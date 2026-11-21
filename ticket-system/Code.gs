@@ -39,9 +39,8 @@ function setupTicketSystem() {
 }
 
 function authorizeTicketServices() {
-  MailApp.getRemainingDailyQuota();
   UrlFetchApp.fetch(TICKET_CONFIG.qrService + "?size=32x32&data=authorize");
-  Logger.log("Izin email dan layanan QR sudah aktif.");
+  Logger.log("Izin layanan QR sudah aktif. Pastikan FONNTE_TOKEN sudah diisi di Script Properties.");
 }
 
 function doGet() {
@@ -51,14 +50,11 @@ function doGet() {
 
 function doPost(e) {
   const data = (e && e.parameter) || {};
-  const required = ["name", "email", "phone", "product", "city", "platform", "participantType", "consent"];
+  const required = ["name", "phone", "product", "city", "platform", "participantType", "consent"];
   const missing = required.filter(key => !String(data[key] || "").trim());
   if (missing.length) return ticketPage_({ error: "Data wajib belum lengkap. Kembali ke formulir dan lengkapi semua kolom bertanda *." });
 
-  const email = String(data.email).trim();
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return ticketPage_({ error: "Format email belum benar. Kembali ke formulir dan periksa alamat email." });
-  }
+  const email = "";
 
   const props = PropertiesService.getScriptProperties();
   const spreadsheetId = props.getProperty("SPREADSHEET_ID");
@@ -82,25 +78,11 @@ function doPost(e) {
   }
 
   const qrBlob = qrBlob_(ticketId);
-  let emailStatus = "TERKIRIM";
-  try {
-    MailApp.sendEmail({
-      to: email,
-      subject: "Tiket Training Exclusive AI untuk Bisnis — " + ticketId,
-      body: "Pendaftaran berhasil. Kode tiket: " + ticketId + ". Simpan lampiran QR ini dan tunjukkan kepada panitia saat datang ke " + TICKET_CONFIG.venue + ".",
-      htmlBody: ticketEmailHtml_(data.name, ticketId),
-      inlineImages: { ticketQr: qrBlob },
-      attachments: [qrBlob]
-    });
-  } catch (err) {
-    emailStatus = "GAGAL";
-    console.error("Email tiket gagal: " + err.message);
-  }
-
-  let whatsappStatus = sendWhatsapp_(normalizePhone_(data.phone), data.name, ticketId);
+  const emailStatus = "TIDAK DIGUNAKAN";
+  const whatsappStatus = sendWhatsapp_(normalizePhone_(data.phone), data.name, ticketId);
   updateDeliveryStatus_(ticketId, emailStatus, whatsappStatus);
   return ticketPage_({
-    name: String(data.name), ticketId: ticketId, email: email,
+    name: String(data.name), ticketId: ticketId,
     emailStatus: emailStatus, whatsappStatus: whatsappStatus,
     qrDataUrl: "data:image/png;base64," + Utilities.base64Encode(qrBlob.getBytes())
   });
@@ -141,20 +123,30 @@ function checkInTicket(ticketId, pin) {
 function sendWhatsapp_(phone, name, ticketId) {
   const token = PropertiesService.getScriptProperties().getProperty("FONNTE_TOKEN");
   if (!token) return "BELUM DIATUR";
+  const qrUrl = TICKET_CONFIG.qrService + "?size=420x420&data=" + encodeURIComponent(ticketId);
+  const message = "Pendaftaran Training Exclusive AI untuk Bisnis berhasil.\n" +
+    "Kode tiket: " + ticketId + "\n" +
+    "Tunjukkan QR tiket saat tiba di " + TICKET_CONFIG.venue + ".";
+  const headers = { Authorization: token };
   try {
-    const response = UrlFetchApp.fetch("https://api.fonnte.com/send", {
-      method: "post",
-      headers: { Authorization: token },
-      payload: {
-        target: phone,
-        message: "Pendaftaran Training Exclusive AI untuk Bisnis berhasil. Tiket " + ticketId + " sudah dikirim ke email. Tunjukkan QR tiket saat tiba di " + TICKET_CONFIG.venue + "."
-      },
+    const withImage = UrlFetchApp.fetch("https://api.fonnte.com/send", {
+      method: "post", headers: headers,
+      payload: { target: phone, message: message, url: qrUrl },
       muteHttpExceptions: true
     });
-    const result = JSON.parse(response.getContentText() || "{}");
-    return response.getResponseCode() < 300 && result.status !== false ? "TERKIRIM" : "GAGAL";
+    const imageResult = JSON.parse(withImage.getContentText() || "{}");
+    if (withImage.getResponseCode() < 300 && imageResult.status !== false) return "TERKIRIM";
+
+    // Some Fonnte plans do not allow URL attachments; send the QR image link in the message instead.
+    const withLink = UrlFetchApp.fetch("https://api.fonnte.com/send", {
+      method: "post", headers: headers,
+      payload: { target: phone, message: message + "\n\nBuka atau simpan QR tiket: " + qrUrl },
+      muteHttpExceptions: true
+    });
+    const linkResult = JSON.parse(withLink.getContentText() || "{}");
+    return withLink.getResponseCode() < 300 && linkResult.status !== false ? "TERKIRIM (LINK QR)" : "GAGAL";
   } catch (err) {
-    console.error("WhatsApp konfirmasi gagal: " + err.message);
+    console.error("WhatsApp tiket gagal: " + err.message);
     return "GAGAL";
   }
 }
@@ -173,24 +165,13 @@ function qrBlob_(ticketId) {
   return UrlFetchApp.fetch(url).getBlob().setName(ticketId + ".png");
 }
 
-function ticketEmailHtml_(name, ticketId) {
-  const safeName = htmlEscape_(name);
-  const qrUrl = TICKET_CONFIG.qrService + "?size=420x420&data=" + encodeURIComponent(ticketId);
-  return "<div style='font-family:Arial,sans-serif;color:#142b43;max-width:560px;margin:auto'>" +
-    "<h2 style='color:#102d4d'>Tiket kamu sudah terbit</h2>" +
-    "<p>Halo " + safeName + ", pendaftaranmu berhasil.</p>" +
-    "<p><b>Kode tiket:</b> " + ticketId + "<br><b>Lokasi:</b> " + TICKET_CONFIG.venue + "</p>" +
-    "<p>Tunjukkan QR ini kepada panitia saat tiba. QR hanya bisa dipakai untuk satu kali check-in.</p>" +
-    "<img src='cid:ticketQr' alt='QR tiket' width='240' height='240'>" +
-    "<p>Jika email ini tidak memuat QR, unduh lampiran PNG pada email.</p></div>";
-}
-
-function ticketPage_(data) {
+email htmlfunction ticketPage_(data) {
   const error = data.error ? "<div class='error'>" + htmlEscape_(data.error) + "</div>" : "";
   const ticket = data.ticketId ? "<div class='ticket'><p class='ok'>Pendaftaran berhasil · Tiket valid</p>" +
     "<h2>" + htmlEscape_(data.name) + "</h2><p class='code'>" + htmlEscape_(data.ticketId) + "</p>" +
     "<img class='qr' src='" + data.qrDataUrl + "' alt='QR tiket'>" +
-    "<p>Lokasi: " + TICKET_CONFIG.venue + "</p><p>QR tiket juga dikirim ke <b>" + htmlEscape_(data.email) + "</b>.</p>" +
+    "<p>Lokasi: " + TICKET_CONFIG.venue + "</p>" +
+    "<p>Status kirim WhatsApp: <b>" + htmlEscape_(data.whatsappStatus || "lihat pesan di WhatsApp") + "</b>.</p>" +
     "<p>Panitia akan memindai QR ini saat kamu datang. Tidak perlu konfirmasi tiket ke admin.</p></div>" : "";
   const html = "<!doctype html><html lang='id'><meta name='viewport' content='width=device-width,initial-scale=1'>" +
     "<title>Tiket AI untuk Bisnis</title><style>body{margin:0;background:#e9eef5;color:#142b43;font:16px/1.5 system-ui,Arial}.box{max-width:520px;margin:7vh auto;padding:28px;background:#edf2f8;border-radius:24px;box-shadow:12px 12px 28px #b9c4d1,-10px -10px 24px #fff}.logo{color:#159b9a;font-size:12px;font-weight:800;letter-spacing:.12em}.ticket{text-align:center}.ok{color:#12705f;font-weight:800}.code{font-size:24px;font-weight:900;letter-spacing:.06em}.qr{width:min(260px,80%);height:auto;background:white;padding:12px;border-radius:14px}h1{color:#102d4d}p{color:#5e7185}.error{background:#fff0e9;color:#a5402f;padding:14px;border-radius:12px}</style>" +
