@@ -22,7 +22,7 @@
     <section class="card" aria-labelledby="page-title">
       <span class="eyebrow">TRAINING EXCLUSIVE</span>
       <h1 id="page-title">Formulir pendaftaran</h1>
-      <p class="intro">Isi data peserta, lalu kirim pendaftaran. Tiket QR langsung tampil di halaman berikutnya dan bisa kamu unduh atau simpan sebagai PDF.</p>
+      <p class="intro">Isi data peserta satu kali. Setelah pendaftaran tersimpan, unduh tiket dan lanjut ke WhatsApp admin dengan pesan konfirmasi yang sudah terisi.</p>
       <div class="progress" id="progress" data-step="1"><span id="progress-label">Langkah 1 dari 2 · Data peserta</span><span class="progress-track"><span class="progress-fill"></span></span></div>
 
       <form id="registration-form" method="post" target="_self" action="https://script.google.com/macros/s/AKfycbzHNKd8RWTlwYRxcfMPvG_mH5AdENZt-BP2Nv11bGUNmLVhE-IyPZjT82-DUWrAGSsWkA/exec">
@@ -38,7 +38,7 @@
             <div class="field"><label for="infaq">Infaq kopi jamaah (opsional)</label><select id="infaq" name="infaq"><option>Tidak memberikan infaq</option><option>Seikhlasnya</option><option>Rp10.000</option><option>Rp20.000</option><option>Rp50.000</option></select></div>
             <div class="field full"><label for="question">Pertanyaan untuk panitia (opsional)</label><textarea id="question" name="question" rows="3" placeholder="Tulis pertanyaan kalau ada"></textarea></div>
             <div class="field full"><p class="fee-note"><strong>Pendaftaran gratis.</strong> Infaq hanya untuk kopi jamaah, sukarela, dan tidak memengaruhi konfirmasi atau tiket.</p></div>
-            <div class="field full"><label class="consent"><input id="consent" name="consent" value="yes" type="checkbox" required><span>Saya setuju data ini digunakan untuk pendaftaran, penerbitan tiket digital, dan pencatatan kehadiran.</span></label><p class="note">Jangan masukkan nomor identitas atau data sensitif.</p></div>
+            <div class="field full"><label class="consent"><input id="consent" name="consent" value="yes" type="checkbox" required><span>Saya setuju data ini digunakan untuk pendaftaran dan tiket. Saat saya menekan Kirim di WhatsApp, data pendaftaran dan kode tiket dapat disampaikan kepada admin untuk konfirmasi kehadiran.</span></label><p class="note">Jangan masukkan nomor identitas atau data sensitif.</p></div>
           </div>
           <div class="actions"><button class="btn primary" type="submit">Tinjau data pendaftaran</button><a class="btn light" href="https://wa.me/6285283966520" target="_blank" rel="noopener">Tanya admin</a></div>
         </div>
@@ -46,9 +46,9 @@
 
       <section id="review-step" class="hidden" aria-labelledby="review-title">
         <h2 id="review-title" style="color:var(--navy);margin:0">Periksa datamu</h2>
-        <p class="intro" style="margin-top:6px">Periksa datamu. Setelah dikirim, tiket langsung terbit tanpa menunggu persetujuan admin.</p>
+        <p class="intro" style="margin-top:6px">Periksa datamu. Tiket langsung terbit tanpa menunggu persetujuan admin; setelahnya kamu bisa mengirim konfirmasi kehadiran melalui WhatsApp.</p>
         <dl class="summary" id="summary"></dl>
-        <div class="handoff">Tiket QR akan tampil setelah pendaftaran berhasil. Unduh QR atau pilih “Cetak / simpan sebagai PDF”, lalu tunjukkan tiket kepada panitia saat datang.</div>
+        <div class="handoff">Tiket QR tampil setelah pendaftaran berhasil. Unduh tiket, lalu lanjutkan ke WhatsApp dengan data yang sudah tersusun. Tekan Kirim untuk mengonfirmasi kehadiran; tidak perlu mengisi data lagi.</div>
         <div class="actions"><button class="btn primary" id="submit-registration" type="button">Daftar dan terbitkan tiket</button><button class="btn light" id="edit-data" type="button">Ubah data</button></div>
         <p id="submit-note" class="notice hidden" role="status">Sedang menyimpan pendaftaran dan membuat tiket. Jangan tutup halaman ini.</p>
       </section>
