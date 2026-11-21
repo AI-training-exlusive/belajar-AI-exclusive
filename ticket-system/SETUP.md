@@ -1,6 +1,6 @@
 # Sistem tiket Training Exclusive AI untuk Bisnis
 
-Backend Google Apps Script ini menyiapkan Google Sheet peserta, menerima pendaftaran dari halaman website, menampilkan tiket QR yang bisa diunduh peserta, dan mencatat kehadiran saat QR dipindai.
+Backend Google Apps Script ini memakai spreadsheet tujuan yang sudah ada, menerima pendaftaran dari halaman website, menampilkan tiket QR yang bisa diunduh peserta, dan mencatat kehadiran saat QR dipindai.
 
 ## Yang dilakukan sistem
 
@@ -14,11 +14,11 @@ Backend Google Apps Script ini menyiapkan Google Sheet peserta, menerima pendaft
 
 ## Pasang di Google Apps Script
 
-1. Buka [script.google.com](https://script.google.com) dengan akun Google pemilik acara dan buat proyek baru.
-2. Tempel isi `Code.gs` ke file `Code.gs`.
-3. Jalankan `setupTicketSystem` satu kali. Skrip membuat spreadsheet dan PIN check-in. Setujui izin Google, lalu simpan PIN dari **Executions > Logs** dan bagikan hanya kepada panitia.
-4. Jalankan `authorizeTicketServices` satu kali dan setujui akses layanan QR.
-5. Pilih **Deploy > Manage deployments**, edit deployment web app, lalu terbitkan versi terbaru. Jalankan sebagai akun pemilik dan atur akses ke siapa saja yang memiliki tautan. Halaman check-in tetap meminta PIN panitia.
+1. Buka proyek Apps Script yang terhubung ke URL web app `/exec`.
+2. Tempel versi terbaru `Code.gs` ke proyek itu dan simpan. ID spreadsheet tujuan sudah ditetapkan di kode; skrip memakai tab `Tiket Peserta` yang sudah ada dan tidak membuat spreadsheet baru.
+3. Jalankan `setupTicketSystem`. Fungsi ini menghubungkan Script Properties ke spreadsheet tujuan, mempertahankan PIN panitia yang sudah ada, lalu menampilkan URL sheet dan PIN di log. Jangan jalankan fungsi ini dari proyek Apps Script lain.
+4. Jika diminta, jalankan `authorizeTicketServices` dan setujui akses QR.
+5. Pilih **Deploy > Manage deployments**, edit deployment web app, lalu terbitkan versi terbaru. Jalankan sebagai akun pemilik dan atur akses ke siapa saja yang memiliki tautan.
 
 ## Nama kolom formulir publik
 
