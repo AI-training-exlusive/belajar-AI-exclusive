@@ -1,18 +1,22 @@
-# Paket Pendaftaran — Training Exclusive AI untuk Bisnis
+# Training Exclusive AI untuk Bisnis
 
-File `index.html` adalah halaman acara yang responsif untuk HP dan komputer.
+Halaman pendaftaran responsif untuk acara bersama Mang Tab, Konsultan Bisnis.
 
-## Sebelum digunakan
-1. Ganti `[Isi tanggal acara]`, `[Isi jam acara]`, `[Isi nama masjid / lokasi]`, dan nomor admin di bagian footer.
-2. Di bagian akhir `index.html`, ganti `ADMIN_WA = "62XXXXXXXXXXX"` dengan nomor WhatsApp admin berformat 62 tanpa `+`, spasi, atau angka 0 di depan.
-3. Unggah `index.html` ke hosting website yang dipilih.
-4. Buka halaman dari HP, isi formulir percobaan, dan pastikan pesan pendaftaran terbuka di WhatsApp admin.
-5. Setelah URL final tersedia, buat QR code dari URL website tersebut dan uji scan dari HP lain sebelum QR dicetak.
+## Sebelum dibagikan ke peserta
+
+1. Edit `index.html`: ganti tanggal, jam, serta nama dan alamat lokasi.
+2. Di bagian akhir `index.html`, ganti `ADMIN_WA = "62XXXXXXXXXXX"` dengan nomor admin dalam format 62, tanpa tanda + atau angka 0 di depan.
+3. Di bagian footer, ganti teks nomor WhatsApp admin.
+4. Buka **Settings → Pages**.
+5. Pada **Build and deployment**, pilih **Deploy from a branch**, branch **main**, folder **/(root)**, lalu tekan **Save**.
+6. Setelah GitHub Pages aktif, buka alamat yang ditampilkan di halaman Settings → Pages. Buat QR dari alamat itu dan uji scan sebelum dicetak.
 
 ## Alur pendaftaran
-Scan QR → halaman acara → isi data → WhatsApp admin terbuka dengan pesan terisi → peserta menekan Kirim → admin mencatat dan mengirim konfirmasi serta tautan grup.
 
-Form mengirim data melalui WhatsApp, tidak menyimpan data di database atau Google Sheets. Jika ingin semua pendaftaran tercatat otomatis di spreadsheet, hubungkan formulir ke Google Forms/Sheets sebelum acara dipublikasikan.
+QR → halaman acara → peserta mengisi formulir → WhatsApp terbuka dengan pesan pendaftaran terisi → peserta menekan Kirim → admin mengonfirmasi dan mengirim tautan grup.
+
+Formulir mengirim data melalui WhatsApp dan belum menyimpan otomatis ke Google Sheets atau database. Admin perlu mencatat pendaftar secara manual.
 
 ## Infaq
-Infaq kopi jamaah masjid ditampilkan sebagai sukarela. Tidak ada kewajiban membayar atau mengirim bukti untuk mendaftar.
+
+Infaq kopi jamaah masjid bersifat sukarela dan seikhlasnya. Pilihan nominal pada formulir bukan syarat pendaftaran; peserta tidak perlu mengirim bukti infaq untuk ikut acara.
