@@ -108,10 +108,9 @@ function checkInTicket(ticketId, pin) {
     if (!match) return { ok: false, message: "Tiket tidak ditemukan." };
 
     const row = match.getRow();
-    const attendance = sheet.getRange(row, 14).getValue();
-    const name = sheet.getRange(row, 3).getValue();
-    if (attendance === "HADIR") {
-      return { ok: false, message: "Tiket ini sudah check-in sebelumnya.", name: name, ticketId: code };
+    const name = String(sheet.getRange(row, 3).getDisplayValue() || "");
+    if (sheet.getRange(row, 14).getValue() === "HADIR") {
+      return { ok: false, alreadyCheckedIn: true, message: "Tiket ini sudah check-in sebelumnya.", name: name, ticketId: code };
     }
     sheet.getRange(row, 14, 1, 2).setValues([["HADIR", new Date()]]);
     return { ok: true, message: "Kehadiran berhasil dicatat.", name: name, ticketId: code };
@@ -181,11 +180,13 @@ function ticketPage_(data) {
 function checkinPage_() {
   return "<!doctype html><html lang='id'><meta name='viewport' content='width=device-width,initial-scale=1'>" +
     "<title>Check-in Peserta</title><script src='https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js'></script>" +
-    "<style>body{font:16px system-ui,Arial;background:#e9eef5;color:#142b43;margin:0;padding:20px}.card{max-width:520px;margin:5vh auto;background:#edf2f8;padding:24px;border-radius:20px;box-shadow:10px 10px 24px #bcc6d2,-8px -8px 22px white}h1{color:#102d4d}input,button{font:inherit;padding:12px;border-radius:10px;border:1px solid #d2dce7;width:100%;box-sizing:border-box;margin:7px 0}button{background:#2865d8;color:white;font-weight:800;border:0}.result{padding:12px;border-radius:10px;margin-top:12px;background:#e0f3eb}.bad{background:#fff0e9}</style>" +
-    "<main class='card'><h1>Check-in peserta</h1><p>Pindai QR tiket, lalu masukkan PIN panitia untuk mencatat kehadiran.</p><div id='reader'></div>" +
-    "<label>Kode tiket<input id='ticket' placeholder='AI-XXXXXXXXXX'></label><label>PIN panitia<input id='pin' type='password' inputmode='numeric' placeholder='PIN 6 digit'></label>" +
-    "<button onclick='checkin()'>Catat kehadiran</button><div id='result'></div></main>" +
-    "<script>const scanner=new Html5Qrcode('reader');Html5Qrcode.getCameras().then(c=>{if(c.length)scanner.start({facingMode:'environment'},{fps:10,qrbox:220},v=>{document.getElementById('ticket').value=v;scanner.stop()})}).catch(()=>{});function checkin(){const code=document.getElementById('ticket').value.trim();const pin=document.getElementById('pin').value.trim();google.script.run.withSuccessHandler(r=>{const box=document.getElementById('result');box.className='result '+(r.ok?'':'bad');box.textContent=r.message+(r.name?' · '+r.name:'')+(r.ticketId?' · '+r.ticketId:'')}).checkInTicket(code,pin)}</script></html>";
+    "<style>body{font:16px/1.5 system-ui,Arial;background:#e9eef5;color:#142b43;margin:0;padding:24px}.layout{max-width:980px;margin:4vh auto;display:grid;grid-template-columns:1fr 1fr;gap:20px}.card{background:#edf2f8;padding:24px;border-radius:20px;box-shadow:10px 10px 24px #bcc6d2,-8px -8px 22px white}h1,h2{color:#102d4d;margin-top:0}input,button{font:inherit;padding:12px;border-radius:10px;border:1px solid #d2dce7;width:100%;box-sizing:border-box;margin:7px 0}button{background:#2865d8;color:white;font-weight:800;border:0;cursor:pointer}.hint{font-size:14px;color:#63758a}.result{padding:14px;border-radius:12px;background:#e6ecf3;margin-top:14px}.result.ok{background:#e0f3eb}.result.bad{background:#fff0e9}.name{font-size:24px;font-weight:850;margin:8px 0}.code{font-weight:800;color:#2865d8}.hidden{display:none!important}#reader{width:100%;overflow:hidden;border-radius:12px;margin:12px 0}#reader video{border-radius:12px}.status{font-weight:800}.idle{text-align:center;padding:40px 10px;color:#66798c}@media(max-width:700px){body{padding:14px}.layout{grid-template-columns:1fr;margin:2vh auto}.card{padding:20px}}</style>" +
+    "<main class='layout'><section class='card'><h1>Check-in peserta</h1><p>PANITIA: masukkan PIN sekali, lalu scan QR peserta. Sistem langsung mencatat kehadiran.</p>" +
+    "<label>PIN panitia<input id='pin' type='password' inputmode='numeric' placeholder='PIN 6 digit' autocomplete='off'></label>" +
+    "<button id='start' onclick='startScanner()'>Mulai scan QR</button><div id='reader'></div><p id='scan-message' class='hint'>Kamera akan aktif setelah tombol ditekan.</p></section>" +
+    "<section class='card'><h2>Hasil pemindaian</h2><div id='result' class='result'><div class='idle'>Hasil tiket akan muncul di sini setelah QR dipindai.</div></div>" +
+    "<button id='next' class='hidden' onclick='scanNext()'>Scan peserta berikutnya</button></section></main>" +
+    "<script>let scanner=null;let busy=false;function esc(s){return String(s||'').replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c]))}function showResult(r){const box=document.getElementById('result');box.className='result '+(r.ok?'ok':'bad');box.innerHTML='<div class="status">'+esc(r.message)+'</div>'+(r.name?'<div class="name">'+esc(r.name)+'</div>':'')+(r.ticketId?'<div class="code">'+esc(r.ticketId)+'</div>':'');document.getElementById('next').classList.remove('hidden');document.getElementById('scan-message').textContent='Hasil pemindaian tampil di panel sebelah.'}function startScanner(){const pin=document.getElementById('pin').value.trim();if(!pin){document.getElementById('scan-message').textContent='Masukkan PIN panitia terlebih dahulu.';return}if(typeof Html5Qrcode==='undefined'){document.getElementById('scan-message').textContent='Pemindai QR belum termuat. Muat ulang halaman dan coba lagi.';return}scanner=new Html5Qrcode('reader');Html5Qrcode.getCameras().then(cameras=>{if(!cameras.length)throw new Error('Kamera tidak ditemukan.');return scanner.start(cameras[0].id,{fps:10,qrbox:{width:230,height:230}},value=>{if(busy)return;busy=true;scanner.pause(true);document.getElementById('scan-message').textContent='Memeriksa tiket…';google.script.run.withSuccessHandler(showResult).withFailureHandler(e=>showResult({ok:false,message:e.message||'Gagal memeriksa tiket.'})).checkInTicket(value,pin)})}).catch(e=>{document.getElementById('scan-message').textContent=e.message||'Kamera tidak dapat dibuka.'})}function scanNext(){busy=false;document.getElementById('next').classList.add('hidden');document.getElementById('scan-message').textContent='Arahkan QR peserta berikutnya ke kamera.';if(scanner)scanner.resume()||startScanner()}</script></html>";
 }
 
 function normalizePhone_(value) {
