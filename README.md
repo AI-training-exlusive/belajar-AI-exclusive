@@ -5,13 +5,13 @@ Website pendaftaran acara bersama Mang Tab, Konsultan Bisnis. Halaman pendaftara
 ## Alur peserta
 
 1. Peserta mengisi nama, nomor WhatsApp, dan data usaha; email tidak diperlukan.
-2. Setelah dikirim, tiket langsung berstatus valid dan QR tampil pada halaman tiket.
-3. Peserta mengunduh QR sebagai PNG atau memilih cetak/simpan sebagai PDF.
-4. Saat acara, panitia membuka URL web app, memindai QR, dan memasukkan PIN check-in. Kehadiran tercatat satu kali di Google Sheets.
+2. Setelah dikirim, data peserta masuk ke Google Sheets dan tiket QR tampil pada halaman tiket.
+3. Peserta mengunduh tiket/QR; tombol utama membuka WhatsApp dengan pesan konfirmasi yang sudah berisi data pendaftaran dan kode tiket.
+4. Peserta menekan Kirim di WhatsApp. Tidak perlu mengisi data lagi. Saat acara, panitia memindai QR dan mencatat kehadiran satu kali.
 
 ## Backend
 
-Kode Google Apps Script dan panduan instalasi ada di folder `ticket-system/`. `daftar.html` mengirim field `name`, `phone`, `business`, `product`, `city`, `platform`, `participantType`, `infaq`, `question`, dan `consent` ke deployment web app. Tiket ditampilkan setelah data tersimpan; peserta mengunduhnya langsung dari halaman tiket.
+Kode Google Apps Script dan panduan instalasi ada di folder `ticket-system/`. `daftar.html` mengirim field `name`, `phone`, `business`, `product`, `city`, `platform`, `participantType`, `infaq`, `question`, dan `consent` ke deployment web app. Tiket ditampilkan setelah data tersimpan; tombol konfirmasi WhatsApp memakai data formulir dan kode tiket, lalu peserta menekan Kirim.
 
 ## Infaq
 
