@@ -10,7 +10,7 @@ Backend Google Apps Script ini memakai spreadsheet tujuan yang sudah ada, meneri
 - Email dan Fonnte tidak diperlukan untuk menerbitkan tiket.
 - Setelah submit, halaman menampilkan kode tiket dan QR. Tombol yang tersedia hanya **Unduh QR & konfirmasi ke admin**.
 - Tombol utama mengunduh QR lalu membuka WhatsApp dengan pesan konfirmasi sopan yang sudah terisi data formulir dan kode tiket. Peserta cukup menekan Kirim; browser tidak mengirim pesan WhatsApp otomatis tanpa tindakan itu.
-- Panitia membuka URL web app, memasukkan PIN sekali, lalu memindai QR. Kehadiran tercatat otomatis dan nama serta kode tiket tampil di panel sebelah.
+- Panitia membuka URL web app, memasukkan PIN sekali, lalu menekan **Buka pemindai QR**. Kamera terbuka pada tab terpisah; hasil scan kembali ke halaman Apps Script dan langsung mencatat kehadiran.
 - Check-in pertama mengubah status menjadi `HADIR`. Pemindaian berikutnya ditolak, dan hasilnya terlihat di panel samping.
 
 ## Pasang di Google Apps Script
