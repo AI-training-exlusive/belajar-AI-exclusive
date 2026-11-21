@@ -6,38 +6,40 @@ const TICKET_CONFIG = {
 };
 
 function setupTicketSystem() {
+  const spreadsheetId = "1XUQLxTFW9eQ4I0dZ_mOum-aTwkVICfgKLQGwTpdg7F0";
   const props = PropertiesService.getScriptProperties();
-  if (props.getProperty("SPREADSHEET_ID")) {
-    throw new Error("Sistem sudah dibuat. Cek URL spreadsheet dan PIN di Executions > Logs.");
+  const spreadsheet = SpreadsheetApp.openById(spreadsheetId);
+  const sheet = spreadsheet.getSheetByName(TICKET_CONFIG.sheetName);
+  if (!sheet) {
+    throw new Error("Tab 'Tiket Peserta' tidak ditemukan di spreadsheet tujuan. Tidak ada spreadsheet baru yang dibuat.");
   }
 
-  const spreadsheet = SpreadsheetApp.create("Pendaftaran Training Exclusive AI untuk Bisnis");
-  const sheet = spreadsheet.getSheets()[0];
-  sheet.setName(TICKET_CONFIG.sheetName);
   const headers = [
     "Waktu daftar", "Kode tiket", "Nama", "Email", "WhatsApp", "Nama usaha",
     "Produk / bidang usaha", "Domisili", "Platform", "Status peserta", "Infaq kopi jamaah",
     "Pertanyaan", "Status tiket", "Status kehadiran", "Waktu check-in", "Status email", "Status WhatsApp"
   ];
-  sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
-  sheet.setFrozenRows(1);
-  sheet.getRange(1, 1, 1, headers.length)
-    .setFontWeight("bold")
-    .setBackground("#102d4d")
-    .setFontColor("#ffffff");
-  sheet.autoResizeColumns(1, headers.length);
+  const headerRange = sheet.getRange(1, 1, 1, headers.length);
+  const currentHeaders = headerRange.getDisplayValues()[0];
+  if (currentHeaders.every(value => !String(value).trim())) {
+    headerRange.setValues([headers]);
+    sheet.setFrozenRows(1);
+    headerRange.setFontWeight("bold").setBackground("#102d4d").setFontColor("#ffffff");
+  } else if (headers.some((value, index) => String(currentHeaders[index]).trim() !== value)) {
+    throw new Error("Header tab 'Tiket Peserta' tidak cocok. Data tidak diubah.");
+  }
 
-  const checkinPin = String(Math.floor(100000 + Math.random() * 900000));
+  const checkinPin = props.getProperty("CHECKIN_PIN") ||
+    String(Math.floor(100000 + Math.random() * 900000));
   props.setProperties({
-    SPREADSHEET_ID: spreadsheet.getId(),
+    SPREADSHEET_ID: spreadsheetId,
     CHECKIN_PIN: checkinPin
   });
 
   Logger.log("SPREADSHEET_URL: " + spreadsheet.getUrl());
   Logger.log("CHECKIN_PIN: " + checkinPin + " (simpan dan bagikan hanya ke panitia)");
-  Logger.log("WEB_APP_URL akan muncul setelah Deploy > New deployment > Web app.");
+  Logger.log("Sistem memakai spreadsheet tujuan yang sudah diberikan; tidak membuat file baru.");
 }
-
 function authorizeTicketServices() {
   UrlFetchApp.fetch(TICKET_CONFIG.qrService + "?size=32x32&data=authorize");
   Logger.log("Izin layanan QR sudah aktif.");
