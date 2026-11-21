@@ -81,9 +81,10 @@ function doPost(e) {
 
   const qrBlob = qrBlob_(ticketId);
   updateDeliveryStatus_(ticketId, "TIKET SIAP DIUNDUH", "TIDAK DIGUNAKAN");
+  const qrDataUrl = "data:image/png;base64," + Utilities.base64Encode(qrBlob.getBytes());
   return ticketPage_({
-    name: String(data.name), ticketId: ticketId,
-    qrDataUrl: "data:image/png;base64," + Utilities.base64Encode(qrBlob.getBytes())
+    name: String(data.name), ticketId: ticketId, qrDataUrl: qrDataUrl,
+    whatsappUrl: whatsappConfirmationUrl_(data, ticketId)
   });
 }
 
@@ -133,20 +134,52 @@ function qrBlob_(ticketId) {
   return UrlFetchApp.fetch(url).getBlob().setName(ticketId + ".png");
 }
 
+function whatsappConfirmationUrl_(data, ticketId) {
+  const fields = [
+    ["Nama peserta", data.name],
+    ["Nomor WhatsApp", normalizePhone_(data.phone)],
+    ["Nama usaha", data.business],
+    ["Bidang usaha", data.product],
+    ["Domisili", data.city],
+    ["Platform jualan", data.platform],
+    ["Status peserta", data.participantType],
+    ["Infaq kopi jamaah", data.infaq],
+    ["Pertanyaan", data.question]
+  ].filter(item => String(item[1] || "").trim());
+
+  const message = "Assalamu'alaikum Admin Masjid Mudzaki,\n\n" +
+    "Saya sudah mengisi formulir pendaftaran Training Exclusive AI untuk Bisnis. Mohon bantu konfirmasi kehadiran saya. Berikut data yang saya daftarkan:\n\n" +
+    fields.map(item => item[0] + ": " + String(item[1]).trim()).join("\n") +
+    "\nKode tiket: " + ticketId +
+    "\n\nSaya akan menunjukkan QR tiket saat hadir. Terima kasih.";
+  return "https://wa.me/6285283966520?text=" + encodeURIComponent(message);
+}
+
 function ticketPage_(data) {
   const error = data.error ? "<div class='error'>" + htmlEscape_(data.error) + "</div>" : "";
+  const qr = data.qrDataUrl || "";
+  const waUrl = data.whatsappUrl || "";
+  const fileName = htmlEscape_((data.ticketId || "tiket") + "-QR.png");
   const ticket = data.ticketId ? "<div class='ticket'><p class='ok'>Pendaftaran berhasil · Tiket valid</p>" +
     "<h2>" + htmlEscape_(data.name) + "</h2><p class='code'>" + htmlEscape_(data.ticketId) + "</p>" +
-    "<img class='qr' src='" + data.qrDataUrl + "' alt='QR tiket'>" +
+    "<img class='qr' src='" + qr + "' alt='QR tiket'>" +
     "<p>Lokasi: " + TICKET_CONFIG.venue + "</p>" +
-    "<p>Simpan tiket ini. Tunjukkan QR kepada panitia saat datang; QR hanya bisa dipakai satu kali.</p>" +
-    "<div class='actions'><a class='btn' href='" + data.qrDataUrl + "' download='" + htmlEscape_(data.ticketId) + "-QR.png'>Unduh QR tiket</a>" +
-    "<button class='btn' type='button' onclick='window.print()'>Cetak / simpan sebagai PDF</button></div></div>" : "";
+    "<p>Data pendaftaran sudah tersimpan. Pesan konfirmasi WhatsApp sudah disusun dari data ini—kamu tidak perlu mengisi ulang.</p>" +
+    "<div class='actions'><button class='btn primary' type='button' onclick='downloadAndConfirm()'>Unduh tiket & lanjut konfirmasi</button>" +
+    "<a class='btn light' href='" + qr + "' download='" + fileName + "'>Unduh QR saja</a>" +
+    "<button class='btn light' type='button' onclick='window.print()'>Cetak / simpan sebagai PDF</button></div>" +
+    "<p class='note'>WhatsApp akan terbuka dengan pesan yang sudah terisi. Tekan tombol Kirim di WhatsApp agar admin menerima konfirmasi.</p>" +
+    "<p>Panitia akan memindai QR ini saat kamu datang. Tiket hanya bisa dipakai check-in satu kali.</p></div>" : "";
+  const scriptValues = "<script>const waTarget=" + JSON.stringify(waUrl) +
+    ";const qrSource=" + JSON.stringify(qr) +
+    ";const qrFile=" + JSON.stringify(fileName) +
+    ";function downloadAndConfirm(){const w=window.open(waTarget,'_blank');const a=document.createElement('a');a.href=qrSource;a.download=qrFile;document.body.appendChild(a);a.click();a.remove();if(!w){document.getElementById('wa-fallback').classList.remove('hidden')}}</script>";
   const html = "<!doctype html><html lang='id'><meta name='viewport' content='width=device-width,initial-scale=1'>" +
-    "<title>Tiket AI untuk Bisnis</title><style>body{margin:0;background:#e9eef5;color:#142b43;font:16px/1.5 system-ui,Arial}.box{max-width:520px;margin:7vh auto;padding:28px;background:#edf2f8;border-radius:24px;box-shadow:12px 12px 28px #b9c4d1,-10px -10px 24px #fff}.logo{color:#159b9a;font-size:12px;font-weight:800;letter-spacing:.12em}.ticket{text-align:center}.ok{color:#12705f;font-weight:800}.code{font-size:24px;font-weight:900;letter-spacing:.06em}.qr{width:min(260px,80%);height:auto;background:white;padding:12px;border-radius:14px}h1{color:#102d4d}p{color:#5e7185}.error{background:#fff0e9;color:#a5402f;padding:14px;border-radius:12px}.actions{display:grid;gap:10px;margin-top:20px}.btn{display:inline-block;padding:13px 16px;border:0;border-radius:11px;background:#2865d8;color:#fff;text-align:center;text-decoration:none;font:700 15px system-ui,Arial;cursor:pointer}@media print{body{background:#fff}.box{margin:0 auto;box-shadow:none;border:1px solid #ddd}.actions{display:none}}</style>" +
+    "<title>Tiket AI untuk Bisnis</title><style>body{margin:0;background:#e9eef5;color:#142b43;font:16px/1.5 system-ui,Arial}.box{max-width:520px;margin:7vh auto;padding:28px;background:#edf2f8;border-radius:24px;box-shadow:12px 12px 28px #b9c4d1,-10px -10px 24px #fff}.logo{color:#159b9a;font-size:12px;font-weight:800;letter-spacing:.12em}.ticket{text-align:center}.ok{color:#12705f;font-weight:800}.code{font-size:24px;font-weight:900;letter-spacing:.06em}.qr{width:min(260px,80%);height:auto;background:white;padding:12px;border-radius:14px}h1{color:#102d4d}p{color:#5e7185}.error{background:#fff0e9;color:#a5402f;padding:14px;border-radius:12px}.actions{display:grid;gap:10px;margin-top:20px}.btn{display:inline-block;padding:13px 16px;border:0;border-radius:11px;background:#2865d8;color:#fff;text-align:center;text-decoration:none;font:700 15px system-ui,Arial;cursor:pointer}.light{background:#e9eef5;color:#102d4d;border:1px solid #dce4ed}.note{font-size:13px}.hidden{display:none}@media print{body{background:#fff}.box{margin:0 auto;box-shadow:none;border:1px solid #ddd}.actions,.note{display:none}}</style>" +
     "<body><main class='box'><div class='logo'>TRAINING EXCLUSIVE</div><h1>" +
     (data.ticketId ? "Tiket pendaftaran" : "Pendaftaran belum berhasil") + "</h1>" + error + ticket +
-    "<p>Training Exclusive AI untuk Bisnis · Masjid Mudzaki</p></main></body></html>";
+    "<p id='wa-fallback' class='hidden'>Unduhan QR sudah dimulai, tetapi WhatsApp tidak terbuka otomatis. <a href='" + htmlEscape_(waUrl) + "' target='_blank' rel='noopener'>Buka WhatsApp untuk konfirmasi</a>.</p>" +
+    "<p>Training Exclusive AI untuk Bisnis · Masjid Mudzaki</p></main>" + scriptValues + "</body></html>";
   return HtmlService.createHtmlOutput(html).setTitle("Tiket — Training Exclusive AI untuk Bisnis");
 }
 
