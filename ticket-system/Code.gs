@@ -40,7 +40,7 @@ function setupTicketSystem() {
 
 function authorizeTicketServices() {
   UrlFetchApp.fetch(TICKET_CONFIG.qrService + "?size=32x32&data=authorize");
-  Logger.log("Izin layanan QR sudah aktif. Pastikan FONNTE_TOKEN sudah diisi di Script Properties.");
+  Logger.log("Izin layanan QR sudah aktif.");
 }
 
 function doGet() {
@@ -78,12 +78,9 @@ function doPost(e) {
   }
 
   const qrBlob = qrBlob_(ticketId);
-  const emailStatus = "TIDAK DIGUNAKAN";
-  const whatsappStatus = sendWhatsapp_(normalizePhone_(data.phone), data.name, ticketId);
-  updateDeliveryStatus_(ticketId, emailStatus, whatsappStatus);
+  updateDeliveryStatus_(ticketId, "TIKET SIAP DIUNDUH", "TIDAK DIGUNAKAN");
   return ticketPage_({
     name: String(data.name), ticketId: ticketId,
-    emailStatus: emailStatus, whatsappStatus: whatsappStatus,
     qrDataUrl: "data:image/png;base64," + Utilities.base64Encode(qrBlob.getBytes())
   });
 }
@@ -120,37 +117,6 @@ function checkInTicket(ticketId, pin) {
   }
 }
 
-function sendWhatsapp_(phone, name, ticketId) {
-  const token = PropertiesService.getScriptProperties().getProperty("FONNTE_TOKEN");
-  if (!token) return "BELUM DIATUR";
-  const qrUrl = TICKET_CONFIG.qrService + "?size=420x420&data=" + encodeURIComponent(ticketId);
-  const message = "Pendaftaran Training Exclusive AI untuk Bisnis berhasil.\n" +
-    "Kode tiket: " + ticketId + "\n" +
-    "Tunjukkan QR tiket saat tiba di " + TICKET_CONFIG.venue + ".";
-  const headers = { Authorization: token };
-  try {
-    const withImage = UrlFetchApp.fetch("https://api.fonnte.com/send", {
-      method: "post", headers: headers,
-      payload: { target: phone, message: message, url: qrUrl },
-      muteHttpExceptions: true
-    });
-    const imageResult = JSON.parse(withImage.getContentText() || "{}");
-    if (withImage.getResponseCode() < 300 && imageResult.status !== false) return "TERKIRIM";
-
-    // Some Fonnte plans do not allow URL attachments; send the QR image link in the message instead.
-    const withLink = UrlFetchApp.fetch("https://api.fonnte.com/send", {
-      method: "post", headers: headers,
-      payload: { target: phone, message: message + "\n\nBuka atau simpan QR tiket: " + qrUrl },
-      muteHttpExceptions: true
-    });
-    const linkResult = JSON.parse(withLink.getContentText() || "{}");
-    return withLink.getResponseCode() < 300 && linkResult.status !== false ? "TERKIRIM (LINK QR)" : "GAGAL";
-  } catch (err) {
-    console.error("WhatsApp tiket gagal: " + err.message);
-    return "GAGAL";
-  }
-}
-
 function updateDeliveryStatus_(ticketId, emailStatus, whatsappStatus) {
   const sheet = SpreadsheetApp.openById(PropertiesService.getScriptProperties().getProperty("SPREADSHEET_ID"))
     .getSheetByName(TICKET_CONFIG.sheetName);
@@ -165,16 +131,17 @@ function qrBlob_(ticketId) {
   return UrlFetchApp.fetch(url).getBlob().setName(ticketId + ".png");
 }
 
-email htmlfunction ticketPage_(data) {
+function ticketPage_(data) {
   const error = data.error ? "<div class='error'>" + htmlEscape_(data.error) + "</div>" : "";
   const ticket = data.ticketId ? "<div class='ticket'><p class='ok'>Pendaftaran berhasil · Tiket valid</p>" +
     "<h2>" + htmlEscape_(data.name) + "</h2><p class='code'>" + htmlEscape_(data.ticketId) + "</p>" +
     "<img class='qr' src='" + data.qrDataUrl + "' alt='QR tiket'>" +
     "<p>Lokasi: " + TICKET_CONFIG.venue + "</p>" +
-    "<p>Status kirim WhatsApp: <b>" + htmlEscape_(data.whatsappStatus || "lihat pesan di WhatsApp") + "</b>.</p>" +
-    "<p>Panitia akan memindai QR ini saat kamu datang. Tidak perlu konfirmasi tiket ke admin.</p></div>" : "";
+    "<p>Simpan tiket ini. Tunjukkan QR kepada panitia saat datang; QR hanya bisa dipakai satu kali.</p>" +
+    "<div class='actions'><a class='btn' href='" + data.qrDataUrl + "' download='" + htmlEscape_(data.ticketId) + "-QR.png'>Unduh QR tiket</a>" +
+    "<button class='btn' type='button' onclick='window.print()'>Cetak / simpan sebagai PDF</button></div></div>" : "";
   const html = "<!doctype html><html lang='id'><meta name='viewport' content='width=device-width,initial-scale=1'>" +
-    "<title>Tiket AI untuk Bisnis</title><style>body{margin:0;background:#e9eef5;color:#142b43;font:16px/1.5 system-ui,Arial}.box{max-width:520px;margin:7vh auto;padding:28px;background:#edf2f8;border-radius:24px;box-shadow:12px 12px 28px #b9c4d1,-10px -10px 24px #fff}.logo{color:#159b9a;font-size:12px;font-weight:800;letter-spacing:.12em}.ticket{text-align:center}.ok{color:#12705f;font-weight:800}.code{font-size:24px;font-weight:900;letter-spacing:.06em}.qr{width:min(260px,80%);height:auto;background:white;padding:12px;border-radius:14px}h1{color:#102d4d}p{color:#5e7185}.error{background:#fff0e9;color:#a5402f;padding:14px;border-radius:12px}</style>" +
+    "<title>Tiket AI untuk Bisnis</title><style>body{margin:0;background:#e9eef5;color:#142b43;font:16px/1.5 system-ui,Arial}.box{max-width:520px;margin:7vh auto;padding:28px;background:#edf2f8;border-radius:24px;box-shadow:12px 12px 28px #b9c4d1,-10px -10px 24px #fff}.logo{color:#159b9a;font-size:12px;font-weight:800;letter-spacing:.12em}.ticket{text-align:center}.ok{color:#12705f;font-weight:800}.code{font-size:24px;font-weight:900;letter-spacing:.06em}.qr{width:min(260px,80%);height:auto;background:white;padding:12px;border-radius:14px}h1{color:#102d4d}p{color:#5e7185}.error{background:#fff0e9;color:#a5402f;padding:14px;border-radius:12px}.actions{display:grid;gap:10px;margin-top:20px}.btn{display:inline-block;padding:13px 16px;border:0;border-radius:11px;background:#2865d8;color:#fff;text-align:center;text-decoration:none;font:700 15px system-ui,Arial;cursor:pointer}@media print{body{background:#fff}.box{margin:0 auto;box-shadow:none;border:1px solid #ddd}.actions{display:none}}</style>" +
     "<body><main class='box'><div class='logo'>TRAINING EXCLUSIVE</div><h1>" +
     (data.ticketId ? "Tiket pendaftaran" : "Pendaftaran belum berhasil") + "</h1>" + error + ticket +
     "<p>Training Exclusive AI untuk Bisnis · Masjid Mudzaki</p></main></body></html>";
