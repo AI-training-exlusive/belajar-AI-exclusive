@@ -56,6 +56,24 @@
     }
     input:focus,select:focus,textarea:focus{outline:3px solid rgba(21,155,154,.25);border-color:var(--teal);box-shadow:inset 2px 2px 5px rgba(157,171,190,.2),0 0 0 2px rgba(21,155,154,.1)}
     .consent input{accent-color:var(--teal);box-shadow:none}
+    /* Make the tactile surfaces clear at first glance while keeping the page calm. */
+    .hero-grid>div:first-child{
+      padding:clamp(24px,3.4vw,40px);
+      border:1px solid rgba(255,255,255,.82);
+      border-radius:28px;
+      background:linear-gradient(145deg,#edf2f8,#e4eaf2);
+      box-shadow:14px 14px 28px rgba(151,165,184,.38),-12px -12px 25px rgba(255,255,255,.92);
+    }
+    .hero-meta{background:linear-gradient(145deg,#eef3f9,#e4eaf2);box-shadow:11px 11px 22px rgba(12,35,61,.2),-6px -6px 14px rgba(255,255,255,.74)}
+    .learn-card{box-shadow:11px 11px 21px rgba(151,165,184,.38),-9px -9px 20px rgba(255,255,255,.9)}
+    .learn-icon{box-shadow:5px 5px 10px rgba(129,157,169,.24),-4px -4px 9px rgba(255,255,255,.88)}
+    .agenda-list{gap:12px}
+    .agenda-row{padding:18px 20px;border:1px solid rgba(255,255,255,.82);border-radius:16px;background:linear-gradient(145deg,#eaf0f7,#e2e9f1);box-shadow:8px 8px 16px rgba(151,165,184,.25),-7px -7px 15px rgba(255,255,255,.8)}
+    .form-shell{box-shadow:14px 14px 28px rgba(151,165,184,.36),-11px -11px 23px rgba(255,255,255,.9)}
+    .btn.primary{box-shadow:7px 7px 14px rgba(28,75,135,.3),-5px -5px 12px rgba(255,255,255,.8)}
+    .btn.light{border-color:rgba(255,255,255,.9);box-shadow:7px 7px 14px rgba(151,165,184,.3),-6px -6px 13px rgba(255,255,255,.88)}
+    @media(max-width:840px){.hero-grid>div:first-child{padding:30px}}
+    @media(max-width:600px){.hero-grid>div:first-child{padding:23px 20px;border-radius:22px}.agenda-row{padding:16px;border-radius:14px}}
     @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important}}
   </style>
 </head>
