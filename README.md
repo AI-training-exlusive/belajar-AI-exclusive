@@ -1,22 +1,20 @@
 # Training Exclusive AI untuk Bisnis
 
-Halaman pendaftaran responsif untuk acara bersama Mang Tab, Konsultan Bisnis.
+Website pendaftaran acara bersama Mang Tab, Konsultan Bisnis. Halaman pendaftaran mengirim data ke Google Apps Script, menyimpan peserta ke Google Sheets, membuat kode tiket dan QR, lalu mengirim tiket ke email peserta.
 
-## Sebelum dibagikan ke peserta
+## Alur peserta
 
-1. Edit `index.html`: ganti tanggal, jam, serta nama dan alamat lokasi.
-2. Di bagian akhir `index.html`, ganti `ADMIN_WA = "62XXXXXXXXXXX"` dengan nomor admin dalam format 62, tanpa tanda + atau angka 0 di depan.
-3. Di bagian footer, ganti teks nomor WhatsApp admin.
-4. Buka **Settings → Pages**.
-5. Pada **Build and deployment**, pilih **Deploy from a branch**, branch **main**, folder **/(root)**, lalu tekan **Save**.
-6. Setelah GitHub Pages aktif, buka alamat yang ditampilkan di halaman Settings → Pages. Buat QR dari alamat itu dan uji scan sebelum dicetak.
+1. Peserta mengisi nama, email, nomor WhatsApp, dan data usaha.
+2. Setelah dikirim, tiket langsung berstatus valid dan QR ditampilkan serta dikirim ke email.
+3. Jika `FONNTE_TOKEN` sudah diatur di Apps Script, peserta menerima pesan WhatsApp otomatis.
+4. Saat acara, panitia membuka URL web app, memindai QR, dan memasukkan PIN check-in. Kehadiran tercatat satu kali di Google Sheets.
 
-## Alur pendaftaran
+## Backend
 
-QR → halaman acara → peserta mengisi formulir → WhatsApp terbuka dengan pesan pendaftaran terisi → peserta menekan Kirim → admin mengonfirmasi dan mengirim tautan grup.
+Kode Google Apps Script dan panduan instalasi ada di folder `ticket-system/`. `daftar.html` mengirim field `name`, `email`, `phone`, `business`, `product`, `city`, `platform`, `participantType`, `infaq`, `question`, dan `consent` ke deployment web app.
 
-Formulir mengirim data melalui WhatsApp dan belum menyimpan otomatis ke Google Sheets atau database. Admin perlu mencatat pendaftar secara manual.
+Token Fonnte disimpan di **Project Settings > Script properties** dengan nama `FONNTE_TOKEN`. Jangan taruh token di HTML atau GitHub.
 
 ## Infaq
 
-Infaq kopi jamaah masjid bersifat sukarela dan seikhlasnya. Pilihan nominal pada formulir bukan syarat pendaftaran; peserta tidak perlu mengirim bukti infaq untuk ikut acara.
+Pendaftaran gratis. Infaq hanya untuk kopi jamaah, bersifat sukarela, dan tidak memengaruhi penerbitan tiket atau check-in.
