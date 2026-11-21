@@ -8,7 +8,7 @@ Backend Google Apps Script ini memakai spreadsheet tujuan yang sudah ada, meneri
 - Data peserta masuk ke tab `Tiket Peserta`.
 - Tiket berisi kode unik dan QR. QR hanya menyimpan kode tiket, bukan data pribadi.
 - Email dan Fonnte tidak diperlukan untuk menerbitkan tiket.
-- Setelah submit, halaman menampilkan kode tiket dan QR. Peserta bisa mengunduh QR PNG atau mencetak halaman sebagai PDF.
+- Setelah submit, halaman menampilkan kode tiket dan QR. Tombol yang tersedia hanya **Unduh QR & konfirmasi ke admin**.
 - Tombol utama mengunduh QR lalu membuka WhatsApp dengan pesan konfirmasi sopan yang sudah terisi data formulir dan kode tiket. Peserta cukup menekan Kirim; browser tidak mengirim pesan WhatsApp otomatis tanpa tindakan itu.
 - Panitia membuka URL web app, memindai QR, lalu memasukkan PIN check-in.
 - Check-in pertama mengubah status menjadi `HADIR`. Pemindaian berikutnya ditolak.
@@ -32,5 +32,5 @@ Nama dan nomor WhatsApp peserta wajib. Email tidak diperlukan. Infaq opsional da
 ## Catatan
 
 - Jangan jalankan `setupTicketSystem` lebih dari satu kali. Skrip mencegah pembuatan spreadsheet duplikat.
-- Setelah data tercatat, kode tiket dan QR ditampilkan di halaman hasil. Tombol konfirmasi membuka WhatsApp dengan data yang sudah terisi; peserta menekan Kirim untuk menyampaikan konfirmasi ke admin.
+- Setelah data tercatat, kode tiket dan QR ditampilkan di halaman hasil. Tombol **Unduh QR & konfirmasi ke admin** mengunduh QR dan membuka WhatsApp dengan data yang sudah terisi; peserta menekan Kirim untuk menyampaikan konfirmasi ke admin.
 - QR dibuat dari kode tiket melalui layanan QR publik. QR tidak memuat nama atau nomor WhatsApp.
