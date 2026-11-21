@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#102d4d">
+  <title>Pemindai QR Tiket</title>
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;padding:18px;background:#e9eef5;color:#142b43;font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+    .card{width:min(620px,100%);margin:3vh auto;padding:clamp(20px,5vw,30px);border:1px solid #ffffffc9;border-radius:22px;background:#edf2f8;box-shadow:12px 12px 28px #b9c4d1,-10px -10px 24px #fff}
+    .eyebrow{color:#159b9a;font-size:12px;font-weight:850;letter-spacing:.12em}
+    h1{margin:8px 0;color:#102d4d;font-size:clamp(25px,6vw,34px)}
+    p{color:#5e7185}
+    #reader{overflow:hidden;width:100%;margin:16px 0;border-radius:14px;background:#dce4ed}
+    #reader video{border-radius:14px}
+    button{width:100%;min-height:48px;padding:12px;border:0;border-radius:11px;background:#2865d8;color:#fff;font:800 15px system-ui,Arial;cursor:pointer}
+    button.secondary{margin-top:10px;background:#e9eef5;color:#102d4d;border:1px solid #d3dce7}
+    .status{padding:14px;border-radius:12px;background:#e1e9f1;color:#536a80}
+    .status.ok{background:#e0f3eb;color:#176b59}
+    .status.bad{background:#fff0e9;color:#9e402c}
+    .name{margin-top:5px;color:#102d4d;font-size:20px;font-weight:850}
+    .code{color:#2865d8;font-weight:850}
+    .hidden{display:none!important}
+  </style>
+</head>
+<body>
+  <main class="card">
+    <span class="eyebrow">TRAINING EXCLUSIVE</span>
+    <h1>Pindai QR tiket</h1>
+    <p>Arahkan QR peserta ke kamera. Kehadiran akan dicatat otomatis setelah dipindai.</p>
+    <div id="reader"></div>
+    <div id="status" class="status">Menyiapkan kamera…</div>
+    <button id="next" class="secondary hidden" type="button" onclick="scanNext()">Pindai peserta berikutnya</button>
+  </main>
+  <script>
+    let scanner=null;
+    let busy=false;
+    const statusBox=document.getElementById("status");
+    const nextButton=document.getElementById("next");
+
+    function setStatus(message,kind){
+      statusBox.className="status"+(kind?" "+kind:"");
+      statusBox.textContent=message;
+    }
+    function appScriptOrigin(origin){
+      try{
+        const host=new URL(origin).hostname;
+        return host==="script.google.com" || host==="script.googleusercontent.com" || host.endsWith(".script.googleusercontent.com");
+      }catch(_){return false;}
+    }
+    window.addEventListener("message",event=>{
+      if(event.source!==window.opener || !appScriptOrigin(event.origin)) return;
+      const data=event.data||{};
+      if(data.type!=="checkin-result") return;
+      const result=data.result||{};
+      statusBox.className="status "+(result.ok?"ok":"bad");
+      statusBox.replaceChildren();
+      const message=document.createElement("div");
+      message.textContent=result.message||"Hasil check-in diterima.";
+      statusBox.appendChild(message);
+      if(result.name){
+        const name=document.createElement("div");name.className="name";name.textContent=result.name;statusBox.appendChild(name);
+      }
+      if(result.ticketId){
+        const code=document.createElement("div");code.className="code";code.textContent=result.ticketId;statusBox.appendChild(code);
+      }
+      nextButton.classList.remove("hidden");
+    });
+
+    async function startScanner(){
+      if(!window.opener){
+        setStatus("Buka pemindai dari halaman check-in panitia agar hasilnya tersimpan.", "bad");
+        return;
+      }
+      if(typeof Html5Qrcode==="undefined"){
+        setStatus("Pemindai gagal dimuat. Periksa koneksi internet lalu muat ulang halaman.", "bad");
+        return;
+      }
+      try{
+        scanner=new Html5Qrcode("reader");
+        const cameras=await Html5Qrcode.getCameras();
+        if(!cameras.length) throw new Error("Kamera tidak ditemukan di perangkat ini.");
+        await scanner.start(cameras[0].id,{fps:10,qrbox:{width:240,height:240}},ticketId=>{
+          if(busy) return;
+          busy=true;
+          scanner.pause(true);
+          nextButton.classList.add("hidden");
+          setStatus("QR terbaca. Mencatat kehadiran…");
+          window.opener.postMessage({type:"ticket-scan",ticketId:ticketId},"*");
+        });
+        setStatus("Kamera aktif. Arahkan QR tiket ke kotak pemindai.");
+      }catch(error){
+        setStatus(error.message||"Kamera tidak dapat diakses. Izinkan akses kamera lalu muat ulang.", "bad");
+      }
+    }
+    function scanNext(){
+      busy=false;
+      nextButton.classList.add("hidden");
+      setStatus("Arahkan QR peserta berikutnya ke kamera.");
+      if(scanner) scanner.resume();
+    }
+    startScanner();
+  </script>
+</body>
+</html>
