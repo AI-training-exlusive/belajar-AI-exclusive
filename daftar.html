@@ -52,10 +52,10 @@
         <div class="actions"><button class="btn primary" id="send-whatsapp" type="button">Konfirmasi ke admin lewat WhatsApp</button><button class="btn light" id="edit-data" type="button">Ubah data</button></div>
         <p id="whatsapp-note" class="notice hidden" role="status">WhatsApp terbuka dengan data pendaftaran. Tekan <strong>Kirim</strong> di WhatsApp agar admin menerima pendaftaranmu.</p>
       </section>
-      <p class="smallprint">Lokasi acara: <a href="https://www.google.com/maps/search/?api=1&query=Masjid+Sejuta+Pemuda" target="_blank" rel="noopener">Masjid Sejuta Pemuda</a> · Panitia: <a href="https://wa.me/6285283966520" target="_blank" rel="noopener">0852-8396-6520</a></p>
+      <p class="smallprint">Acara: Sabtu, 21 November 2026 · 09.00 WIB–selesai · lokasi: <a href="https://www.google.com/maps/search/?api=1&query=Masjid+Sejuta+Pemuda" target="_blank" rel="noopener">Aula Masjid Sejuta Pemuda</a> · Panitia: <a href="https://wa.me/6285283966520" target="_blank" rel="noopener">0852-8396-6520</a></p>
     </section>
   </main>
-  <footer class="footer">Training Exclusive AI untuk Bisnis · Masjid Sejuta Pemuda</footer>
+  <footer class="footer">Training Exclusive AI untuk Bisnis · Aula Masjid Sejuta Pemuda</footer>
   <script>
     const form = document.getElementById("registration-form");
     const formStep = document.getElementById("form-step");
@@ -93,6 +93,7 @@
     document.getElementById("send-whatsapp").addEventListener("click", () => {
       const message = [
         "Assalamu’alaikum, saya ingin mendaftar Training Exclusive AI untuk Bisnis.",
+        "Acara: Sabtu, 21 November 2026, 09.00 WIB–selesai, Aula Masjid Sejuta Pemuda.",
         "Nama: " + read("name"),
         "WhatsApp peserta: " + read("phone"),
         "Nama usaha: " + (read("business") || "Tidak diisi"),
