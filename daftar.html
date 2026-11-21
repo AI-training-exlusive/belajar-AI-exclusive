@@ -22,23 +22,24 @@
     <section class="card" aria-labelledby="page-title">
       <span class="eyebrow">TRAINING EXCLUSIVE</span>
       <h1 id="page-title">Formulir pendaftaran</h1>
-      <p class="intro">Isi data berikut. Setelah ditinjau, kamu akan diarahkan ke WhatsApp admin untuk mengirim pendaftaran dan menerima konfirmasi tiket.</p>
+      <p class="intro">Isi dan periksa data pendaftaran. Setelah dikirim, tiket ber-QR langsung dibuat, dikirim ke email, dan berlaku untuk check-in acara.</p>
       <div class="progress" id="progress" data-step="1"><span id="progress-label">Langkah 1 dari 2 · Data peserta</span><span class="progress-track"><span class="progress-fill"></span></span></div>
 
-      <form id="registration-form">
+      <form id="registration-form" method="post" target="_self" action="https://script.google.com/macros/s/AKfycbxCrhqOrb5OqeG7l-YS9aElVUy17ONBBEnS5VO2P5dEqLHHVoRZViIRusGsB5uCbJET/exec">
         <div id="form-step">
           <div class="fields">
             <div class="field"><label for="name">Nama lengkap *</label><input id="name" name="name" required autocomplete="name" placeholder="Nama sesuai identitas peserta"></div>
             <div class="field"><label for="phone">Nomor WhatsApp peserta *</label><input id="phone" name="phone" required type="tel" inputmode="tel" autocomplete="tel" placeholder="08xxxxxxxxxx"></div>
+            <div class="field"><label for="email">Email aktif *</label><input id="email" name="email" required type="email" autocomplete="email" placeholder="nama@email.com"><p class="note">Tiket digital dan QR akan dikirim ke email ini.</p></div>
             <div class="field"><label for="business">Nama usaha</label><input id="business" name="business" placeholder="Boleh dikosongkan"></div>
             <div class="field"><label for="product">Produk / bidang usaha *</label><input id="product" name="product" required placeholder="Contoh: makanan, fashion, jasa"></div>
             <div class="field"><label for="city">Domisili *</label><input id="city" name="city" required autocomplete="address-level2" placeholder="Kota / kabupaten"></div>
             <div class="field"><label for="platform">Platform jualan *</label><select id="platform" name="platform" required><option value="">Pilih platform</option><option>WhatsApp</option><option>Instagram</option><option>TikTok Shop</option><option>Shopee</option><option>Tokopedia</option><option>Belum mulai berjualan</option><option>Lainnya</option></select></div>
-            <div class="field"><label for="status">Status peserta *</label><select id="status" name="status" required><option value="">Pilih status</option><option>Seller</option><option>Reseller</option><option>Pemilik UMKM</option><option>Pemula</option><option>Lainnya</option></select></div>
+            <div class="field"><label for="status">Status peserta *</label><select id="status" name="participantType" required><option value="">Pilih status</option><option>Seller</option><option>Reseller</option><option>Pemilik UMKM</option><option>Pemula</option><option>Lainnya</option></select></div>
             <div class="field"><label for="infaq">Infaq kopi jamaah (opsional)</label><select id="infaq" name="infaq"><option>Tidak memberikan infaq</option><option>Seikhlasnya</option><option>Rp10.000</option><option>Rp20.000</option><option>Rp50.000</option></select></div>
             <div class="field full"><label for="question">Pertanyaan untuk panitia (opsional)</label><textarea id="question" name="question" rows="3" placeholder="Tulis pertanyaan kalau ada"></textarea></div>
             <div class="field full"><p class="fee-note"><strong>Pendaftaran gratis.</strong> Infaq hanya untuk kopi jamaah, sukarela, dan tidak memengaruhi konfirmasi atau tiket.</p></div>
-            <div class="field full"><label class="consent"><input id="consent" type="checkbox" required><span>Saya setuju data ini dikirim kepada panitia melalui WhatsApp untuk mengelola pendaftaran dan mengirim konfirmasi tiket.</span></label><p class="note">Jangan masukkan nomor identitas atau data sensitif.</p></div>
+            <div class="field full"><label class="consent"><input id="consent" name="consent" value="yes" type="checkbox" required><span>Saya setuju data ini digunakan untuk pendaftaran, penerbitan tiket, dan pencatatan kehadiran.</span></label><p class="note">Jangan masukkan nomor identitas atau data sensitif.</p></div>
           </div>
           <div class="actions"><button class="btn primary" type="submit">Tinjau data pendaftaran</button><a class="btn light" href="https://wa.me/6285283966520" target="_blank" rel="noopener">Tanya admin</a></div>
         </div>
@@ -46,11 +47,11 @@
 
       <section id="review-step" class="hidden" aria-labelledby="review-title">
         <h2 id="review-title" style="color:var(--navy);margin:0">Periksa datamu</h2>
-        <p class="intro" style="margin-top:6px">Pastikan nomor WhatsApp sudah benar. Data baru dikirim setelah kamu menekan tombol WhatsApp dan mengirim pesannya.</p>
+        <p class="intro" style="margin-top:6px">Pastikan email dan nomor WhatsApp benar. Setelah kamu mengirim, tiket langsung diterbitkan tanpa menunggu persetujuan admin.</p>
         <dl class="summary" id="summary"></dl>
-        <div class="handoff">Setelah admin mengonfirmasi pendaftaran, tiket digital akan dikirim langsung ke nomor WhatsApp yang kamu cantumkan.</div>
-        <div class="actions"><button class="btn primary" id="send-whatsapp" type="button">Konfirmasi ke admin lewat WhatsApp</button><button class="btn light" id="edit-data" type="button">Ubah data</button></div>
-        <p id="whatsapp-note" class="notice hidden" role="status">WhatsApp terbuka dengan data pendaftaran. Tekan <strong>Kirim</strong> di WhatsApp agar admin menerima pendaftaranmu.</p>
+        <div class="handoff">Tiket dikirim ke email. Saat acara, tunjukkan QR tiket kepada panitia untuk mencatat kehadiran. Tiket hanya bisa dipakai check-in satu kali.</div>
+        <div class="actions"><button class="btn primary" id="submit-registration" type="button">Daftar dan terbitkan tiket</button><button class="btn light" id="edit-data" type="button">Ubah data</button></div>
+        <p id="submit-note" class="notice hidden" role="status">Sedang menyimpan pendaftaran dan membuat tiket. Jangan tutup halaman ini.</p>
       </section>
       <p class="smallprint">Acara: Sabtu, 21 November 2026 · 09.00 WIB–selesai · lokasi: <a href="https://www.google.com/maps/search/?api=1&query=Masjid+Sejuta+Pemuda" target="_blank" rel="noopener">Aula Masjid Sejuta Pemuda</a> · Panitia: <a href="https://wa.me/6285283966520" target="_blank" rel="noopener">0852-8396-6520</a></p>
     </section>
@@ -64,7 +65,7 @@
     const summary = document.getElementById("summary");
     const read = id => document.getElementById(id).value.trim();
     const fields = [
-      ["Nama", "name"], ["WhatsApp peserta", "phone"], ["Nama usaha", "business"],
+      ["Nama", "name"], ["WhatsApp peserta", "phone"], ["Email", "email"], ["Nama usaha", "business"],
       ["Produk / bidang usaha", "product"], ["Domisili", "city"], ["Platform jualan", "platform"],
       ["Status peserta", "status"], ["Infaq kopi jamaah", "infaq"], ["Pertanyaan", "question"]
     ];
@@ -81,7 +82,7 @@
       formStep.classList.add("hidden");
       reviewStep.classList.remove("hidden");
       progress.dataset.step = "2";
-      document.getElementById("progress-label").textContent = "Langkah 2 dari 2 · Konfirmasi ke admin";
+      document.getElementById("progress-label").textContent = "Langkah 2 dari 2 · Terbitkan tiket";
       window.scrollTo({top:0,behavior:"smooth"});
     });
     document.getElementById("edit-data").addEventListener("click", () => {
@@ -90,23 +91,17 @@
       document.getElementById("progress-label").textContent = "Langkah 1 dari 2 · Data peserta";
       window.scrollTo({top:0,behavior:"smooth"});
     });
-    document.getElementById("send-whatsapp").addEventListener("click", () => {
-      const message = [
-        "Assalamu’alaikum, saya ingin mendaftar Training Exclusive AI untuk Bisnis.",
-        "Acara: Sabtu, 21 November 2026, 09.00 WIB–selesai, Aula Masjid Sejuta Pemuda.",
-        "Nama: " + read("name"),
-        "WhatsApp peserta: " + read("phone"),
-        "Nama usaha: " + (read("business") || "Tidak diisi"),
-        "Produk/bidang usaha: " + read("product"),
-        "Domisili: " + read("city"),
-        "Platform jualan: " + read("platform"),
-        "Status peserta: " + read("status"),
-        "Infaq kopi jamaah (sukarela): " + read("infaq"),
-        "Pertanyaan: " + (read("question") || "Tidak ada"),
-        "Mohon konfirmasi pendaftaran dan kirim tiket digital melalui WhatsApp ini."
-      ].join("\n");
-      window.open("https://wa.me/6285283966520?text=" + encodeURIComponent(message), "_blank", "noopener");
-      document.getElementById("whatsapp-note").classList.remove("hidden");
+    document.getElementById("submit-registration").addEventListener("click", () => {
+      if (!form.reportValidity()) {
+        reviewStep.classList.add("hidden");
+        formStep.classList.remove("hidden");
+        progress.dataset.step = "1";
+        document.getElementById("progress-label").textContent = "Langkah 1 dari 2 · Data peserta";
+        return;
+      }
+      document.getElementById("submit-registration").disabled = true;
+      document.getElementById("submit-note").classList.remove("hidden");
+      form.submit();
     });
   </script>
 </body>
