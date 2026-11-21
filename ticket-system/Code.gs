@@ -38,6 +38,12 @@ function setupTicketSystem() {
   Logger.log("WEB_APP_URL akan muncul setelah Deploy > New deployment > Web app.");
 }
 
+function authorizeTicketServices() {
+  MailApp.getRemainingDailyQuota();
+  UrlFetchApp.fetch(TICKET_CONFIG.qrService + "?size=32x32&data=authorize");
+  Logger.log("Izin email dan layanan QR sudah aktif.");
+}
+
 function doGet() {
   return HtmlService.createHtmlOutput(checkinPage_())
     .setTitle("Check-in Peserta — Training Exclusive AI untuk Bisnis");
