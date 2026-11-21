@@ -73,6 +73,16 @@
     .btn.primary{box-shadow:7px 7px 14px rgba(28,75,135,.3),-5px -5px 12px rgba(255,255,255,.8)}
     .btn.light{border-color:rgba(255,255,255,.9);box-shadow:7px 7px 14px rgba(151,165,184,.3),-6px -6px 13px rgba(255,255,255,.88)}
     .art-frame{transform-style:preserve-3d;transition:transform .22s ease;will-change:transform}
+    .speaker-hero-frame{background:linear-gradient(145deg,#123a5a,#0b6277);border:1px solid rgba(255,255,255,.48);box-shadow:0 28px 62px rgba(8,42,70,.28),inset 0 1px rgba(255,255,255,.35)}
+    .speaker-hero-frame:before,.speaker-hero-frame:after{z-index:2;width:340px;height:340px;border-color:rgba(188,255,247,.56);pointer-events:none}
+    .speaker-hero-frame:after{width:250px;height:250px;border-color:rgba(255,255,255,.42)}
+    .hero-speaker-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:20% 54%;transform:scale(1.65);filter:saturate(.94) contrast(1.05);}
+    .speaker-photo-shade{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(5,29,52,.05) 24%,rgba(5,29,52,.08) 58%,rgba(5,29,52,.56) 100%),linear-gradient(90deg,rgba(4,32,54,.16),transparent 65%);pointer-events:none}
+    .photo-glow{position:absolute;z-index:1;width:200px;height:200px;right:3%;top:4%;border-radius:50%;background:#59f4e2;filter:blur(76px);opacity:.34;pointer-events:none}
+    .speaker-hero-frame .orbit{z-index:2;width:300px;height:110px;border-color:rgba(193,255,247,.7);pointer-events:none}
+    .speaker-hero-frame .orbit.second{width:260px;height:92px;border-color:rgba(255,255,255,.55)}
+    .speaker-hero-frame .spark{z-index:3}
+    .photo-ai-badge{position:absolute;z-index:4;top:22px;right:23px;width:64px;height:64px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.86);border-radius:19px;background:linear-gradient(145deg,#f5fffe,#a8eee3);color:#123a5a;font-size:1.32rem;font-weight:950;box-shadow:8px 10px 22px rgba(3,26,50,.28),inset 2px 2px 5px rgba(255,255,255,.9);animation:chip-float 4.8s ease-in-out infinite;transform:rotate(7deg)}
     .ai-orb{animation:orb-float 5s ease-in-out infinite;transform-style:preserve-3d}
     .orbit{animation:orbit-spin 24s linear infinite}
     .orbit.second{animation:orbit-spin-reverse 30s linear infinite}
@@ -98,7 +108,7 @@
     @keyframes chip-float{0%,100%{translate:0 0}50%{translate:0 -7px}}
     @keyframes spark-pulse{0%,100%{opacity:.55;scale:.82}50%{opacity:1;scale:1.2}}
     @media(max-width:840px){.hero-grid>div:first-child{padding:30px}}
-    @media(max-width:600px){.hero-grid>div:first-child{padding:23px 20px;border-radius:22px}.agenda-row{padding:16px;border-radius:14px}.speaker-photo{transform:scale(1.25);object-position:42% 40%}}
+    @media(max-width:600px){.hero-grid>div:first-child{padding:23px 20px;border-radius:22px}.agenda-row{padding:16px;border-radius:14px}.speaker-photo{transform:scale(1.25);object-position:42% 40%}.hero-speaker-photo{transform:scale(1.52);object-position:18% 54%}.photo-ai-badge{width:54px;height:54px;top:15px;right:15px;border-radius:16px}}
     @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
   </style>
 </head>
@@ -118,12 +128,14 @@
         <div class="hero-actions"><a class="btn primary" href="#daftar">Daftar sebagai peserta</a><a class="btn light" href="#materi">Lihat yang dipelajari</a></div>
         <p class="mini-proof">Dirancang untuk pemilik usaha, seller, reseller, dan peserta pemula.</p>
       </div>
-      <div class="hero-art" aria-label="Ilustrasi teknologi AI untuk bisnis">
-        <div class="art-frame">
-          <div class="glow"></div>
-          <svg class="network" viewBox="0 0 520 390" aria-hidden="true"><g fill="none" stroke="#b7fff3" stroke-width="1.2" opacity=".7"><path d="M0 285 92 201l68 26 94-104 90 70 75-92 101 65M18 76l113 57 85-90 72 50 93-65 74 74M58 360l102-133 104 87 78-121 102 123 70-72M70 44l42 158m179-109-37 116m167-153-40 168M160 227l68-145m158 40 33 136"/></g><g fill="#d3fff8"><circle cx="92" cy="201" r="4"/><circle cx="160" cy="227" r="4"/><circle cx="254" cy="123" r="4"/><circle cx="344" cy="193" r="4"/><circle cx="419" cy="101" r="4"/><circle cx="454" cy="286" r="4"/><circle cx="131" cy="133" r="4"/><circle cx="288" cy="93" r="4"/></g></svg>
-          <div class="orbit"></div><div class="orbit second"></div><div class="ai-orb">AI</div><span class="spark s1"></span><span class="spark s2"></span>
-          <div class="chip one"><em>IDE KONTEN</em>Lebih terarah</div><div class="chip two"><em>STRATEGI USAHA</em>Mulai dari kebutuhanmu</div><div class="chip three"><em>PRAKTIK LANGSUNG</em>Bawa contoh produk</div>
+      <div class="hero-art" aria-label="Foto Mang Tab dengan efek visual AI">
+        <div class="art-frame speaker-hero-frame">
+          <img class="hero-speaker-photo" src="assets/training-poster.jpeg" alt="Mang Tab, pemateri Training Exclusive AI for Business">
+          <div class="speaker-photo-shade" aria-hidden="true"></div>
+          <div class="photo-glow" aria-hidden="true"></div>
+          <div class="orbit"></div><div class="orbit second"></div>
+          <span class="spark s1"></span><span class="spark s2"></span>
+          <div class="photo-ai-badge" aria-hidden="true">AI</div>
         </div>
         <div class="hero-meta"><div class="meta-item"><small>TANGGAL</small><strong>[Isi tanggal]</strong></div><div class="meta-item"><small>WAKTU</small><strong>[Isi jam]</strong></div><div class="meta-item"><small>LOKASI</small><strong>[Isi lokasi]</strong></div></div>
       </div>
