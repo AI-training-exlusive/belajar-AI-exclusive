@@ -1,4 +1,4 @@
-name: Cek CORS (sementara)
+name: Cek link (sementara)
 on:
   push:
     branches: [ci-cek-cors]
@@ -6,17 +6,7 @@ jobs:
   cek:
     runs-on: ubuntu-latest
     steps:
-      - name: POST tanpa data (tidak menyimpan apa pun)
-        run: |
-          URL="https://script.google.com/macros/s/AKfycbzHNKd8RWTlwYRxcfMPvG_mH5AdENZt-BP2Nv11bGUNmLVhE-IyPZjT82-DUWrAGSsWkA/exec"
-          curl -sS -D h1.txt -o b1.txt -X POST -H "Origin: https://ai-training-exlusive.github.io" --data "format=json" "$URL"
-          grep -iE "^HTTP|^access-control|^content-type" h1.txt
-          LOC=$(grep -i "^location" h1.txt | tr -d '\r' | cut -d' ' -f2)
-          if [ -n "$LOC" ]; then
-            echo "--- redirect diikuti"
-            curl -sS -D h2.txt -o b2.txt -H "Origin: https://ai-training-exlusive.github.io" "$LOC"
-            grep -iE "^HTTP|^access-control|^content-type" h2.txt
-            echo "BODY: $(head -c 200 b2.txt)"
-          else
-            echo "BODY: $(head -c 120 b1.txt)"
-          fi
+      - run: |
+          U=$(curl -sS -o /dev/null -w "%{redirect_url}" "https://maps.app.goo.gl/Eqbw839XBTK7faA59")
+          echo "REDIR1: $U"
+          curl -sS -L -o /dev/null -w "FINAL: %{url_effective}\n" "https://maps.app.goo.gl/Eqbw839XBTK7faA59"
