@@ -24,9 +24,8 @@
     .row input{flex:1;min-width:0}
     .row .btn{flex:none}
     .btn.wide{width:100%}
-    #reader{overflow:hidden;border-radius:14px;background:#0f2a44;min-height:0}
-    #reader:empty{display:none}
-    #reader video{border-radius:14px}
+    #reader{width:100%;max-width:480px;justify-self:center;overflow:hidden;border-radius:14px;background:#0f2a44}
+    #reader video{width:100%!important;height:auto!important;border-radius:14px;display:block}
     .result{border-radius:18px;padding:18px;background:var(--paper);border:2px solid var(--line);text-align:center;display:grid;gap:4px}
     .result .big{font:800 26px var(--display)}
     .result .name{font:800 22px var(--display);color:var(--ink)}
@@ -71,7 +70,7 @@
       </div>
     </section>
 
-    <div id="reader"></div>
+    <div id="reader" class="hidden"></div>
 
     <section class="result wait" id="result" aria-live="polite">
       <span class="big" id="r-big">Siap memindai</span>
@@ -180,17 +179,21 @@
       try { sessionStorage.setItem("checkin-pin", pinInput.value.trim()); } catch (_) {}
       if (typeof Html5Qrcode === "undefined") { show("bad", "Pemindai gagal dimuat", "", "", "Cek internet lalu muat ulang halaman."); return; }
       try {
+        // Kotak kamera harus terlihat dulu supaya lebarnya terbaca (bukan 0).
+        document.getElementById("reader").classList.remove("hidden");
         scanner = scanner || new Html5Qrcode("reader");
         await scanner.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 240, height: 240 } }, onScan);
         startBtn.classList.add("hidden"); stopBtn.classList.remove("hidden");
         show("wait", "Kamera aktif", "", "", "Arahkan QR tiket ke kotak pemindai.");
       } catch (err) {
+        document.getElementById("reader").classList.add("hidden");
         show("bad", "Kamera tidak bisa dibuka", "", "", "Izinkan akses kamera di browser, lalu coba lagi.");
       }
     });
     stopBtn.addEventListener("click", async () => {
       try { if (scanner) await scanner.stop(); } catch (_) {}
       stopBtn.classList.add("hidden"); startBtn.classList.remove("hidden");
+      document.getElementById("reader").classList.add("hidden");
       show("wait", "Kamera mati", "", "", "Tekan Nyalakan kamera untuk memindai lagi.");
     });
     document.getElementById("manual-go").addEventListener("click", () => {
