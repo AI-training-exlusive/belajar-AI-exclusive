@@ -161,6 +161,11 @@
     .t-qr span{display:grid;place-items:center;width:112px;height:112px;background:#fff;border-radius:10px;color:var(--navy);font:800 13px var(--mono)}
     .ticket-cap{font-size:12.5px;color:var(--ink-soft);margin-top:14px}
 
+    .loc{display:grid;grid-template-columns:1fr 1.2fr;gap:clamp(20px,4vw,44px);align-items:center}
+    .loc>*{min-width:0}
+    .map{border-radius:20px;overflow:hidden;border:1px solid var(--line);background:var(--ground);aspect-ratio:4/3;max-width:100%}
+    .map iframe{width:100%;height:100%;border:0;display:block}
+    @media (max-width:860px){.loc{grid-template-columns:1fr}}
     .faq{display:grid;gap:10px;margin-top:22px}
     .faq details{background:var(--ground);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
     .faq summary{font-weight:700;cursor:pointer}
@@ -206,7 +211,7 @@
         <span class="logo-pill"><img src="assets/logo-penyelenggara.jpg" alt="masjidmuzaki.com dan Masjid Sejuta Pemuda" width="350" height="92"></span>
         <span>AI FOR BUSINESS<small>Training Exclusive</small></span>
       </a>
-      <nav class="links" aria-label="Navigasi utama"><a href="#materi">Materi</a><a href="#agenda">Agenda</a><a href="#tiket">Tiket</a><a href="#faq">FAQ</a></nav>
+      <nav class="links" aria-label="Navigasi utama"><a href="#materi">Materi</a><a href="#agenda">Agenda</a><a href="#tiket">Tiket</a><a href="#lokasi">Lokasi</a><a href="#faq">FAQ</a></nav>
       <a class="btn hot sm only-before" href="daftar.html">Daftar</a>
       <a class="btn hot sm only-dday" href="#tiket">Info masuk</a>
       <a class="btn hot sm only-after js-wa-next" href="https://wa.me/6285283966520" target="_blank" rel="noopener">Kabari acara berikutnya</a>
@@ -229,7 +234,7 @@
           <div class="facts">
             <div class="fact"><small>TANGGAL</small>Sabtu, 19 Des 2026</div>
             <div class="fact"><small>WAKTU</small>09.00 WIB–selesai</div>
-            <a class="fact" href="https://www.google.com/maps/search/?api=1&query=Masjid+Sejuta+Pemuda" target="_blank" rel="noopener"><small>LOKASI ↗</small>Aula Masjid Sejuta Pemuda</a>
+            <a class="fact" href="https://maps.app.goo.gl/Eqbw839XBTK7faA59" target="_blank" rel="noopener"><small>LOKASI ↗</small>Aula Masjid Sejuta Pemuda</a>
           </div>
           <div class="count only-before" id="countdown" hidden>Mulai dalam <b id="cd-d">0</b> hari <b id="cd-h">00</b> jam <b id="cd-m">00</b> menit</div>
           <p class="count only-after">Mau ikut acara berikutnya? Tekan tombol di atas, admin akan mengabari lewat WhatsApp.</p>
@@ -354,6 +359,23 @@
       </div>
     </section>
 
+    <section class="sec" id="lokasi" style="padding-top:0">
+      <div class="wrap loc">
+        <div>
+          <span class="eye">Lokasi</span>
+          <h2>Aula Masjid Sejuta Pemuda</h2>
+          <p class="sub">Acara di aula masjid. Tekan tombol di bawah untuk petunjuk arah dari tempatmu.</p>
+          <div class="cta-row">
+            <a class="btn hot" href="https://www.google.com/maps/dir/?api=1&destination=-6.9455072,106.9286462" target="_blank" rel="noopener">Petunjuk arah</a>
+            <a class="btn line" href="https://maps.app.goo.gl/Eqbw839XBTK7faA59" target="_blank" rel="noopener">Buka di Google Maps</a>
+          </div>
+        </div>
+        <div class="map">
+          <iframe title="Peta lokasi Masjid Sejuta Pemuda" src="https://maps.google.com/maps?q=-6.9455072,106.9286462&amp;z=17&amp;hl=id&amp;output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+        </div>
+      </div>
+    </section>
+
     <section class="sec" id="faq" style="padding-top:0">
       <div class="wrap">
         <span class="eye">FAQ</span>
@@ -363,7 +385,7 @@
           <details><summary>Ada biaya pendaftaran?</summary><p>Ada, Rp20.000 untuk kopi jamaah. Bayar lewat QRIS di halaman ini atau di formulir pendaftaran.</p></details>
           <details><summary>Bagaimana cara bayar?</summary><p>Scan QRIS pakai m-banking atau e-wallet (nominal sudah Rp20.000), screenshot bukti transfernya, lalu upload di formulir pendaftaran. Admin mengecek bukti itu sebelum hari H.</p></details>
           <details><summary>Perlu bawa apa?</summary><p>Disarankan membawa laptop dan charger. Bawa juga HP dan satu contoh produk atau ide usaha untuk praktik.</p></details>
-          <details><summary>Di mana acaranya?</summary><p>Aula Masjid Sejuta Pemuda. <a href="https://www.google.com/maps/search/?api=1&query=Masjid+Sejuta+Pemuda" target="_blank" rel="noopener">Buka di Google Maps</a> atau tanya admin.</p></details>
+          <details><summary>Di mana acaranya?</summary><p>Aula Masjid Sejuta Pemuda. <a href="https://maps.app.goo.gl/Eqbw839XBTK7faA59" target="_blank" rel="noopener">Buka di Google Maps</a> atau tanya admin.</p></details>
         </div>
       </div>
     </section>
