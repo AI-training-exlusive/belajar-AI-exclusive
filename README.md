@@ -27,4 +27,4 @@ Untuk membuka batch baru, ubah tanggal di tiga tempat:
 2. `window.REG_CLOSE_AT` di `daftar.html`
 3. `TICKET_CONFIG.closeAt` di `ticket-system/Code.gs` (lalu deploy ulang Apps Script)
 
-Teks tanggal yang tampil (mis. "Sabtu, 21 Nov 2026") juga perlu diganti manual.
+Teks tanggal yang tampil (mis. "Senin, 21 Des 2026") juga perlu diganti manual.

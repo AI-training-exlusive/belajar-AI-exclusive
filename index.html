@@ -9,9 +9,9 @@
   <script>
     // Jadwal acara. Ganti tiga baris ini untuk batch berikutnya.
     window.EVENT = {
-      dayStart: "2026-11-21T00:00:00+07:00", // awal hari H
-      start:    "2026-11-21T09:00:00+07:00", // jam mulai (pendaftaran online ditutup)
-      dayEnd:   "2026-11-21T23:59:59+07:00"  // akhir hari H
+      dayStart: "2026-12-21T00:00:00+07:00", // awal hari H
+      start:    "2026-12-21T09:00:00+07:00", // jam mulai (pendaftaran online ditutup)
+      dayEnd:   "2026-12-21T23:59:59+07:00"  // akhir hari H
     };
     // Mode halaman: before (sebelum), dday (hari H), after (setelah).
     // Bisa dipaksa lewat alamat, mis. index.html?mode=before untuk pratinjau.
@@ -174,7 +174,7 @@
   <div class="announce">
     <span class="only-before">Gratis · Kursi terbatas · Disarankan bawa laptop dan charger</span>
     <span class="only-dday">Hari ini 09.00 WIB · Siapkan QR tiket di HP sebelum masuk aula</span>
-    <span class="only-after">Batch 1 selesai 21 Nov 2026 · Terima kasih jamaah dan peserta!</span>
+    <span class="only-after">Acara selesai 21 Des 2026 · Terima kasih jamaah dan peserta!</span>
   </div>
 
   <header class="top">
@@ -186,7 +186,7 @@
       <nav class="links" aria-label="Navigasi utama"><a href="#materi">Materi</a><a href="#agenda">Agenda</a><a href="#tiket">Tiket</a><a href="#faq">FAQ</a></nav>
       <a class="btn hot sm only-before" href="daftar.html">Daftar gratis</a>
       <a class="btn hot sm only-dday" href="#tiket">Info masuk</a>
-      <a class="btn hot sm only-after js-wa-next" href="https://wa.me/6285283966520" target="_blank" rel="noopener">Kabari batch 2</a>
+      <a class="btn hot sm only-after js-wa-next" href="https://wa.me/6285283966520" target="_blank" rel="noopener">Kabari acara berikutnya</a>
     </div>
   </header>
 
@@ -194,22 +194,22 @@
     <section class="hero">
       <div class="wrap hero-grid">
         <div>
-          <span class="kick"><b></b><span class="only-before">Training exclusive · gratis</span><span class="only-dday">Berlangsung hari ini</span><span class="only-after">Batch 1 sudah selesai</span></span>
+          <span class="kick"><b></b><span class="only-before">Training exclusive · gratis</span><span class="only-dday">Berlangsung hari ini</span><span class="only-after">Acara sudah selesai</span></span>
           <h1>Jualan lebih <em>gurih</em> dengan AI.</h1>
           <p class="lead">Tingkatkan bisnis dengan teknologi masa depan. Belajar pakai AI buat cari ide promosi, nulis caption, dan bales chat pelanggan, langsung praktik pakai produk usahamu sendiri.</p>
           <div class="cta-row">
             <a class="btn hot only-before" href="daftar.html">Ambil tiket gratis</a>
             <a class="btn hot only-dday" href="#tiket">Lihat info masuk</a>
-            <a class="btn hot only-after js-wa-next" href="https://wa.me/6285283966520" target="_blank" rel="noopener">Kabari saya batch berikutnya</a>
+            <a class="btn hot only-after js-wa-next" href="https://wa.me/6285283966520" target="_blank" rel="noopener">Kabari saya acara berikutnya</a>
             <a class="btn ghost" href="#materi">Lihat materinya</a>
           </div>
           <div class="facts">
-            <div class="fact"><small>TANGGAL</small>Sabtu, 21 Nov 2026</div>
+            <div class="fact"><small>TANGGAL</small>Senin, 21 Des 2026</div>
             <div class="fact"><small>WAKTU</small>09.00 WIB–selesai</div>
             <a class="fact" href="https://www.google.com/maps/search/?api=1&query=Masjid+Sejuta+Pemuda" target="_blank" rel="noopener"><small>LOKASI ↗</small>Aula Masjid Sejuta Pemuda</a>
           </div>
           <div class="count only-before" id="countdown" hidden>Mulai dalam <b id="cd-d">0</b> hari <b id="cd-h">00</b> jam <b id="cd-m">00</b> menit</div>
-          <p class="count only-after">Mau ikut batch berikutnya? Tekan tombol di atas, admin akan mengabari lewat WhatsApp.</p>
+          <p class="count only-after">Mau ikut acara berikutnya? Tekan tombol di atas, admin akan mengabari lewat WhatsApp.</p>
         </div>
 
         <div class="demo" aria-label="Simulasi AI menulis materi jualan">
@@ -288,17 +288,17 @@
         <div>
           <span class="eye only-before">Tiketmu langsung jadi</span>
           <span class="eye only-dday">Masuk aula</span>
-          <span class="eye only-after">Batch berikutnya</span>
+          <span class="eye only-after">Acara berikutnya</span>
           <h2 class="only-before">Daftar 1 menit, tiket QR langsung terbit.</h2>
           <h2 class="only-dday">Tunjukkan QR tiket ke panitia di pintu.</h2>
-          <h2 class="only-after">Pendaftaran batch 1 sudah ditutup.</h2>
+          <h2 class="only-after">Pendaftaran sudah ditutup.</h2>
           <ol class="steps only-before">
             <li><b>1</b><span>Isi nama, nomor WhatsApp, dan info usaha.</span></li>
             <li><b>2</b><span>Tiket QR langsung tampil. Simpan atau screenshot.</span></li>
             <li><b>3</b><span>Tekan tombol WhatsApp untuk konfirmasi kehadiran ke admin.</span></li>
           </ol>
           <p class="sub only-dday" style="margin-top:10px">Belum punya tiket? Datang ke meja panitia dan sebutkan nama serta nomor WhatsApp yang didaftarkan.</p>
-          <p class="sub only-after" style="margin-top:10px">Tinggalkan pesan ke admin supaya dikabari kalau batch 2 dibuka. Tanggal batch 2 belum ditentukan.</p>
+          <p class="sub only-after" style="margin-top:10px">Tinggalkan pesan ke admin supaya dikabari kalau acara berikutnya dibuka.</p>
           <div class="cta-row">
             <a class="btn hot only-before" href="daftar.html">Buka formulir</a>
             <a class="btn hot only-after js-wa-next" href="https://wa.me/6285283966520" target="_blank" rel="noopener">Kabari saya</a>
@@ -311,7 +311,7 @@
               <span class="ok">TIKET VALID</span>
               <small>PESERTA</small><strong>Nama Peserta</strong>
               <small>KODE</small><code>AI-XXXXXXXXXX</code>
-              <small>SABTU, 21 NOV 2026 · 09.00 WIB</small>
+              <small>SENIN, 21 DES 2026 · 09.00 WIB</small>
             </div>
             <div class="t-qr"><span>QR</span></div>
           </div>
@@ -345,7 +345,7 @@
   <div class="dock">
     <span class="only-before">Gratis · tiket QR langsung jadi</span>
     <span class="only-dday">Siapkan QR di HP</span>
-    <span class="only-after">Batch 1 selesai</span>
+    <span class="only-after">Acara selesai</span>
     <a class="btn hot sm only-before" href="daftar.html">Daftar</a>
     <a class="btn hot sm only-dday" href="#tiket">Info masuk</a>
     <a class="btn hot sm only-after js-wa-next" href="https://wa.me/6285283966520" target="_blank" rel="noopener">Kabari saya</a>
