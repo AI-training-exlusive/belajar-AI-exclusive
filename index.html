@@ -69,6 +69,23 @@
     .demo-foot{font-size:12px;color:var(--hero-soft);margin-top:10px}
 
     section{scroll-margin-top:12px}
+    .tool{display:inline-flex;align-items:center;gap:8px;padding:7px 14px 7px 7px;border-radius:99px;background:#fff;color:#0d2238;font:700 14px var(--body);box-shadow:0 8px 20px #0f2a4426;white-space:nowrap}
+    .tool i{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font:800 12px var(--display);font-style:normal;color:#fff;flex:none}
+    .t-gpt i{background:#10a37f}
+    .t-capcut i{background:#111;box-shadow:inset 0 0 0 2px #fff}
+    .t-canva i{background:linear-gradient(135deg,#00c4cc,#7d2ae8)}
+    .t-claude i{background:#d97757}
+    .t-tts i{background:#111;text-shadow:-1.5px 0 #25f4ee,1.5px 0 #fe2c55}
+    .t-shopee i{background:#ee4d2d}
+    .tools-band{background:var(--hero-bg);border-top:1px solid #ffffff14;padding-block:18px 22px;overflow:hidden}
+    .tools-band p{color:var(--hero-soft);font:700 11.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;text-align:center;margin-bottom:12px}
+    .marquee{display:flex;width:max-content;gap:12px;animation:slide 26s linear infinite}
+    .tools-band:hover .marquee{animation-play-state:paused}
+    .marquee .tool{animation:pop 2.6s ease-in-out infinite}
+    .marquee .tool:nth-child(3n+2){animation-delay:-.9s}
+    .marquee .tool:nth-child(3n){animation-delay:-1.8s}
+    @keyframes slide{to{transform:translateX(-50%)}}
+    @keyframes pop{50%{transform:translateY(-4px) scale(1.04)}}
     .sec{padding-block:clamp(40px,6vw,72px)}
     .sec h2{font-size:clamp(28px,4.4vw,44px);line-height:1.05;margin:8px 0 10px;font-weight:800}
     .sub{color:var(--ink-soft);max-width:60ch}
@@ -95,9 +112,15 @@
     .tl p{color:var(--ink-soft);font-size:14.5px}
     .bring{background:var(--amber-soft);border-radius:14px;padding:12px 14px;font-size:14.5px}
 
-    .speaker{background:var(--ground);border:1px solid var(--line);border-radius:22px;padding:18px;display:grid;grid-template-columns:200px 1fr;gap:20px;align-items:center;margin-top:22px}
+    .speaker{background:var(--ground);border:1px solid var(--line);border-radius:22px;padding:18px;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:22px;align-items:center;margin-top:22px}
     .speaker>*{min-width:0}
-    .speaker img{width:100%;aspect-ratio:500/620;object-fit:cover;border-radius:16px;background:#fff;display:block}
+    .photo{position:relative;border-radius:18px;background:radial-gradient(circle at 60% 35%,#d7f0ed,#fff 70%);padding:10px 10px 0;overflow:visible}
+    .speaker img{width:100%;height:auto;max-height:460px;object-fit:contain;object-position:bottom;display:block;margin:0 auto}
+    .orbit-chip{position:absolute;z-index:2;animation:bob 3.6s ease-in-out infinite}
+    .orbit-chip:nth-of-type(1){top:6%;left:-6px}
+    .orbit-chip:nth-of-type(2){top:38%;right:-8px;animation-delay:-1.2s}
+    .orbit-chip:nth-of-type(3){bottom:10%;left:-4px;animation-delay:-2.4s}
+    @keyframes bob{50%{transform:translateY(-8px)}}
     .speaker h3{font-size:30px}
     .role{display:inline-block;margin:4px 0 8px;background:var(--navy);color:#fff;font-size:13px;font-weight:700;padding:3px 10px;border-radius:99px}
     .speaker p{color:var(--ink-soft);font-size:14.5px}
@@ -159,7 +182,7 @@
     @media (max-width:540px){
       .learn{grid-template-columns:1fr}
       .speaker{grid-template-columns:1fr}
-      .speaker img{max-width:280px}
+      .speaker img{max-height:380px}
       .kopi{grid-template-columns:1fr}
       .cup{display:none}
       .qris{grid-template-columns:1fr}
@@ -226,6 +249,11 @@
       </div>
     </section>
 
+    <div class="tools-band" aria-label="AI dan platform yang akrab untuk jualan online">
+      <p>AI &amp; platform yang akrab buat jualan online</p>
+      <div class="marquee"><span class="tool t-gpt"><i>G</i>ChatGPT</span><span class="tool t-claude"><i>C</i>Claude</span><span class="tool t-canva"><i>C</i>Canva</span><span class="tool t-capcut"><i>C</i>CapCut</span><span class="tool t-tts"><i>T</i>TikTok Shop</span><span class="tool t-shopee"><i>S</i>Shopee</span><span aria-hidden="true" style="display:contents"><span class="tool t-gpt"><i>G</i>ChatGPT</span><span class="tool t-claude"><i>C</i>Claude</span><span class="tool t-canva"><i>C</i>Canva</span><span class="tool t-capcut"><i>C</i>CapCut</span><span class="tool t-tts"><i>T</i>TikTok Shop</span><span class="tool t-shopee"><i>S</i>Shopee</span></span></div>
+    </div>
+
     <section class="sec" id="materi">
       <div class="wrap">
         <span class="eye">Isi pelatihan</span>
@@ -257,7 +285,12 @@
           <span class="eye">Pemateri</span>
           <h2>Belajar langsung dari praktisi.</h2>
           <div class="speaker">
-            <img src="assets/mang-tab.jpg" alt="Mang Tab, pemateri, bersama ilustrasi robot AI" width="500" height="620" loading="lazy">
+            <div class="photo">
+              <span class="tool t-gpt orbit-chip" aria-hidden="true"><i>G</i>ChatGPT</span>
+              <span class="tool t-canva orbit-chip" aria-hidden="true"><i>C</i>Canva</span>
+              <span class="tool t-shopee orbit-chip" aria-hidden="true"><i>S</i>Shopee</span>
+              <img src="assets/mang-tab.jpg" alt="Mang Tab, pemateri, bersama ilustrasi robot AI" width="500" height="620">
+            </div>
             <div>
               <h3>Mang Tab</h3>
               <span class="role">Konsultan Bisnis</span>
