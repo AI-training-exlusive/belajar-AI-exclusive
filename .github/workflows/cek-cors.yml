@@ -9,12 +9,14 @@ jobs:
       - name: POST tanpa data (tidak menyimpan apa pun)
         run: |
           URL="https://script.google.com/macros/s/AKfycbzHNKd8RWTlwYRxcfMPvG_mH5AdENZt-BP2Nv11bGUNmLVhE-IyPZjT82-DUWrAGSsWkA/exec"
-          curl -sS -D - -o body1.txt -X POST -H "Origin: https://ai-training-exlusive.github.io" \
-            --data "format=json" "$URL" | grep -iE "^HTTP|^location|^access-control|^content-type" | sed -E 's/(user_content_key=)[^&]*/\1.../'
-          echo "--- body awal (teks):"; python3 -c "import re,html;t=open('body1.txt').read();m=re.search(r'<title>(.*?)</title>',t,re.S);print('TITLE',m and m.group(1));t=re.sub(r'<script.*?</script>|<style.*?</style>','',t,flags=re.S);t=html.unescape(re.sub(r'<[^>]+>',' ',t));print(' '.join(t.split())[:600])"
-          echo "--- GET:"; curl -sS -D - -o body3.txt "$URL" | grep -iE "^HTTP|^location|^content-type"; head -c 200 body3.txt; echo
-          exit 0
-          LOC=$(curl -sS -D - -o /dev/null -X POST --data "format=json" "$URL" | grep -i "^location" | tr -d '\r' | cut -d' ' -f2)
-          echo "--- ikuti redirect (GET):"
-          curl -sS -D - -o body2.txt -H "Origin: https://ai-training-exlusive.github.io" "$LOC" | grep -iE "^HTTP|^location|^access-control|^content-type"
-          echo "--- body akhir:"; head -c 300 body2.txt; echo
+          curl -sS -D h1.txt -o b1.txt -X POST -H "Origin: https://ai-training-exlusive.github.io" --data "format=json" "$URL"
+          grep -iE "^HTTP|^access-control|^content-type" h1.txt
+          LOC=$(grep -i "^location" h1.txt | tr -d '\r' | cut -d' ' -f2)
+          if [ -n "$LOC" ]; then
+            echo "--- redirect diikuti"
+            curl -sS -D h2.txt -o b2.txt -H "Origin: https://ai-training-exlusive.github.io" "$LOC"
+            grep -iE "^HTTP|^access-control|^content-type" h2.txt
+            echo "BODY: $(head -c 200 b2.txt)"
+          else
+            echo "BODY: $(head -c 120 b1.txt)"
+          fi
