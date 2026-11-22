@@ -1,0 +1,49 @@
+/* Gaya bersama index.html dan daftar.html.
+   Warna navy + teal diambil dari poster; kuning kunyit untuk tombol utama. */
+:root{
+  --ground:#f2f7f6; --paper:#ffffff; --ink:#0d2238; --ink-soft:#4b6073; --line:#d6e3e2;
+  --navy:#0f2a44; --teal:#0f9c97; --teal-soft:#d7f0ed; --saffron:#f4a62a; --saffron-dark:#c47f12;
+  --saffron-soft:#fdecc8; --coffee:#6b3f22; --chili:#d9472b; --chili-soft:#fde3dc;
+  --leaf:#1f8a4c; --leaf-soft:#dcf2e4; --amber-soft:#fff1d6;
+  --hero-bg:#0f2a44; --hero-ink:#f3fbfa; --hero-soft:#a9c3d4; --chat:#163857;
+  --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --body:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.6 var(--body)}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;letter-spacing:-.02em}
+p{margin:0}
+a{color:inherit}
+img{max-width:100%}
+:focus-visible{outline:3px solid var(--saffron);outline-offset:2px;border-radius:6px}
+.wrap{max-width:1100px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.hidden{display:none!important}
+
+/* tombol */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;font:700 15px var(--body);padding:12px 20px;border-radius:14px;text-decoration:none;border:0;cursor:pointer}
+.btn.hot{background:var(--saffron);color:#2a1a05;box-shadow:0 5px 0 var(--saffron-dark)}
+.btn.hot:active{transform:translateY(3px);box-shadow:0 2px 0 var(--saffron-dark)}
+.btn.hot[disabled]{opacity:.6;cursor:wait}
+.btn.ghost{background:transparent;color:var(--hero-ink);border:1.5px solid #ffffff40}
+.btn.line{background:var(--paper);color:var(--navy);border:1.5px solid var(--line)}
+.btn.sm{min-height:40px;padding:8px 14px;font-size:14px;box-shadow:0 4px 0 var(--saffron-dark)}
+
+/* header */
+.top{background:var(--hero-bg);color:var(--hero-ink)}
+.top .wrap{display:flex;align-items:center;gap:14px;padding-block:12px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font:800 14px var(--display);letter-spacing:.02em}
+.brand small{display:block;font:500 11.5px var(--body);color:var(--hero-soft);letter-spacing:0}
+.logo-pill{background:#fff;border-radius:10px;padding:4px 8px;display:flex}
+.logo-pill img{height:34px;width:auto;display:block}
+.links{display:flex;gap:18px;margin-left:auto;font-size:14px;color:var(--hero-soft)}
+.links a{text-decoration:none}
+.links a:hover{color:var(--hero-ink)}
+
+.eye{font:700 12px var(--mono);letter-spacing:.14em;color:var(--teal);text-transform:uppercase}
+.announce{background:var(--saffron);color:#2a1a05;font-weight:700;font-size:14px;text-align:center;padding:9px 16px}
+
+@media (max-width:860px){.links{display:none}}
+@media (max-width:420px){.top .btn{display:none}.logo-pill img{height:28px}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}

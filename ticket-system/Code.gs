@@ -2,7 +2,10 @@ const TICKET_CONFIG = {
   eventName: "Training Exclusive AI untuk Bisnis",
   venue: "Aula Masjid Sejuta Pemuda",
   sheetName: "Tiket Peserta",
-  qrService: "https://api.qrserver.com/v1/create-qr-code/"
+  qrService: "https://api.qrserver.com/v1/create-qr-code/",
+  // Pendaftaran online ditolak mulai waktu ini. Samakan dengan REG_CLOSE_AT di daftar.html.
+  closeAt: "2026-11-21T09:00:00+07:00",
+  adminWa: "6285283966520"
 };
 
 function setupTicketSystem() {
@@ -52,6 +55,13 @@ function doGet() {
 
 function doPost(e) {
   const data = (e && e.parameter) || {};
+  if (new Date() >= new Date(TICKET_CONFIG.closeAt)) {
+    return ticketPage_({ error: "Pendaftaran online sudah ditutup. Hubungi admin WhatsApp 0852 8396 6520 untuk info batch berikutnya." });
+  }
+  // Kolom jebakan bot: manusia tidak melihat kolom ini, jadi seharusnya kosong.
+  if (String(data.website || "").trim()) {
+    return ticketPage_({ error: "Pendaftaran tidak dapat diproses. Silakan coba lagi dari formulir resmi." });
+  }
   const required = ["name", "phone", "product", "city", "platform", "participantType", "consent"];
   const missing = required.filter(key => !String(data[key] || "").trim());
   if (missing.length) return ticketPage_({ error: "Data wajib belum lengkap. Kembali ke formulir dan lengkapi semua kolom bertanda *." });
@@ -66,22 +76,37 @@ function doPost(e) {
   lock.waitLock(15000);
   let ticketId;
   try {
-    ticketId = "AI-" + Utilities.getUuid().replace(/-/g, "").slice(0, 10).toUpperCase();
     const sheet = SpreadsheetApp.openById(spreadsheetId).getSheetByName(TICKET_CONFIG.sheetName);
-    const values = [[
-      new Date(), ticketId, safeCell_(data.name), email, normalizePhone_(data.phone),
+    const phone = normalizePhone_(data.phone);
+    const lastRow = sheet.getLastRow();
+    if (lastRow >= 2) {
+      // Satu nomor WhatsApp hanya untuk satu tiket. Tiket lama tidak ditampilkan ulang
+      // supaya orang lain tidak bisa mengambil QR hanya dengan mengetik nomor seseorang.
+      const phones = sheet.getRange(2, 5, lastRow - 1, 1).getDisplayValues();
+      if (phones.some(row => String(row[0]).replace(/\D/g, "") === phone)) {
+        return ticketPage_({ error: "Nomor WhatsApp ini sudah terdaftar. Cek tiket yang sudah kamu simpan, atau hubungi admin WhatsApp 0852 8396 6520." });
+      }
+    }
+    ticketId = "AI-" + Utilities.getUuid().replace(/-/g, "").slice(0, 10).toUpperCase();
+    sheet.appendRow([
+      new Date(), ticketId, safeCell_(data.name), email, phone,
       safeCell_(data.business), safeCell_(data.product), safeCell_(data.city),
       safeCell_(data.platform), safeCell_(data.participantType), safeCell_(data.infaq),
       safeCell_(data.question), "VALID", "BELUM HADIR", "", "MENUNGGU", "MENUNGGU"
-    ]];
-    sheet.appendRow(values[0]);
+    ]);
   } finally {
     lock.releaseLock();
   }
 
-  const qrBlob = qrBlob_(ticketId);
-  updateDeliveryStatus_(ticketId, "TIKET SIAP DIUNDUH", "TIDAK DIGUNAKAN");
-  const qrDataUrl = "data:image/png;base64," + Utilities.base64Encode(qrBlob.getBytes());
+  // Data sudah tersimpan. Kalau layanan QR gagal, tiket tetap tampil dengan kodenya.
+  let qrDataUrl = "";
+  try {
+    const qrBlob = qrBlob_(ticketId);
+    qrDataUrl = "data:image/png;base64," + Utilities.base64Encode(qrBlob.getBytes());
+    updateDeliveryStatus_(ticketId, "TIKET SIAP DIUNDUH", "TIDAK DIGUNAKAN");
+  } catch (err) {
+    updateDeliveryStatus_(ticketId, "QR GAGAL DIBUAT", "TIDAK DIGUNAKAN");
+  }
   return ticketPage_({
     name: String(data.name), ticketId: ticketId, qrDataUrl: qrDataUrl,
     whatsappUrl: whatsappConfirmationUrl_(data, ticketId)
@@ -90,7 +115,12 @@ function doPost(e) {
 
 function checkInTicket(ticketId, pin) {
   const props = PropertiesService.getScriptProperties();
+  // Batasi tebakan PIN: 5 kali salah dikunci 10 menit.
+  const cache = CacheService.getScriptCache();
+  const fails = Number(cache.get("pin_fails") || 0);
+  if (fails >= 5) return { ok: false, message: "Terlalu banyak PIN salah. Tunggu 10 menit lalu coba lagi." };
   if (!pin || String(pin) !== props.getProperty("CHECKIN_PIN")) {
+    cache.put("pin_fails", String(fails + 1), 600);
     return { ok: false, message: "PIN panitia salah." };
   }
   const code = String(ticketId || "").trim().toUpperCase();
@@ -146,12 +176,12 @@ function whatsappConfirmationUrl_(data, ticketId) {
     ["Pertanyaan", data.question]
   ].filter(item => String(item[1] || "").trim());
 
-  const message = "Assalamu'alaikum Admin Masjid Mudzaki,\n\n" +
+  const message = "Assalamu'alaikum Admin Masjid Muzaki,\n\n" +
     "Saya sudah mengisi formulir pendaftaran Training Exclusive AI untuk Bisnis. Mohon bantu konfirmasi kehadiran saya. Berikut data yang saya daftarkan:\n\n" +
     fields.map(item => item[0] + ": " + String(item[1]).trim()).join("\n") +
     "\nKode tiket: " + ticketId +
     "\n\nSaya akan menunjukkan QR tiket saat hadir. Terima kasih.";
-  return "https://wa.me/6285283966520?text=" + encodeURIComponent(message);
+  return "https://wa.me/" + TICKET_CONFIG.adminWa + "?text=" + encodeURIComponent(message);
 }
 
 function ticketPage_(data) {
@@ -161,14 +191,14 @@ function ticketPage_(data) {
   const fileName = htmlEscape_((data.ticketId || "tiket") + "-QR.png");
   const ticket = data.ticketId ? "<div class='ticket'><p class='ok'>Pendaftaran berhasil · Tiket valid</p>" +
     "<h2>" + htmlEscape_(data.name) + "</h2><p class='code'>" + htmlEscape_(data.ticketId) + "</p>" +
-    "<img class='qr' src='" + qr + "' alt='QR tiket'>" +
+    (qr ? "<img class='qr' src='" + qr + "' alt='QR tiket'>" : "<p class='error'>QR belum bisa dibuat. Simpan kode tiket di atas dan tunjukkan ke panitia saat hadir.</p>") +
     "<p>Lokasi: " + TICKET_CONFIG.venue + "</p>" +
     "<p>Data pendaftaran sudah tersimpan. Pesan konfirmasi WhatsApp sudah disusun dari data ini—kamu tidak perlu mengisi ulang.</p>" +
     "<div class='actions'><button class='btn primary' type='button' onclick='downloadAndConfirm()'>Unduh QR & konfirmasi ke admin</button></div></div>" : "";
   const scriptValues = "<script>const waTarget=" + JSON.stringify(waUrl) +
     ";const qrSource=" + JSON.stringify(qr) +
     ";const qrFile=" + JSON.stringify(fileName) +
-    ";function downloadAndConfirm(){const w=window.open(waTarget,'_blank');const a=document.createElement('a');a.href=qrSource;a.download=qrFile;document.body.appendChild(a);a.click();a.remove();if(!w)setTimeout(()=>window.location.assign(waTarget),400)}</script>";
+    ";function downloadAndConfirm(){const w=window.open(waTarget,'_blank');if(qrSource){const a=document.createElement('a');a.href=qrSource;a.download=qrFile;document.body.appendChild(a);a.click();a.remove();}if(!w)setTimeout(()=>window.location.assign(waTarget),400)}</script>";
   const html = "<!doctype html><html lang='id'><meta name='viewport' content='width=device-width,initial-scale=1'>" +
     "<title>Tiket AI untuk Bisnis</title><style>body{margin:0;background:#e9eef5;color:#142b43;font:16px/1.5 system-ui,Arial}.box{max-width:520px;margin:7vh auto;padding:28px;background:#edf2f8;border-radius:24px;box-shadow:12px 12px 28px #b9c4d1,-10px -10px 24px #fff}.logo{color:#159b9a;font-size:12px;font-weight:800;letter-spacing:.12em}.ticket{text-align:center}.ok{color:#12705f;font-weight:800}.code{font-size:24px;font-weight:900;letter-spacing:.06em}.qr{width:min(260px,80%);height:auto;background:white;padding:12px;border-radius:14px}h1{color:#102d4d}p{color:#5e7185}.error{background:#fff0e9;color:#a5402f;padding:14px;border-radius:12px}.actions{display:grid;gap:10px;margin-top:20px}.btn{display:inline-block;padding:13px 16px;border:0;border-radius:11px;background:#2865d8;color:#fff;text-align:center;text-decoration:none;font:700 15px system-ui,Arial;cursor:pointer}.light{background:#e9eef5;color:#102d4d;border:1px solid #dce4ed}.note{font-size:13px}.hidden{display:none}@media print{body{background:#fff}.box{margin:0 auto;box-shadow:none;border:1px solid #ddd}.actions,.note{display:none}}</style>" +
     "<body><main class='box'><div class='logo'>TRAINING EXCLUSIVE</div><h1>" +
