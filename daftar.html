@@ -37,7 +37,12 @@
     .pay-qr img{width:170px;height:170px;display:block;border-radius:12px;background:#fff}
     .pay-copy{display:grid;gap:8px;font-size:.92rem;color:var(--coffee)}
     .pay-amt{font:800 22px var(--display);color:var(--coffee)}
-    .pay .consent{color:var(--ink);font-weight:700}
+    .proof-label{color:var(--ink)}
+    #proof-file{background:var(--paper);padding:10px}
+    .proof-status{font-size:.84rem;color:var(--ink-soft)}
+    .proof-status.bad{color:var(--chili);font-weight:700}
+    .proof-status.ok{color:var(--leaf);font-weight:700}
+    .proof-preview{max-width:160px;max-height:220px;border-radius:10px;border:1px solid var(--line);background:#fff}
     @media(max-width:560px){.pay{grid-template-columns:1fr}.pay-qr img{width:200px;height:200px}}
     .fee-note{padding:13px 15px;border-radius:14px;background:var(--amber-soft);color:var(--coffee);font-size:.92rem}
     .bring-note{padding:13px 15px;border-radius:14px;background:var(--teal-soft);color:#0b5e5b;font-size:.92rem;margin-bottom:22px}
@@ -74,7 +79,7 @@
     <section class="card" aria-labelledby="page-title">
       <span class="eyebrow">TRAINING EXCLUSIVE</span>
       <h1 id="page-title">Formulir pendaftaran</h1>
-      <p class="intro">Biaya Rp20.000 lewat QRIS (ada di bawah). Isi data peserta satu kali. Setelah tiket muncul, lanjut ke WhatsApp admin dan lampirkan bukti bayar.</p>
+      <p class="intro">Biaya Rp20.000 lewat QRIS (ada di bawah). Isi data, upload bukti transfer, dan tiket QR langsung muncul.</p>
       <div class="progress" id="progress" data-step="1"><span id="progress-label">Langkah 1 dari 2 · Data peserta</span><span class="progress-track"><span class="progress-fill"></span></span></div>
       <p class="bring-note"><b>Disarankan membawa laptop dan charger</b> saat acara, plus HP dan satu contoh produk atau ide usaha.</p>
 
@@ -96,8 +101,12 @@
               <div class="pay-copy">
                 <strong class="pay-amt">Biaya pendaftaran Rp20.000</strong>
                 <p>Untuk kopi jamaah. Scan QRIS ini pakai m-banking atau e-wallet, nominal sudah Rp20.000. Pastikan penerimanya <b>YAYASAN AMANAH SEJUTA PEMUDA</b>.</p>
-                <p>Simpan bukti bayar. Setelah tiket muncul, kirim bukti itu di chat WhatsApp konfirmasi ke admin.</p>
-                <label class="consent"><input id="paid" type="checkbox" required><span>Saya sudah membayar Rp20.000 lewat QRIS dan akan mengirim bukti bayar ke admin.</span></label>
+                <p>Setelah bayar, screenshot bukti transfernya lalu upload di sini. Admin mengecek bukti ini sebelum hari H.</p>
+                <label for="proof-file" class="proof-label">Upload bukti transfer *</label>
+                <input id="proof-file" type="file" accept="image/*" required>
+                <input type="hidden" id="proof" name="proof">
+                <p class="proof-status" id="proof-status" role="status">Format foto (JPG/PNG). Maksimal 10 MB.</p>
+                <img id="proof-preview" class="proof-preview hidden" alt="Pratinjau bukti transfer">
               </div>
             </div>
             <div class="field full"><label class="consent"><input id="consent" name="consent" value="yes" type="checkbox" required><span>Saya setuju data ini digunakan untuk pendaftaran dan tiket. Saat saya menekan Kirim di WhatsApp, data pendaftaran dan kode tiket dapat disampaikan kepada admin untuk konfirmasi kehadiran.</span></label><p class="note">Jangan masukkan nomor identitas atau data sensitif.</p></div>
@@ -108,7 +117,7 @@
 
       <section id="review-step" class="hidden" aria-labelledby="review-title">
         <h2 id="review-title" style="color:var(--navy);margin:0">Periksa datamu</h2>
-        <p class="intro" style="margin-top:6px">Periksa datamu. Tiket langsung terbit tanpa menunggu persetujuan admin; setelahnya kirim konfirmasi dan bukti bayar ke admin melalui WhatsApp.</p>
+        <p class="intro" style="margin-top:6px">Periksa datamu. Tiket langsung terbit tanpa menunggu persetujuan admin; setelahnya kirim konfirmasi ke admin melalui WhatsApp. Admin mengecek bukti transfer yang kamu upload.</p>
         <dl class="summary" id="summary"></dl>
         <div class="handoff">Tiket QR tampil setelah pendaftaran berhasil. Unduh tiket, lalu lanjutkan ke WhatsApp dengan data yang sudah tersusun. Tekan Kirim untuk mengonfirmasi kehadiran; tidak perlu mengisi data lagi.</div>
         <div class="actions"><button class="btn hot" id="submit-registration" type="button">Daftar dan terbitkan tiket</button><button class="btn line" id="edit-data" type="button">Ubah data</button></div>
@@ -130,9 +139,46 @@
       ["Produk / bidang usaha", "product"], ["Domisili", "city"], ["Platform jualan", "platform"],
       ["Status peserta", "status"], ["Pembayaran", "infaq"], ["Pertanyaan", "question"]
     ];
+
+    // Bukti transfer: diperkecil di browser jadi JPG (maks 1200 px) lalu dikirim sebagai teks.
+    const proofFile = document.getElementById("proof-file");
+    const proofInput = document.getElementById("proof");
+    const proofStatus = document.getElementById("proof-status");
+    const proofPreview = document.getElementById("proof-preview");
+    let proofBusy = false;
+    function setProofStatus(text, kind) { proofStatus.textContent = text; proofStatus.className = "proof-status" + (kind ? " " + kind : ""); }
+    proofFile.addEventListener("change", () => {
+      proofInput.value = ""; proofPreview.classList.add("hidden");
+      const file = proofFile.files && proofFile.files[0];
+      if (!file) { setProofStatus("Pilih foto bukti transfer.", "bad"); return; }
+      if (!/^image\//.test(file.type)) { proofFile.value = ""; setProofStatus("File harus berupa foto (JPG/PNG).", "bad"); return; }
+      if (file.size > 10 * 1024 * 1024) { proofFile.value = ""; setProofStatus("Foto terlalu besar. Maksimal 10 MB.", "bad"); return; }
+      proofBusy = true; setProofStatus("Menyiapkan foto…");
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = () => {
+        const scale = Math.min(1, 1200 / Math.max(img.width, img.height));
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.round(img.width * scale); canvas.height = Math.round(img.height * scale);
+        const ctx = canvas.getContext("2d");
+        ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        proofInput.value = canvas.toDataURL("image/jpeg", 0.75);
+        proofPreview.src = proofInput.value; proofPreview.classList.remove("hidden");
+        URL.revokeObjectURL(url); proofBusy = false;
+        setProofStatus("Bukti transfer siap dikirim.", "ok");
+      };
+      img.onerror = () => { URL.revokeObjectURL(url); proofBusy = false; proofFile.value = ""; setProofStatus("Foto tidak bisa dibaca. Coba screenshot ulang.", "bad"); };
+      img.src = url;
+    });
+    function proofReady() {
+      if (proofBusy) { setProofStatus("Tunggu sebentar, foto masih disiapkan…", "bad"); return false; }
+      if (!proofInput.value) { setProofStatus("Upload bukti transfer dulu.", "bad"); proofFile.focus(); return false; }
+      return true;
+    }
     form.addEventListener("submit", event => {
       event.preventDefault();
-      if (!form.reportValidity()) return;
+      if (!form.reportValidity() || !proofReady()) return;
       summary.replaceChildren();
       fields.forEach(([label, id]) => {
         const row = document.createElement("div"); row.className = "summary-row";
@@ -140,6 +186,10 @@
         const value = document.createElement("dd"); value.textContent = read(id) || "Tidak diisi";
         row.append(term, value); summary.append(row);
       });
+      const proofRow = document.createElement("div"); proofRow.className = "summary-row";
+      const proofTerm = document.createElement("dt"); proofTerm.textContent = "Bukti transfer";
+      const proofValue = document.createElement("dd"); proofValue.textContent = proofFile.files[0] ? proofFile.files[0].name : "Terlampir";
+      proofRow.append(proofTerm, proofValue); summary.append(proofRow);
       formStep.classList.add("hidden");
       reviewStep.classList.remove("hidden");
       progress.dataset.step = "2";
@@ -153,7 +203,7 @@
       window.scrollTo({top:0,behavior:"smooth"});
     });
     document.getElementById("submit-registration").addEventListener("click", () => {
-      if (!form.reportValidity()) {
+      if (!form.reportValidity() || !proofReady()) {
         reviewStep.classList.add("hidden");
         formStep.classList.remove("hidden");
         progress.dataset.step = "1";
