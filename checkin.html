@@ -151,6 +151,9 @@
           hadir++; document.getElementById("count").textContent = hadir + " hadir";
           show("ok", "✓ Hadir", data.name, data.ticketId, "Silakan masuk.");
           addLog("ok", data.name || code, "HADIR"); buzz(120);
+        } else if (data.notPaid) {
+          show("bad", "Belum lunas", data.name, data.ticketId, "Status bayar: " + (data.payStatus || "kosong") + ". Arahkan ke meja panitia untuk cek pembayaran.");
+          addLog("bad", data.name || code, "BELUM BAYAR"); buzz([200, 80, 200]);
         } else if (data.alreadyCheckedIn) {
           show("warn", "Sudah check-in", data.name, data.ticketId, "Tiket ini sudah dipakai masuk sebelumnya.");
           addLog("warn", data.name || code, "DOBEL"); buzz([80, 60, 80]);

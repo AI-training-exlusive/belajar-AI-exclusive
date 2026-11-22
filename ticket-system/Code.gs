@@ -6,7 +6,9 @@ const TICKET_CONFIG = {
   // Pendaftaran online ditolak mulai waktu ini. Samakan dengan REG_CLOSE_AT di daftar.html.
   closeAt: "2026-12-19T09:00:00+07:00",
   adminWa: "6285283966520",
-  proofFolderName: "Bukti Bayar Training AI for Business"
+  proofFolderName: "Bukti Bayar Training AI for Business",
+  // Isi kolom S (Status bayar) yang dianggap lunas. Harus sama dengan pilihan dropdown di sheet.
+  paidStatus: "sudah bayar"
 };
 
 function setupTicketSystem() {
@@ -219,6 +221,14 @@ function checkInTicket(ticketId, pin) {
 
     const row = match.getRow();
     const name = String(sheet.getRange(row, 3).getDisplayValue() || "");
+    // Hanya peserta dengan Status bayar (kolom S) "sudah bayar" yang boleh masuk.
+    const payStatus = String(sheet.getRange(row, 19).getDisplayValue() || "").trim();
+    if (payStatus.toLowerCase() !== TICKET_CONFIG.paidStatus.toLowerCase()) {
+      return {
+        ok: false, notPaid: true, name: name, ticketId: code, payStatus: payStatus || "KOSONG",
+        message: "Pembayaran belum dicek / belum lunas (status: " + (payStatus || "kosong") + "). Arahkan ke meja panitia."
+      };
+    }
     if (sheet.getRange(row, 14).getValue() === "HADIR") {
       return { ok: false, alreadyCheckedIn: true, message: "Tiket ini sudah check-in sebelumnya.", name: name, ticketId: code };
     }
