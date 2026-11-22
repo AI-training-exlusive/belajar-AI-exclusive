@@ -34,3 +34,16 @@ Nama dan nomor WhatsApp peserta wajib. Email tidak diperlukan. Infaq opsional da
 - Jangan jalankan `setupTicketSystem` lebih dari satu kali. Skrip mencegah pembuatan spreadsheet duplikat.
 - Setelah data tercatat, kode tiket dan QR ditampilkan di halaman hasil. Tombol **Unduh QR & konfirmasi ke admin** mengunduh QR dan membuka WhatsApp dengan data yang sudah terisi; peserta menekan Kirim untuk menyampaikan konfirmasi ke admin.
 - QR dibuat dari kode tiket melalui layanan QR publik. QR tidak memuat nama atau nomor WhatsApp.
+
+## Deploy otomatis dari GitHub
+
+Workflow `.github/workflows/deploy-apps-script.yml` memasang `ticket-system/Code.gs` ke proyek Apps Script dan memperbarui deployment web app yang sudah ada setiap kali file itu berubah di `main` (alamat `/exec` tetap sama). Bisa juga dijalankan manual dari tab **Actions → Deploy Apps Script → Run workflow**.
+
+Persiapan sekali saja (oleh pemilik akun Google proyek Apps Script):
+
+1. Aktifkan **Google Apps Script API** di https://script.google.com/home/usersettings.
+2. Di komputer yang ada Node.js, jalankan `npx @google/clasp@2.4.2 login`, lalu login dengan akun pemilik proyek.
+3. Buka file `.clasprc.json` di folder pengguna (Windows: `%USERPROFILE%\.clasprc.json`), salin seluruh isinya.
+4. Di GitHub: **Settings → Secrets and variables → Actions → New repository secret**, nama `CLASPRC_JSON`, tempel isinya.
+
+Isi `.clasprc.json` adalah kunci akses akun Google. Jangan ditempel di chat, issue, atau file repo. Untuk mencabutnya, hapus akses "clasp" di https://myaccount.google.com/permissions.
