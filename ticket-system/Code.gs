@@ -4,7 +4,7 @@ const TICKET_CONFIG = {
   sheetName: "Tiket Peserta",
   qrService: "https://api.qrserver.com/v1/create-qr-code/",
   // Pendaftaran online ditolak mulai waktu ini. Samakan dengan REG_CLOSE_AT di daftar.html.
-  closeAt: "2026-11-21T09:00:00+07:00",
+  closeAt: "2026-12-21T09:00:00+07:00",
   adminWa: "6285283966520"
 };
 
