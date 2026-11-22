@@ -5,7 +5,8 @@ const TICKET_CONFIG = {
   qrService: "https://api.qrserver.com/v1/create-qr-code/",
   // Pendaftaran online ditolak mulai waktu ini. Samakan dengan REG_CLOSE_AT di daftar.html.
   closeAt: "2026-12-19T09:00:00+07:00",
-  adminWa: "6285283966520"
+  adminWa: "6285283966520",
+  proofFolderName: "Bukti Bayar Training AI for Business"
 };
 
 function setupTicketSystem() {
@@ -45,7 +46,32 @@ function setupTicketSystem() {
 }
 function authorizeTicketServices() {
   UrlFetchApp.fetch(TICKET_CONFIG.qrService + "?size=32x32&data=authorize");
-  Logger.log("Izin layanan QR sudah aktif.");
+  const folder = proofFolder_();
+  const sheet = SpreadsheetApp.openById(PropertiesService.getScriptProperties().getProperty("SPREADSHEET_ID"))
+    .getSheetByName(TICKET_CONFIG.sheetName);
+  ensureProofColumns_(sheet);
+  Logger.log("Izin layanan QR dan Drive sudah aktif. Folder bukti bayar: " + folder.getUrl());
+}
+
+// Folder Drive untuk bukti transfer. Dibuat sekali, ID-nya disimpan di Script Properties.
+function proofFolder_() {
+  const props = PropertiesService.getScriptProperties();
+  const id = props.getProperty("PROOF_FOLDER_ID");
+  if (id) {
+    try { return DriveApp.getFolderById(id); } catch (err) { /* folder terhapus: buat ulang */ }
+  }
+  const folder = DriveApp.createFolder(TICKET_CONFIG.proofFolderName);
+  props.setProperty("PROOF_FOLDER_ID", folder.getId());
+  return folder;
+}
+
+// Kolom R dan S untuk bukti bayar (header lama A..Q tidak diubah).
+function ensureProofColumns_(sheet) {
+  const range = sheet.getRange(1, 18, 1, 2);
+  if (range.getDisplayValues()[0].every(value => !String(value).trim())) {
+    range.setValues([["Bukti bayar", "Status bayar"]])
+      .setFontWeight("bold").setBackground("#102d4d").setFontColor("#ffffff");
+  }
 }
 
 function doGet() {
@@ -65,6 +91,12 @@ function doPost(e) {
   const required = ["name", "phone", "product", "city", "platform", "participantType", "consent"];
   const missing = required.filter(key => !String(data[key] || "").trim());
   if (missing.length) return ticketPage_({ error: "Data wajib belum lengkap. Kembali ke formulir dan lengkapi semua kolom bertanda *." });
+
+  // Bukti transfer dikirim formulir sebagai data URL gambar.
+  const proofMatch = /^data:image\/(jpeg|png|webp);base64,([A-Za-z0-9+\/=]+)$/.exec(String(data.proof || ""));
+  if (!proofMatch) return ticketPage_({ error: "Bukti transfer belum diupload. Kembali ke formulir dan upload foto bukti transfer." });
+  const proofBytes = Utilities.base64Decode(proofMatch[2]);
+  if (proofBytes.length > 4 * 1024 * 1024) return ticketPage_({ error: "Foto bukti transfer terlalu besar. Coba screenshot ulang lalu upload lagi." });
 
   const email = "";
 
@@ -88,11 +120,21 @@ function doPost(e) {
       }
     }
     ticketId = "AI-" + Utilities.getUuid().replace(/-/g, "").slice(0, 10).toUpperCase();
+    let proofUrl;
+    try {
+      const ext = proofMatch[1] === "jpeg" ? "jpg" : proofMatch[1];
+      const blob = Utilities.newBlob(proofBytes, "image/" + proofMatch[1], ticketId + "-bukti." + ext);
+      proofUrl = proofFolder_().createFile(blob).getUrl();
+    } catch (err) {
+      return ticketPage_({ error: "Bukti transfer gagal disimpan. Coba kirim ulang formulir sebentar lagi." });
+    }
+    ensureProofColumns_(sheet);
     sheet.appendRow([
       new Date(), ticketId, safeCell_(data.name), email, phone,
       safeCell_(data.business), safeCell_(data.product), safeCell_(data.city),
       safeCell_(data.platform), safeCell_(data.participantType), safeCell_(data.infaq),
-      safeCell_(data.question), "VALID", "BELUM HADIR", "", "MENUNGGU", "MENUNGGU"
+      safeCell_(data.question), "VALID", "BELUM HADIR", "", "MENUNGGU", "MENUNGGU",
+      proofUrl, "MENUNGGU CEK"
     ]);
   } finally {
     lock.releaseLock();
@@ -172,7 +214,8 @@ function whatsappConfirmationUrl_(data, ticketId) {
     ["Domisili", data.city],
     ["Platform jualan", data.platform],
     ["Status peserta", data.participantType],
-    ["Infaq kopi jamaah", data.infaq],
+    ["Pembayaran", data.infaq],
+    ["Bukti transfer", "sudah diupload di formulir"],
     ["Pertanyaan", data.question]
   ].filter(item => String(item[1] || "").trim());
 
