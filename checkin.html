@@ -38,6 +38,7 @@
   <script>
     let scanner=null;
     let busy=false;
+let waitTimer=null;
     const statusBox=document.getElementById("status");
     const nextButton=document.getElementById("next");
 
@@ -55,6 +56,7 @@
       if(event.source!==window.opener || !appScriptOrigin(event.origin)) return;
       const data=event.data||{};
       if(data.type!=="checkin-result") return;
+      clearTimeout(waitTimer);
       const result=data.result||{};
       statusBox.className="status "+(result.ok?"ok":"bad");
       statusBox.replaceChildren();
@@ -90,7 +92,17 @@
           scanner.pause(true);
           nextButton.classList.add("hidden");
           setStatus("QR terbaca. Mencatat kehadiran…");
+          if(!window.opener||window.opener.closed){
+            setStatus("Halaman check-in panitia sudah tertutup. Buka lagi halaman panitia, isi PIN, lalu tekan Buka pemindai QR.","bad");
+            nextButton.classList.remove("hidden");
+            return;
+          }
           window.opener.postMessage({type:"ticket-scan",ticketId:ticketId},"*");
+          clearTimeout(waitTimer);
+          waitTimer=setTimeout(()=>{
+            setStatus("Belum ada jawaban dari halaman panitia. Cek tab Check-in panitia (masih terbuka dan PIN terisi), lalu tekan Pindai peserta berikutnya untuk mencoba lagi.","bad");
+            nextButton.classList.remove("hidden");
+          },15000);
         });
         document.getElementById("start").classList.add("hidden");
         setStatus("Kamera aktif. Arahkan QR tiket ke kotak pemindai.");
