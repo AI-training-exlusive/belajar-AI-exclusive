@@ -56,6 +56,17 @@
     .closed{padding:18px;border-radius:16px;background:var(--chili-soft);color:#8a2a17;margin-bottom:6px}
     .closed strong{display:block;font:800 20px var(--display);margin-bottom:4px}
     .closed .btn{margin-top:12px}
+    .ok-pill{display:inline-block;font:700 11px var(--mono);letter-spacing:.1em;background:var(--leaf-soft);color:var(--leaf);padding:5px 10px;border-radius:99px}
+    .ticket-h{font-size:clamp(28px,6vw,40px);font-weight:800;margin:10px 0 6px}
+    .tk{display:grid;grid-template-columns:1fr 190px;background:var(--navy);color:#fff;border-radius:20px;overflow:hidden;margin:8px 0 4px}
+    .tk>*{min-width:0}
+    .tk-main{padding:20px;display:flex;flex-direction:column;gap:4px;border-right:2px dashed #ffffff55}
+    .tk-main small{font:700 10.5px var(--mono);letter-spacing:.12em;opacity:.75}
+    .tk-main strong{font:800 24px var(--display);line-height:1.1;margin-bottom:6px;overflow-wrap:anywhere}
+    .tk-main code{font:700 17px var(--mono);color:var(--saffron);letter-spacing:.05em;margin-bottom:6px}
+    .tk-qr{display:grid;place-items:center;padding:14px;background:#fff}
+    .tk-qr img{width:100%;max-width:170px;height:auto;display:block}
+    @media(max-width:560px){.tk{grid-template-columns:1fr}.tk-main{border-right:0;border-bottom:2px dashed #ffffff55}.tk-qr img{max-width:220px}}
     .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
     .smallprint{margin-top:20px;border-top:1px solid var(--line);padding-top:14px;color:var(--ink-soft);font-size:.84rem}
     .smallprint a{color:var(--teal);font-weight:700}
@@ -122,6 +133,28 @@
         <div class="handoff">Tiket QR tampil setelah pendaftaran berhasil. Unduh tiket, lalu lanjutkan ke WhatsApp dengan data yang sudah tersusun. Tekan Kirim untuk mengonfirmasi kehadiran; tidak perlu mengisi data lagi.</div>
         <div class="actions"><button class="btn hot" id="submit-registration" type="button">Daftar dan terbitkan tiket</button><button class="btn line" id="edit-data" type="button">Ubah data</button></div>
         <p id="submit-note" class="notice hidden" role="status">Sedang menyimpan pendaftaran dan membuat tiket. Jangan tutup halaman ini.</p>
+        <p id="submit-error" class="closed hidden" role="alert"></p>
+      </section>
+
+      <section id="ticket-step" class="hidden" aria-labelledby="ticket-title">
+        <span class="ok-pill">TIKET VALID</span>
+        <h2 id="ticket-title" class="ticket-h">Ini tiketmu</h2>
+        <p class="intro">Simpan tiket ini, lalu tunjukkan QR-nya ke panitia saat masuk. Bukti transfermu sudah kami terima dan akan dicek admin.</p>
+        <div class="tk">
+          <div class="tk-main">
+            <small>PESERTA</small><strong id="tk-name"></strong>
+            <small>KODE TIKET</small><code id="tk-code"></code>
+            <small>SABTU, 19 DES 2026 · 09.00 WIB</small>
+            <small>AULA MASJID SEJUTA PEMUDA</small>
+          </div>
+          <div class="tk-qr"><img id="tk-qr" alt="QR tiket"></div>
+        </div>
+        <p id="tk-noqr" class="notice hidden">QR belum bisa dibuat. Simpan kode tiket di atas dan tunjukkan ke panitia saat hadir.</p>
+        <div class="actions">
+          <button class="btn hot" id="save-ticket" type="button">Simpan tiket (gambar)</button>
+          <a class="btn line" id="wa-confirm" href="#" target="_blank" rel="noopener">Konfirmasi ke admin via WhatsApp</a>
+        </div>
+        <p class="note" style="margin-top:12px">Kalau tombol simpan tidak jalan di HP-mu, screenshot layar ini.</p>
       </section>
       <p class="smallprint">Acara: Sabtu, 19 Desember 2026 · 09.00 WIB–selesai · lokasi: <a href="https://www.google.com/maps/search/?api=1&query=Masjid+Sejuta+Pemuda" target="_blank" rel="noopener">Aula Masjid Sejuta Pemuda</a> · Panitia: <a href="https://wa.me/6285283966520" target="_blank" rel="noopener">0852-8396-6520</a></p>
     </section>
@@ -210,9 +243,94 @@
         document.getElementById("progress-label").textContent = "Langkah 1 dari 2 · Data peserta";
         return;
       }
-      document.getElementById("submit-registration").disabled = true;
-      document.getElementById("submit-note").classList.remove("hidden");
-      form.submit();
+      sendRegistration();
+    });
+
+    // Kirim ke Apps Script dan tampilkan tiket di halaman ini.
+    async function sendRegistration() {
+      const btn = document.getElementById("submit-registration");
+      const note = document.getElementById("submit-note");
+      const errBox = document.getElementById("submit-error");
+      btn.disabled = true; note.classList.remove("hidden"); errBox.classList.add("hidden");
+      const body = new URLSearchParams(new FormData(form));
+      body.set("format", "json");
+      let text;
+      try {
+        const res = await fetch(form.action, { method: "POST", body: body });
+        text = await res.text();
+      } catch (err) {
+        btn.disabled = false; note.classList.add("hidden");
+        errBox.textContent = "Koneksi gagal. Cek internet lalu tekan Daftar lagi.";
+        errBox.classList.remove("hidden");
+        return;
+      }
+      let data;
+      try { data = JSON.parse(text); } catch (_) {
+        // Server versi lama sudah menyimpan data dan menjawab halaman tiket HTML:
+        // tampilkan halaman itu apa adanya (jangan kirim ulang, nanti dianggap nomor dobel).
+        document.open(); document.write(text); document.close();
+        return;
+      }
+      note.classList.add("hidden");
+      if (!data.ok) {
+        btn.disabled = false;
+        errBox.textContent = data.error || "Pendaftaran belum berhasil. Coba lagi.";
+        errBox.classList.remove("hidden");
+        return;
+      }
+      showTicket(data);
+    }
+
+    let ticketData = null;
+    function showTicket(data) {
+      ticketData = data;
+      document.getElementById("tk-name").textContent = data.name;
+      document.getElementById("tk-code").textContent = data.ticketId;
+      const qr = document.getElementById("tk-qr");
+      if (data.qrDataUrl) { qr.src = data.qrDataUrl; } else { qr.parentElement.classList.add("hidden"); document.getElementById("tk-noqr").classList.remove("hidden"); }
+      document.getElementById("wa-confirm").href = data.whatsappUrl || "https://wa.me/6285283966520";
+      reviewStep.classList.add("hidden");
+      progress.classList.add("hidden");
+      document.querySelector(".bring-note").classList.add("hidden");
+      document.getElementById("page-title").textContent = "Pendaftaran berhasil";
+      document.querySelector(".card > .intro").classList.add("hidden");
+      document.getElementById("ticket-step").classList.remove("hidden");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    // Gambar tiket lengkap (nama, kode, jadwal, QR) jadi PNG untuk disimpan.
+    document.getElementById("save-ticket").addEventListener("click", () => {
+      if (!ticketData) return;
+      const W = 1080, H = 1500, c = document.createElement("canvas");
+      c.width = W; c.height = H;
+      const g = c.getContext("2d");
+      g.fillStyle = "#0f2a44"; g.fillRect(0, 0, W, H);
+      g.fillStyle = "#f4a62a"; g.fillRect(0, 0, W, 16);
+      g.fillStyle = "#a9c3d4"; g.font = "700 30px monospace"; g.fillText("TRAINING EXCLUSIVE", 80, 120);
+      g.fillStyle = "#ffffff"; g.font = "800 76px sans-serif"; g.fillText("AI for Business", 80, 210);
+      g.fillStyle = "#a9c3d4"; g.font = "700 28px monospace"; g.fillText("PESERTA", 80, 320);
+      g.fillStyle = "#ffffff"; g.font = "800 58px sans-serif";
+      const name = String(ticketData.name); g.fillText(name.length > 26 ? name.slice(0, 25) + "…" : name, 80, 390);
+      g.fillStyle = "#a9c3d4"; g.font = "700 28px monospace"; g.fillText("KODE TIKET", 80, 470);
+      g.fillStyle = "#f4a62a"; g.font = "700 52px monospace"; g.fillText(ticketData.ticketId, 80, 535);
+      g.fillStyle = "#ffffff"; g.font = "600 34px sans-serif";
+      g.fillText("Sabtu, 19 Desember 2026 · 09.00 WIB", 80, 620);
+      g.fillText("Aula Masjid Sejuta Pemuda", 80, 670);
+      const finish = () => {
+        g.fillStyle = "#a9c3d4"; g.font = "500 28px sans-serif";
+        g.fillText("Tunjukkan QR ini ke panitia saat masuk.", 80, 1440);
+        const a = document.createElement("a");
+        a.href = c.toDataURL("image/png"); a.download = ticketData.ticketId + "-tiket.png";
+        document.body.appendChild(a); a.click(); a.remove();
+      };
+      if (!ticketData.qrDataUrl) { finish(); return; }
+      const img = new Image();
+      img.onload = () => {
+        g.fillStyle = "#ffffff"; g.fillRect(240, 740, 600, 600);
+        g.drawImage(img, 270, 770, 540, 540); finish();
+      };
+      img.onerror = finish;
+      img.src = ticketData.qrDataUrl;
     });
 
     // Tutup formulir setelah batas pendaftaran (backend juga menolak).
