@@ -112,6 +112,12 @@
     @keyframes steam{0%{transform:translateY(8px) scaleY(.6);opacity:0}50%{opacity:.45}100%{transform:translateY(-14px) scaleY(1.1);opacity:0}}
     .kopi h3{font-size:25px;color:var(--coffee)}
     .kopi p{font-size:15px;margin-top:4px}
+    .qris{display:grid;grid-template-columns:150px 1fr;gap:16px;align-items:center;margin-top:14px;background:var(--paper);border-radius:16px;padding:14px}
+    .qris>*{min-width:0}
+    .qris img{width:150px;height:150px;display:block;border-radius:10px;background:#fff}
+    .qris p{font-size:14px;color:var(--ink-soft);margin:0}
+    .qris b{color:var(--ink)}
+    .qris .amt{font:800 24px var(--display);color:var(--coffee);display:block}
     .free{font:800 36px var(--display);color:var(--leaf);text-align:center;line-height:1}
     .free small{display:block;font:600 12px var(--body);color:var(--ink-soft)}
 
@@ -156,6 +162,8 @@
       .speaker img{max-width:280px}
       .kopi{grid-template-columns:1fr}
       .cup{display:none}
+      .qris{grid-template-columns:1fr}
+      .qris img{width:180px;height:180px}
       .ticket{grid-template-columns:1fr 118px;transform:none}
       .ticket::before,.ticket::after{left:calc(100% - 131px)}
       .t-qr span{width:90px;height:90px}
@@ -266,6 +274,10 @@
         <div>
           <h3 id="kopi-title">Infaq kopi jamaah</h3>
           <p>Pendaftaran gratis. Infaq kopi jamaah sukarela, bukan biaya, dan tidak memengaruhi tiket.</p>
+          <div class="qris">
+            <img src="assets/qris-kopi-jamaah.png" alt="QRIS infaq kopi jamaah Rp20.000" width="400" height="400" loading="lazy">
+            <p><span class="amt">Rp20.000</span><b>Scan pakai m-banking atau e-wallet.</b> Nominal sudah tetap. Pastikan nama penerima <b>YAYASAN AMANAH SEJUTA PEMUDA</b> sebelum membayar.</p>
+          </div>
         </div>
         <div class="free">Rp0<small>biaya daftar</small></div>
       </div>
