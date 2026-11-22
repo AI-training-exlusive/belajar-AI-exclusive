@@ -60,7 +60,17 @@ jobs:
           # Ambil isi proyek saat ini supaya appsscript.json (zona waktu, izin web app) tetap sama.
           clasp pull
           ls -la
-          cp ../ticket-system/Code.gs Code.js
+          # Timpa file yang memang berisi kode tiket (di proyek ini namanya Kode.gs),
+          # dan hapus salinan lain supaya tidak ada deklarasi ganda.
+          TARGET=$(grep -l "const TICKET_CONFIG" *.js 2>/dev/null | grep -vx "Code.js" | head -1)
+          TARGET=${TARGET:-$(grep -l "const TICKET_CONFIG" *.js 2>/dev/null | head -1)}
+          TARGET=${TARGET:-Code.js}
+          for f in $(grep -l "const TICKET_CONFIG" *.js 2>/dev/null); do
+            if [ "$f" != "$TARGET" ]; then echo "Hapus duplikat $f"; rm "$f"; fi
+          done
+          echo "Tulis ke $TARGET"
+          cp ../ticket-system/Code.gs "$TARGET"
+          ls -la
           clasp push --force
 
       - name: Perbarui deployment yang sudah ada
