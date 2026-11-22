@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#0f2a44">
-  <meta name="description" content="Formulir pendaftaran gratis Training Exclusive AI untuk Bisnis.">
+  <meta name="description" content="Formulir pendaftaran Training Exclusive AI untuk Bisnis. Biaya Rp20.000 untuk kopi jamaah.">
   <title>Formulir Pendaftaran — AI untuk Bisnis</title>
   <script>
     // Batas pendaftaran online. Samakan dengan TICKET_CONFIG.closeAt di Code.gs.
@@ -32,6 +32,13 @@
     .consent{display:flex;align-items:flex-start;gap:10px;color:var(--ink-soft);font-size:.88rem;font-weight:500}
     .consent input{width:auto;margin:5px 0 0;accent-color:var(--teal)}
     .note{font-size:.83rem;color:var(--ink-soft);margin:0}
+    .pay{display:grid;grid-template-columns:170px 1fr;gap:16px;align-items:start;padding:16px;border-radius:16px;background:var(--amber-soft)}
+    .pay>*{min-width:0}
+    .pay-qr img{width:170px;height:170px;display:block;border-radius:12px;background:#fff}
+    .pay-copy{display:grid;gap:8px;font-size:.92rem;color:var(--coffee)}
+    .pay-amt{font:800 22px var(--display);color:var(--coffee)}
+    .pay .consent{color:var(--ink);font-weight:700}
+    @media(max-width:560px){.pay{grid-template-columns:1fr}.pay-qr img{width:200px;height:200px}}
     .fee-note{padding:13px 15px;border-radius:14px;background:var(--amber-soft);color:var(--coffee);font-size:.92rem}
     .bring-note{padding:13px 15px;border-radius:14px;background:var(--teal-soft);color:#0b5e5b;font-size:.92rem;margin-bottom:22px}
     .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}
@@ -67,7 +74,7 @@
     <section class="card" aria-labelledby="page-title">
       <span class="eyebrow">TRAINING EXCLUSIVE</span>
       <h1 id="page-title">Formulir pendaftaran</h1>
-      <p class="intro">Isi data peserta satu kali. Setelah pendaftaran tersimpan, unduh tiket dan lanjut ke WhatsApp admin dengan pesan konfirmasi yang sudah terisi.</p>
+      <p class="intro">Biaya Rp20.000 lewat QRIS (ada di bawah). Isi data peserta satu kali. Setelah tiket muncul, lanjut ke WhatsApp admin dan lampirkan bukti bayar.</p>
       <div class="progress" id="progress" data-step="1"><span id="progress-label">Langkah 1 dari 2 · Data peserta</span><span class="progress-track"><span class="progress-fill"></span></span></div>
       <p class="bring-note"><b>Disarankan membawa laptop dan charger</b> saat acara, plus HP dan satu contoh produk atau ide usaha.</p>
 
@@ -82,9 +89,17 @@
             <div class="field"><label for="city">Domisili *</label><input id="city" name="city" required autocomplete="address-level2" placeholder="Kota / kabupaten"></div>
             <div class="field"><label for="platform">Platform jualan *</label><select id="platform" name="platform" required><option value="">Pilih platform</option><option>WhatsApp</option><option>Instagram</option><option>TikTok Shop</option><option>Shopee</option><option>Tokopedia</option><option>Belum mulai berjualan</option><option>Lainnya</option></select></div>
             <div class="field"><label for="status">Status peserta *</label><select id="status" name="participantType" required><option value="">Pilih status</option><option>Seller</option><option>Reseller</option><option>Pemilik UMKM</option><option>Pemula</option><option>Lainnya</option></select></div>
-            <div class="field"><label for="infaq">Infaq kopi jamaah (opsional)</label><select id="infaq" name="infaq"><option>Tidak memberikan infaq</option><option>Seikhlasnya</option><option>Rp10.000</option><option>Rp20.000</option><option>Rp50.000</option></select></div>
+            <input type="hidden" id="infaq" name="infaq" value="Rp20.000 (dibayar via QRIS)">
             <div class="field full"><label for="question">Pertanyaan untuk panitia (opsional)</label><textarea id="question" name="question" rows="3" placeholder="Tulis pertanyaan kalau ada"></textarea></div>
-            <div class="field full"><p class="fee-note"><strong>Pendaftaran gratis.</strong> Infaq hanya untuk kopi jamaah, sukarela, dan tidak memengaruhi konfirmasi atau tiket.</p></div>
+            <div class="field full pay">
+              <div class="pay-qr"><img src="assets/qris-kopi-jamaah.png" alt="QRIS pembayaran pendaftaran Rp20.000" width="400" height="400"></div>
+              <div class="pay-copy">
+                <strong class="pay-amt">Biaya pendaftaran Rp20.000</strong>
+                <p>Untuk kopi jamaah. Scan QRIS ini pakai m-banking atau e-wallet, nominal sudah Rp20.000. Pastikan penerimanya <b>YAYASAN AMANAH SEJUTA PEMUDA</b>.</p>
+                <p>Simpan bukti bayar. Setelah tiket muncul, kirim bukti itu di chat WhatsApp konfirmasi ke admin.</p>
+                <label class="consent"><input id="paid" type="checkbox" required><span>Saya sudah membayar Rp20.000 lewat QRIS dan akan mengirim bukti bayar ke admin.</span></label>
+              </div>
+            </div>
             <div class="field full"><label class="consent"><input id="consent" name="consent" value="yes" type="checkbox" required><span>Saya setuju data ini digunakan untuk pendaftaran dan tiket. Saat saya menekan Kirim di WhatsApp, data pendaftaran dan kode tiket dapat disampaikan kepada admin untuk konfirmasi kehadiran.</span></label><p class="note">Jangan masukkan nomor identitas atau data sensitif.</p></div>
           </div>
           <div class="actions"><button class="btn hot" type="submit">Tinjau data pendaftaran</button><a class="btn line" href="https://wa.me/6285283966520" target="_blank" rel="noopener">Tanya admin</a></div>
@@ -93,7 +108,7 @@
 
       <section id="review-step" class="hidden" aria-labelledby="review-title">
         <h2 id="review-title" style="color:var(--navy);margin:0">Periksa datamu</h2>
-        <p class="intro" style="margin-top:6px">Periksa datamu. Tiket langsung terbit tanpa menunggu persetujuan admin; setelahnya kamu bisa mengirim konfirmasi kehadiran melalui WhatsApp.</p>
+        <p class="intro" style="margin-top:6px">Periksa datamu. Tiket langsung terbit tanpa menunggu persetujuan admin; setelahnya kirim konfirmasi dan bukti bayar ke admin melalui WhatsApp.</p>
         <dl class="summary" id="summary"></dl>
         <div class="handoff">Tiket QR tampil setelah pendaftaran berhasil. Unduh tiket, lalu lanjutkan ke WhatsApp dengan data yang sudah tersusun. Tekan Kirim untuk mengonfirmasi kehadiran; tidak perlu mengisi data lagi.</div>
         <div class="actions"><button class="btn hot" id="submit-registration" type="button">Daftar dan terbitkan tiket</button><button class="btn line" id="edit-data" type="button">Ubah data</button></div>
@@ -113,7 +128,7 @@
     const fields = [
       ["Nama", "name"], ["WhatsApp peserta", "phone"], ["Nama usaha", "business"],
       ["Produk / bidang usaha", "product"], ["Domisili", "city"], ["Platform jualan", "platform"],
-      ["Status peserta", "status"], ["Infaq kopi jamaah", "infaq"], ["Pertanyaan", "question"]
+      ["Status peserta", "status"], ["Pembayaran", "infaq"], ["Pertanyaan", "question"]
     ];
     form.addEventListener("submit", event => {
       event.preventDefault();

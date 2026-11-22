@@ -13,9 +13,9 @@ Website pendaftaran acara bersama Mang Tab, Konsultan Bisnis. Penyelenggara: mas
 
 Kode Google Apps Script dan panduan instalasi ada di folder `ticket-system/`. `daftar.html` mengirim field `name`, `phone`, `business`, `product`, `city`, `platform`, `participantType`, `infaq`, `question`, dan `consent` ke deployment web app. Tiket ditampilkan setelah data tersimpan; tombol konfirmasi WhatsApp memakai data formulir dan kode tiket, lalu peserta menekan Kirim.
 
-## Infaq
+## Biaya pendaftaran
 
-Pendaftaran gratis. Infaq hanya untuk kopi jamaah, bersifat sukarela, dan tidak memengaruhi penerbitan tiket atau check-in.
+Biaya pendaftaran Rp20.000 untuk kopi jamaah, dibayar lewat QRIS (`assets/qris-kopi-jamaah.png`). Formulir mewajibkan centang "sudah membayar" dan mengirim field `infaq` berisi "Rp20.000 (dibayar via QRIS)". Sistem tidak memeriksa pembayaran secara otomatis: peserta mengirim bukti bayar di chat WhatsApp konfirmasi, lalu admin mencocokkannya. Tiket tetap terbit saat formulir dikirim.
 
 ## Mode halaman dan batch berikutnya
 
