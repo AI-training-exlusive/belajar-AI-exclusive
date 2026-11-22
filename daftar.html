@@ -3,29 +3,76 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#102d4d">
+  <meta name="theme-color" content="#0f2a44">
   <meta name="description" content="Formulir pendaftaran gratis Training Exclusive AI untuk Bisnis.">
   <title>Formulir Pendaftaran — AI untuk Bisnis</title>
+  <script>
+    // Batas pendaftaran online. Samakan dengan TICKET_CONFIG.closeAt di Code.gs.
+    window.REG_CLOSE_AT = "2026-11-21T09:00:00+07:00";
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+  <link rel="stylesheet" href="assets/site.css">
   <style>
-    :root{--ink:#142b43;--navy:#102d4d;--blue:#2865d8;--teal:#159b9a;--muted:#687a8e;--surface:#e9eef5;--line:#dce4ed;--shadow:rgba(151,165,184,.34)}
-    *{box-sizing:border-box}body{margin:0;background:var(--surface);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.55}a{color:inherit;text-decoration:none}.wrap{width:min(760px,calc(100% - 32px));margin:auto}.topbar{height:72px;display:flex;align-items:center;justify-content:space-between}.brand{display:flex;align-items:center;gap:10px;color:var(--navy)}.brand img{width:46px;height:42px;object-fit:contain;border-radius:12px;background:#fff;box-shadow:0 5px 15px #11314e1f}.brand-copy{display:grid;line-height:1.15}.brand-copy strong{font-size:.94rem}.brand-copy small{font-size:.7rem;color:var(--teal);font-weight:750;margin-top:4px}.back{font-size:.92rem;color:#52677d;font-weight:700}.page{padding:35px 0 65px}.card{padding:clamp(22px,5vw,38px);border:1px solid #ffffffc9;border-radius:24px;background:linear-gradient(145deg,#edf2f8,#e5ebf3);box-shadow:14px 14px 30px var(--shadow),-12px -12px 25px #ffffffde}.eyebrow{font-size:.76rem;letter-spacing:.12em;text-transform:uppercase;font-weight:850;color:var(--teal)}h1{font-size:clamp(2rem,6vw,3.2rem);line-height:1.05;letter-spacing:-.05em;color:var(--navy);margin:8px 0 9px}.intro{color:var(--muted);margin:0 0 24px}.progress{display:flex;align-items:center;gap:10px;margin:0 0 23px;color:#66798c;font-size:.85rem;font-weight:750}.progress-track{height:7px;border-radius:99px;background:#d5dee8;flex:1;overflow:hidden}.progress-fill{width:50%;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--teal),#55c6b8);transition:width .3s ease}.progress[data-step="2"] .progress-fill{width:100%}.fields{display:grid;grid-template-columns:1fr 1fr;gap:15px}.field{display:flex;flex-direction:column;gap:7px}.field.full{grid-column:1/-1}label{font-size:.91rem;font-weight:780;color:var(--navy)}input,select,textarea{width:100%;font:inherit;color:var(--ink);padding:12px 13px;border-radius:11px;border:1px solid var(--line);background:#e9eef5;box-shadow:inset 4px 4px 8px #9dabbf4d,inset -4px -4px 8px #ffffffc7}input:focus,select:focus,textarea:focus{outline:3px solid #159b9a38;border-color:var(--teal)}.consent{display:flex;align-items:flex-start;gap:10px;color:#536a80;font-size:.87rem}.consent input{width:auto;margin:5px 0 0;accent-color:var(--teal);box-shadow:none}.note{font-size:.82rem;color:var(--muted);margin:0}.fee-note{padding:13px 15px;border-radius:12px;background:#dff2ed;color:#176d6c;font-size:.9rem;margin:4px 0 1px}.fee-note strong{color:#105956}.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}.btn{min-height:46px;display:inline-flex;align-items:center;justify-content:center;padding:11px 17px;border-radius:11px;font:inherit;font-weight:820;border:1px solid transparent;cursor:pointer}.primary{background:var(--blue);color:#fff;box-shadow:7px 7px 14px #1c4b874d,-5px -5px 12px #ffffffc9}.light{background:var(--surface);color:var(--navy);border-color:#ffffffd9;box-shadow:7px 7px 14px #97a5b64d,-6px -6px 13px #ffffffd1}.primary:hover,.light:hover{transform:translateY(-1px)}.summary{display:grid;gap:0;margin:20px 0}.summary-row{display:grid;grid-template-columns:minmax(115px,.7fr) 1.3fr;gap:12px;padding:12px 0;border-bottom:1px solid #d4dfe9}.summary-row dt{font-size:.87rem;color:#687a8e}.summary-row dd{margin:0;font-weight:750;color:var(--navy);overflow-wrap:anywhere}.notice{padding:13px;border-radius:12px;background:#fff3dc;color:#775212;font-size:.9rem;margin-top:14px}.hidden{display:none!important}.handoff{padding:14px 16px;border:1px solid #b9e7dc;border-radius:13px;background:#e2f4ee;color:#246b61;font-size:.9rem}.smallprint{margin-top:18px;border-top:1px solid #d5dee8;padding-top:14px;color:var(--muted);font-size:.82rem}.smallprint a{color:var(--blue);text-decoration:underline}.footer{text-align:center;color:#75869a;font-size:.82rem;padding:0 0 24px}
-    @media(max-width:560px){.topbar{height:64px}.brand img{width:40px;height:38px}.brand-copy strong{font-size:.83rem}.brand-copy small{font-size:.65rem}.back{font-size:.83rem}.page{padding-top:20px}.card{border-radius:20px}.fields{grid-template-columns:1fr}.field.full{grid-column:auto}.actions .btn{width:100%}.summary-row{grid-template-columns:1fr;gap:2px;padding:10px 0}}
-    @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+    .page{padding-block:clamp(20px,5vw,44px) 64px;max-width:800px}
+    .card{padding:clamp(20px,5vw,38px);border:1px solid var(--line);border-radius:24px;background:var(--paper);box-shadow:0 24px 50px #0f2a4414}
+    h1{font-size:clamp(32px,6vw,50px);line-height:1;letter-spacing:-.04em;margin:8px 0 10px;font-weight:800}
+    .intro{color:var(--ink-soft);margin:0 0 22px}
+    .progress{display:flex;align-items:center;gap:10px;margin:0 0 24px;color:var(--ink-soft);font-size:.86rem;font-weight:700}
+    .progress-track{height:8px;border-radius:99px;background:var(--teal-soft);flex:1;overflow:hidden}
+    .progress-fill{display:block;width:50%;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--teal),var(--saffron));transition:width .3s ease}
+    .progress[data-step="2"] .progress-fill{width:100%}
+    .fields{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .field{display:flex;flex-direction:column;gap:7px;min-width:0}
+    .field.full{grid-column:1/-1}
+    label{font-size:.92rem;font-weight:700;color:var(--ink)}
+    input,select,textarea{width:100%;font:inherit;color:var(--ink);padding:12px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--ground)}
+    input:focus,select:focus,textarea:focus{outline:3px solid #0f9c9733;border-color:var(--teal);background:var(--paper)}
+    .consent{display:flex;align-items:flex-start;gap:10px;color:var(--ink-soft);font-size:.88rem;font-weight:500}
+    .consent input{width:auto;margin:5px 0 0;accent-color:var(--teal)}
+    .note{font-size:.83rem;color:var(--ink-soft);margin:0}
+    .fee-note{padding:13px 15px;border-radius:14px;background:var(--amber-soft);color:var(--coffee);font-size:.92rem}
+    .bring-note{padding:13px 15px;border-radius:14px;background:var(--teal-soft);color:#0b5e5b;font-size:.92rem;margin-bottom:22px}
+    .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}
+    .summary{display:grid;margin:20px 0}
+    .summary-row{display:grid;grid-template-columns:minmax(120px,.7fr) 1.3fr;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+    .summary-row dt{font-size:.88rem;color:var(--ink-soft)}
+    .summary-row dd{margin:0;font-weight:700;overflow-wrap:anywhere}
+    .notice{padding:13px;border-radius:12px;background:var(--saffron-soft);color:var(--coffee);font-size:.92rem;margin-top:14px}
+    .handoff{padding:14px 16px;border-radius:14px;background:var(--leaf-soft);color:#14603a;font-size:.92rem}
+    .closed{padding:18px;border-radius:16px;background:var(--chili-soft);color:#8a2a17;margin-bottom:6px}
+    .closed strong{display:block;font:800 20px var(--display);margin-bottom:4px}
+    .closed .btn{margin-top:12px}
+    .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+    .smallprint{margin-top:20px;border-top:1px solid var(--line);padding-top:14px;color:var(--ink-soft);font-size:.84rem}
+    .smallprint a{color:var(--teal);font-weight:700}
+    .back{font-size:.9rem;color:var(--hero-soft);font-weight:700;text-decoration:none;margin-left:auto}
+    .footer{text-align:center;color:var(--ink-soft);font-size:.83rem;padding:0 16px 28px}
+    @media(max-width:560px){.fields{grid-template-columns:1fr}.field.full{grid-column:auto}.actions .btn{width:100%}.summary-row{grid-template-columns:1fr;gap:2px;padding:10px 0}}
   </style>
 </head>
 <body>
-  <header class="wrap topbar">
-    <a class="brand" href="index.html"><img src="assets/logo-masjid-mudzaki.png?v=logo-528f886" alt="Logo Masjid Mudzaki"><span class="brand-copy"><strong>AI UNTUK BISNIS</strong><small>by Masjid Mudzaki</small></span></a>
-    <a class="back" href="index.html">← Kembali ke acara</a>
+  <header class="top">
+    <div class="wrap">
+      <a class="brand" href="index.html">
+        <span class="logo-pill"><img src="assets/logo-penyelenggara.jpg" alt="masjidmuzaki.com dan Masjid Sejuta Pemuda" width="350" height="92"></span>
+        <span>AI FOR BUSINESS<small>Training Exclusive</small></span>
+      </a>
+      <a class="back" href="index.html">← Kembali</a>
+    </div>
   </header>
   <main class="wrap page">
+    <div class="closed hidden" id="closed-box" role="status"><strong>Pendaftaran online sudah ditutup.</strong>Batch ini sudah dimulai. Ingin ikut batch berikutnya? Kabari admin lewat WhatsApp.<br><a class="btn hot sm" id="closed-wa" href="https://wa.me/6285283966520" target="_blank" rel="noopener">Kabari saya batch berikutnya</a></div>
     <section class="card" aria-labelledby="page-title">
       <span class="eyebrow">TRAINING EXCLUSIVE</span>
       <h1 id="page-title">Formulir pendaftaran</h1>
       <p class="intro">Isi data peserta satu kali. Setelah pendaftaran tersimpan, unduh tiket dan lanjut ke WhatsApp admin dengan pesan konfirmasi yang sudah terisi.</p>
       <div class="progress" id="progress" data-step="1"><span id="progress-label">Langkah 1 dari 2 · Data peserta</span><span class="progress-track"><span class="progress-fill"></span></span></div>
+      <p class="bring-note"><b>Disarankan membawa laptop dan charger</b> saat acara, plus HP dan satu contoh produk atau ide usaha.</p>
 
       <form id="registration-form" method="post" target="_self" action="https://script.google.com/macros/s/AKfycbzHNKd8RWTlwYRxcfMPvG_mH5AdENZt-BP2Nv11bGUNmLVhE-IyPZjT82-DUWrAGSsWkA/exec">
+        <div class="hp" aria-hidden="true"><label for="website">Jangan diisi</label><input id="website" name="website" tabindex="-1" autocomplete="off"></div>
         <div id="form-step">
           <div class="fields">
             <div class="field"><label for="name">Nama lengkap *</label><input id="name" name="name" required autocomplete="name" placeholder="Nama sesuai identitas peserta"></div>
@@ -40,7 +87,7 @@
             <div class="field full"><p class="fee-note"><strong>Pendaftaran gratis.</strong> Infaq hanya untuk kopi jamaah, sukarela, dan tidak memengaruhi konfirmasi atau tiket.</p></div>
             <div class="field full"><label class="consent"><input id="consent" name="consent" value="yes" type="checkbox" required><span>Saya setuju data ini digunakan untuk pendaftaran dan tiket. Saat saya menekan Kirim di WhatsApp, data pendaftaran dan kode tiket dapat disampaikan kepada admin untuk konfirmasi kehadiran.</span></label><p class="note">Jangan masukkan nomor identitas atau data sensitif.</p></div>
           </div>
-          <div class="actions"><button class="btn primary" type="submit">Tinjau data pendaftaran</button><a class="btn light" href="https://wa.me/6285283966520" target="_blank" rel="noopener">Tanya admin</a></div>
+          <div class="actions"><button class="btn hot" type="submit">Tinjau data pendaftaran</button><a class="btn line" href="https://wa.me/6285283966520" target="_blank" rel="noopener">Tanya admin</a></div>
         </div>
       </form>
 
@@ -49,13 +96,13 @@
         <p class="intro" style="margin-top:6px">Periksa datamu. Tiket langsung terbit tanpa menunggu persetujuan admin; setelahnya kamu bisa mengirim konfirmasi kehadiran melalui WhatsApp.</p>
         <dl class="summary" id="summary"></dl>
         <div class="handoff">Tiket QR tampil setelah pendaftaran berhasil. Unduh tiket, lalu lanjutkan ke WhatsApp dengan data yang sudah tersusun. Tekan Kirim untuk mengonfirmasi kehadiran; tidak perlu mengisi data lagi.</div>
-        <div class="actions"><button class="btn primary" id="submit-registration" type="button">Daftar dan terbitkan tiket</button><button class="btn light" id="edit-data" type="button">Ubah data</button></div>
+        <div class="actions"><button class="btn hot" id="submit-registration" type="button">Daftar dan terbitkan tiket</button><button class="btn line" id="edit-data" type="button">Ubah data</button></div>
         <p id="submit-note" class="notice hidden" role="status">Sedang menyimpan pendaftaran dan membuat tiket. Jangan tutup halaman ini.</p>
       </section>
       <p class="smallprint">Acara: Sabtu, 21 November 2026 · 09.00 WIB–selesai · lokasi: <a href="https://www.google.com/maps/search/?api=1&query=Masjid+Sejuta+Pemuda" target="_blank" rel="noopener">Aula Masjid Sejuta Pemuda</a> · Panitia: <a href="https://wa.me/6285283966520" target="_blank" rel="noopener">0852-8396-6520</a></p>
     </section>
   </main>
-  <footer class="footer">Training Exclusive AI untuk Bisnis · Aula Masjid Sejuta Pemuda</footer>
+  <footer class="footer">Training Exclusive AI for Business · Aula Masjid Sejuta Pemuda · masjidmuzaki.com</footer>
   <script>
     const form = document.getElementById("registration-form");
     const formStep = document.getElementById("form-step");
@@ -102,6 +149,14 @@
       document.getElementById("submit-note").classList.remove("hidden");
       form.submit();
     });
+
+    // Tutup formulir setelah batas pendaftaran (backend juga menolak).
+    if (Date.now() >= Date.parse(window.REG_CLOSE_AT)) {
+      document.getElementById("closed-box").classList.remove("hidden");
+      document.querySelector(".card").classList.add("hidden");
+      const msg = "Assalamu'alaikum Admin Masjid Muzaki,\n\nSaya ingin dikabari kalau Training Exclusive AI for Business batch berikutnya dibuka. Terima kasih.";
+      document.getElementById("closed-wa").href = "https://wa.me/6285283966520?text=" + encodeURIComponent(msg);
+    }
   </script>
 </body>
 </html>

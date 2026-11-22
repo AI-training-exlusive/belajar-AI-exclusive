@@ -1,213 +1,407 @@
 <!doctype html>
-<html lang="id">
+<html lang="id" data-mode="after">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#102d4d">
-  <meta name="description" content="Training Exclusive AI untuk Bisnis bersama Mang Tab di Masjid Sejuta Pemuda. Pendaftaran gratis.">
-  <title>AI untuk Bisnis — Training Exclusive</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0f2a44">
+  <meta name="description" content="Training Exclusive AI for Business bersama Mang Tab di Aula Masjid Sejuta Pemuda. Pendaftaran gratis.">
+  <title>AI for Business — Training Exclusive</title>
+  <script>
+    // Jadwal acara. Ganti tiga baris ini untuk batch berikutnya.
+    window.EVENT = {
+      dayStart: "2026-11-21T00:00:00+07:00", // awal hari H
+      start:    "2026-11-21T09:00:00+07:00", // jam mulai (pendaftaran online ditutup)
+      dayEnd:   "2026-11-21T23:59:59+07:00"  // akhir hari H
+    };
+    // Mode halaman: before (sebelum), dday (hari H), after (setelah).
+    // Bisa dipaksa lewat alamat, mis. index.html?mode=before untuk pratinjau.
+    (function () {
+      var forced = new URLSearchParams(location.search).get("mode");
+      var now = Date.now(), mode = "after";
+      if (now < Date.parse(EVENT.dayStart)) mode = "before";
+      else if (now <= Date.parse(EVENT.dayEnd)) mode = "dday";
+      if (/^(before|dday|after)$/.test(forced || "")) mode = forced;
+      document.documentElement.dataset.mode = mode;
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+  <link rel="stylesheet" href="assets/site.css">
   <style>
-    :root{--ink:#142b43;--navy:#102d4d;--blue:#2865d8;--teal:#159b9a;--mint:#daf3ee;--muted:#687a8e;--line:#e4eaf0;--soft:#f5f8fb;--white:#fff;--shadow:0 20px 55px rgba(25,54,86,.12)}
-    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:#fff;line-height:1.6}a{color:inherit;text-decoration:none}.wrap{width:min(1160px,calc(100% - 44px));margin:auto}
-    .announce{background:var(--navy);color:#dce9f5;font-size:.86rem;text-align:center;padding:8px 14px}.announce strong{color:#8fe0d6}.nav{height:76px;display:flex;align-items:center;justify-content:space-between;gap:24px;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:11px;font-weight:850;color:var(--navy);letter-spacing:.01em}.brandmark{width:40px;height:40px;border-radius:13px;background:linear-gradient(135deg,var(--teal),#54c8ba);display:grid;place-items:center;color:#fff;font-weight:900}.navlinks{display:flex;align-items:center;gap:28px;color:#53677d;font-size:.94rem}.navlinks a:hover{color:var(--blue)}.nav .btn{padding:11px 17px}
-    .btn{display:inline-flex;justify-content:center;align-items:center;min-height:46px;padding:12px 18px;border-radius:10px;border:1px solid transparent;font-weight:800;cursor:pointer;font-size:.96rem}.btn.primary{background:var(--blue);color:#fff;box-shadow:0 8px 18px #2865d833}.btn.light{background:#fff;color:var(--navy);border-color:var(--line)}
-    .hero{padding:64px 0 58px;overflow:hidden;background:linear-gradient(180deg,#f8fbfe 0%,#fff 100%)}.hero-grid{display:grid;grid-template-columns:1.03fr .97fr;gap:44px;align-items:center}.kicker{display:inline-flex;align-items:center;gap:8px;background:#eaf7f5;color:#087b7f;border-radius:999px;padding:7px 12px;font-size:.83rem;font-weight:850;letter-spacing:.075em}.kicker i{display:block;width:7px;height:7px;border-radius:50%;background:var(--teal)}h1{font-size:clamp(3rem,6.5vw,5.35rem);line-height:.99;letter-spacing:-.06em;color:var(--navy);margin:20px 0 18px;max-width:680px}h1 span{color:var(--blue)}.lead{font-size:1.15rem;line-height:1.65;color:#536a80;max-width:590px;margin:0}.hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin:27px 0 30px}.mini-proof{display:flex;gap:14px;align-items:center;color:#61758a;font-size:.9rem}.avatars{display:flex}.avatars b{width:28px;height:28px;border:2px solid white;border-radius:50%;margin-left:-7px;background:linear-gradient(135deg,#d8f0e9,#5db4ad);display:block}.avatars b:first-child{margin-left:0;background:linear-gradient(135deg,#c6ddff,#5378c8)}.avatars b:last-child{background:linear-gradient(135deg,#ffe7c9,#c98048)}
-    .hero-art{min-height:430px;position:relative;display:grid;place-items:center}.art-frame{position:relative;width:min(100%,510px);height:390px;border-radius:26px;background:linear-gradient(145deg,#0b2b4b,#0f6d7c 66%,#1ca6a2);overflow:hidden;box-shadow:var(--shadow)}.art-frame:before,.art-frame:after{content:"";position:absolute;border:1px solid #ffffff28;border-radius:50%;width:440px;height:440px;left:50%;top:53%;transform:translate(-50%,-50%)}.art-frame:after{width:320px;height:320px}.glow{position:absolute;width:220px;height:220px;background:#4ad5c1;filter:blur(78px);opacity:.45;right:10px;top:15px}.network{position:absolute;inset:0;width:100%;height:100%;opacity:.58}.chip{position:absolute;z-index:2;border:1px solid #d7fbf7a0;background:#ffffffea;color:var(--navy);box-shadow:0 12px 28px #001d2c36;border-radius:14px;padding:13px 16px;font-size:.88rem;font-weight:800}.chip.one{top:32px;left:28px}.chip.two{right:25px;top:105px}.chip.three{left:38px;bottom:28px}.chip em{font-style:normal;color:var(--teal);display:block;font-size:.75rem;font-weight:700}.ai-orb{position:absolute;z-index:1;width:185px;height:185px;border-radius:50%;left:50%;top:50%;transform:translate(-50%,-50%);background:radial-gradient(circle at 35% 28%,#edffff,#9ce9dc 18%,#32b5b0 44%,#12496a 72%);box-shadow:inset -20px -24px 38px #05284988,0 0 65px #51e3d788;display:grid;place-items:center;color:white;font-weight:950;font-size:3.2rem;letter-spacing:-.08em}.orbit{position:absolute;z-index:1;width:270px;height:92px;border:2px solid #a4f4e9b8;border-radius:50%;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-27deg)}.orbit.second{width:250px;height:80px;transform:translate(-50%,-50%) rotate(34deg);border-color:#ffffff66}.spark{position:absolute;z-index:2;width:9px;height:9px;border-radius:50%;background:#c4fff2;box-shadow:0 0 18px 7px #8bf1db66}.spark.s1{left:22%;top:36%}.spark.s2{right:20%;bottom:24%}.hero-meta{position:absolute;z-index:3;left:50%;bottom:-16px;transform:translateX(-50%);width:min(92%,460px);background:#fff;border:1px solid var(--line);box-shadow:0 12px 30px #17385714;border-radius:15px;display:grid;grid-template-columns:repeat(3,1fr);padding:15px 10px}.meta-item{text-align:center;padding:0 7px;border-right:1px solid var(--line)}.meta-item:last-child{border:0}.meta-item small{display:block;color:var(--muted);font-size:.71rem;font-weight:800;letter-spacing:.08em}.meta-item strong{display:block;color:var(--navy);font-size:.91rem;margin-top:2px}
-    section{padding:76px 0}.section-head{max-width:680px;margin-bottom:28px}.eyebrow{font-size:.8rem;font-weight:850;color:var(--teal);letter-spacing:.12em;text-transform:uppercase}.title{font-size:clamp(2rem,4vw,3rem);letter-spacing:-.045em;line-height:1.1;color:var(--navy);margin:8px 0 12px}.desc{color:var(--muted);font-size:1.05rem;margin:0}.content-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.learn-card{padding:22px;border:1px solid var(--line);border-radius:16px;background:#fff;display:flex;gap:15px;align-items:flex-start}.learn-icon{width:42px;height:42px;flex:none;border-radius:13px;background:var(--mint);color:#087b7f;display:grid;place-items:center;font-weight:950}.learn-card h3{font-size:1.05rem;margin:0 0 5px;color:var(--navy)}.learn-card p{color:var(--muted);margin:0;font-size:.95rem}
-    .agenda{background:var(--soft)}.agenda-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:45px;align-items:start}.agenda-note{padding:24px;border-radius:18px;background:var(--navy);color:#e4eef8}.agenda-note strong{color:#9be5db}.agenda-list{display:grid;gap:0}.agenda-row{display:grid;grid-template-columns:95px 1fr;gap:20px;padding:18px 0;border-bottom:1px solid #dbe4ec}.agenda-row time{font-weight:850;color:var(--teal)}.agenda-row h3{margin:0;color:var(--navy);font-size:1.04rem}.agenda-row p{margin:3px 0 0;color:var(--muted);font-size:.93rem}
-    .speaker{display:grid;grid-template-columns:.8fr 1.2fr;gap:34px;align-items:center}.speaker-image{min-height:300px;border-radius:22px;background:radial-gradient(circle at 70% 22%,#d7f6f0 0,transparent 30%),linear-gradient(135deg,#e7f1fa,#d5eeea);display:grid;place-items:center;position:relative;overflow:hidden}.speaker-image:before{content:"";position:absolute;width:240px;height:240px;border-radius:50%;background:#fff8;right:-60px;bottom:-80px}.initials{width:146px;height:146px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(140deg,var(--navy),var(--teal));color:#fff;font-size:3rem;font-weight:900;box-shadow:0 20px 45px #102d4d35;position:relative}.speaker-copy h2{font-size:2.4rem;letter-spacing:-.04em;color:var(--navy);margin:8px 0 0}.speaker-copy .role{color:var(--teal);font-weight:800;margin:0 0 15px}.speaker-copy p{color:var(--muted);max-width:620px}
-    .infaq-wrap{padding-top:0}.infaq{border-radius:20px;padding:26px 30px;background:linear-gradient(110deg,#102d4d,#145c70);color:#e7f0f7;display:flex;align-items:center;justify-content:space-between;gap:24px}.infaq h2{color:#fff;font-size:1.3rem;margin:0 0 5px}.infaq p{margin:0;color:#d2e2ed}.infaq strong{color:#9be5db}.infaq-badge{flex:none;border:1px solid #ffffff5c;color:#c9f4ee;padding:10px 14px;border-radius:12px;font-weight:850;font-size:.89rem}
-    .register{background:#f5f8fb}.register-layout{display:grid;grid-template-columns:.8fr 1.2fr;gap:36px;align-items:start}.register-copy{position:sticky;top:24px}.register-copy .title{font-size:2.6rem}.form-shell{background:#fff;border:1px solid var(--line);border-radius:20px;padding:26px;box-shadow:0 15px 38px #1738570c}.grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}.field{display:flex;flex-direction:column;gap:7px}.field.full{grid-column:1/-1}label{font-weight:750;color:var(--navy);font-size:.92rem}input,select,textarea{font:inherit;border:1px solid #cbd8e3;border-radius:10px;padding:12px;background:#fff;color:var(--ink);width:100%}input:focus,select:focus,textarea:focus{outline:3px solid #159b9a2b;border-color:var(--teal)}.consent{display:flex;gap:10px;align-items:flex-start;font-size:.9rem;color:#536a80}.consent input{width:auto;margin-top:5px}.note{font-size:.85rem;color:var(--muted);margin:0}.notice{display:none;padding:12px;border-radius:10px;background:#fff4df;color:#735116}.form-shell .btn{width:100%;margin-top:2px}.footer{padding:30px 0;background:#0c243e;color:#d7e3ef}.footer-inner{display:flex;justify-content:space-between;gap:20px;align-items:center}.footer p{margin:3px 0;color:#b8c9d9;font-size:.9rem}.footer .brand{color:#fff}.qr-hint{font-size:.85rem;color:#c5d8e5}.mobile-cta{display:none}
-    @media(max-width:840px){.navlinks{gap:15px}.hero-grid{grid-template-columns:1fr;gap:22px}.hero-art{min-height:390px}.art-frame{height:340px}.agenda-grid,.speaker,.register-layout{grid-template-columns:1fr}.register-copy{position:static}.speaker-image{min-height:250px}.footer-inner{align-items:flex-start;flex-direction:column}}
-    @media(max-width:600px){.wrap{width:min(100% - 32px,1160px)}.announce{font-size:.76rem}.nav{height:65px}.navlinks{display:none}.brand{font-size:.92rem}.nav .btn{font-size:.85rem;padding:9px 12px;min-height:40px}.hero{padding:44px 0 43px}.hero-grid{gap:10px}.lead{font-size:1.04rem}.hero-art{min-height:320px}.art-frame{height:278px;border-radius:20px}.ai-orb{width:135px;height:135px;font-size:2.5rem}.orbit{width:210px;height:68px}.orbit.second{width:200px;height:64px}.chip{padding:9px 11px;font-size:.75rem}.chip.one{top:18px;left:14px}.chip.two{right:12px;top:75px}.chip.three{left:16px;bottom:17px}.hero-meta{bottom:-20px;padding:11px 5px;width:96%}.meta-item small{font-size:.62rem}.meta-item strong{font-size:.78rem}.hero-art{margin-bottom:20px}section{padding:58px 0}.content-grid{grid-template-columns:1fr}.agenda-grid{gap:22px}.agenda-row{grid-template-columns:72px 1fr;gap:13px}.speaker-image{min-height:210px}.initials{width:118px;height:118px;font-size:2.5rem}.speaker-copy h2{font-size:2rem}.infaq{padding:22px;align-items:flex-start;flex-direction:column}.infaq-badge{padding:8px 11px}.register-copy .title{font-size:2.1rem}.form-shell{padding:18px}.grid{grid-template-columns:1fr}.field.full{grid-column:auto}.registration-cta .btn{width:100%}.faq-item{padding:16px}.footer-inner{gap:12px}.mobile-cta{display:flex;position:fixed;bottom:12px;left:12px;right:12px;z-index:8}.mobile-cta .btn{width:100%;box-shadow:0 8px 25px #09284940}.footer{padding-bottom:82px}}
+    html[data-mode="before"] .only-dday, html[data-mode="before"] .only-after,
+    html[data-mode="dday"] .only-before, html[data-mode="dday"] .only-after,
+    html[data-mode="after"] .only-before, html[data-mode="after"] .only-dday{display:none!important}
 
-    /* Elegant neumorphism: use depth on key surfaces and controls only. */
-    :root{
-      --surface:#e9eef5;
-      --surface-shadow:rgba(157,171,190,.38);
-      --surface-light:rgba(255,255,255,.88);
-      --line:#dce4ed;
+    .hero{background:var(--hero-bg);color:var(--hero-ink);padding-block:clamp(28px,6vw,64px);position:relative;overflow:hidden}
+    .hero::after{content:"";position:absolute;width:560px;height:560px;right:-180px;top:-200px;border-radius:50%;background:radial-gradient(circle,#0f9c9755,transparent 65%);pointer-events:none}
+    .hero-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:clamp(24px,4vw,52px);align-items:center;position:relative;z-index:1}
+    .hero-grid>*{min-width:0}
+    .kick{display:inline-flex;gap:8px;align-items:center;font:700 12px var(--mono);letter-spacing:.14em;color:var(--saffron);text-transform:uppercase}
+    .kick b{width:8px;height:8px;border-radius:50%;background:var(--saffron);animation:pulse 1.8s infinite}
+    @keyframes pulse{50%{opacity:.25}}
+    .hero h1{font-size:clamp(42px,7.6vw,84px);line-height:.95;font-weight:800;margin:14px 0 16px;letter-spacing:-.045em}
+    .hero h1 em{font-style:normal;color:var(--saffron);position:relative;white-space:nowrap}
+    .hero h1 em::after{content:"";position:absolute;left:0;right:0;bottom:.04em;height:.12em;background:var(--teal);border-radius:99px;z-index:-1}
+    .lead{color:var(--hero-soft);font-size:17.5px;max-width:44ch}
+    .cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
+    .facts{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+    .fact{background:#ffffff12;border:1px solid #ffffff1f;border-radius:12px;padding:8px 12px;font-size:14px;text-decoration:none}
+    .fact small{display:block;font:700 10.5px var(--mono);letter-spacing:.12em;color:var(--hero-soft)}
+    a.fact:hover{background:#ffffff1f}
+    .count{display:flex;gap:6px;margin-top:18px;align-items:center;font-size:13.5px;color:var(--hero-soft);flex-wrap:wrap}
+    .count[hidden]{display:none}
+    .count b{font:700 18px var(--mono);color:var(--hero-ink);background:#ffffff14;border-radius:8px;padding:2px 8px;font-variant-numeric:tabular-nums}
+
+    .demo{background:var(--chat);border:1px solid #ffffff1f;border-radius:20px;padding:16px;box-shadow:0 30px 60px #0007;transform:rotate(1.2deg)}
+    .demo-head{display:flex;align-items:center;gap:8px;font:600 12.5px var(--mono);color:var(--hero-soft);margin-bottom:12px}
+    .demo-head i{width:9px;height:9px;border-radius:50%;background:#ffffff30}
+    .demo-head i:first-child{background:var(--saffron)}
+    .demo-head span{margin-left:auto;background:#ffffff14;padding:2px 8px;border-radius:99px;font-size:11px}
+    .pick{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+    .pick button{font:600 13px var(--body);border:1px solid #ffffff2a;background:transparent;color:var(--hero-ink);border-radius:99px;padding:6px 11px;cursor:pointer}
+    .pick button[aria-pressed="true"]{background:var(--teal);border-color:var(--teal);color:#04201f}
+    .msg{border-radius:14px;padding:11px 13px;font-size:14.5px;line-height:1.55;max-width:92%}
+    .msg.you{background:#ffffff14;margin-left:auto;border-bottom-right-radius:4px}
+    .msg.ai{background:#f3fbfa;color:#0d2238;margin-top:10px;border-bottom-left-radius:4px;min-height:150px;white-space:pre-line}
+    .msg.ai .who{display:block;font:700 11px var(--mono);letter-spacing:.1em;color:#0f9c97;margin-bottom:4px}
+    .caret{display:inline-block;width:8px;height:1.1em;background:#0f9c97;vertical-align:-3px;animation:pulse .9s infinite}
+    .demo-foot{font-size:12px;color:var(--hero-soft);margin-top:10px}
+
+    section{scroll-margin-top:12px}
+    .sec{padding-block:clamp(40px,6vw,72px)}
+    .sec h2{font-size:clamp(28px,4.4vw,44px);line-height:1.05;margin:8px 0 10px;font-weight:800}
+    .sub{color:var(--ink-soft);max-width:60ch}
+    .learn{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:26px}
+    .learn article{border-radius:18px;padding:18px;background:var(--ground);border:1px solid var(--line);display:flex;flex-direction:column;gap:8px;transition:transform .2s}
+    .learn article:hover{transform:translateY(-4px)}
+    .tag{align-self:flex-start;font:700 11px var(--mono);letter-spacing:.1em;padding:4px 9px;border-radius:99px}
+    .learn article:nth-child(1) .tag{background:var(--teal-soft);color:var(--teal)}
+    .learn article:nth-child(2) .tag{background:var(--saffron-soft);color:var(--coffee)}
+    .learn article:nth-child(3) .tag{background:var(--chili-soft);color:var(--chili)}
+    .learn article:nth-child(4) .tag{background:var(--leaf-soft);color:var(--leaf)}
+    .learn h3{font-size:19px;line-height:1.2}
+    .learn p{color:var(--ink-soft);font-size:14.5px}
+
+    .two{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4vw,52px);align-items:start}
+    .two>*{min-width:0}
+    .tl{list-style:none;margin:22px 0 0;padding:0}
+    .tl li{display:grid;grid-template-columns:44px 1fr;gap:14px;padding-bottom:18px;position:relative}
+    .tl li::before{content:"";position:absolute;left:21px;top:44px;bottom:0;width:2px;background:var(--line)}
+    .tl li:last-child::before{display:none}
+    .tl .n{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;font:700 15px var(--mono);background:var(--navy);color:#fff}
+    .tl li:last-child .n{background:var(--saffron);color:#2a1a05}
+    .tl h3{font-size:17.5px}
+    .tl p{color:var(--ink-soft);font-size:14.5px}
+    .bring{background:var(--amber-soft);border-radius:14px;padding:12px 14px;font-size:14.5px}
+
+    .speaker{background:var(--ground);border:1px solid var(--line);border-radius:22px;padding:18px;display:grid;grid-template-columns:200px 1fr;gap:20px;align-items:center;margin-top:22px}
+    .speaker>*{min-width:0}
+    .speaker img{width:100%;aspect-ratio:500/620;object-fit:cover;border-radius:16px;background:#fff;display:block}
+    .speaker h3{font-size:30px}
+    .role{display:inline-block;margin:4px 0 8px;background:var(--navy);color:#fff;font-size:13px;font-weight:700;padding:3px 10px;border-radius:99px}
+    .speaker p{color:var(--ink-soft);font-size:14.5px}
+
+    .kopi{background:linear-gradient(120deg,var(--saffron-soft),var(--amber-soft));border-radius:24px;padding:clamp(20px,4vw,34px);display:grid;grid-template-columns:auto 1fr auto;gap:22px;align-items:center}
+    .kopi>*{min-width:0}
+    .cup{width:86px;height:96px;position:relative}
+    .cup .body{position:absolute;bottom:0;left:6px;width:62px;height:58px;background:var(--coffee);border-radius:6px 6px 22px 22px}
+    .cup .body::after{content:"";position:absolute;right:-17px;top:10px;width:16px;height:24px;border:6px solid var(--coffee);border-left:0;border-radius:0 14px 14px 0}
+    .cup .steam{position:absolute;bottom:62px;width:6px;height:26px;border-radius:99px;background:var(--coffee);opacity:0;animation:steam 2.4s infinite ease-in-out}
+    .cup .steam:nth-child(1){left:18px}.cup .steam:nth-child(2){left:34px;animation-delay:.6s}.cup .steam:nth-child(3){left:50px;animation-delay:1.2s}
+    @keyframes steam{0%{transform:translateY(8px) scaleY(.6);opacity:0}50%{opacity:.45}100%{transform:translateY(-14px) scaleY(1.1);opacity:0}}
+    .kopi h3{font-size:25px;color:var(--coffee)}
+    .kopi p{font-size:15px;margin-top:4px}
+    .qris{display:grid;grid-template-columns:150px 1fr;gap:16px;align-items:center;margin-top:14px;background:var(--paper);border-radius:16px;padding:14px}
+    .qris>*{min-width:0}
+    .qris img{width:150px;height:150px;display:block;border-radius:10px;background:#fff}
+    .qris p{font-size:14px;color:var(--ink-soft);margin:0}
+    .qris b{color:var(--ink)}
+    .qris .amt{font:800 24px var(--display);color:var(--coffee);display:block}
+    .free{font:800 36px var(--display);color:var(--leaf);text-align:center;line-height:1}
+    .free small{display:block;font:600 12px var(--body);color:var(--ink-soft)}
+
+    .ticket-wrap{display:grid;grid-template-columns:1fr 1.1fr;gap:clamp(24px,4vw,44px);align-items:center}
+    .ticket-wrap>*{min-width:0}
+    .steps{list-style:none;padding:0;margin:18px 0 0;display:grid;gap:10px}
+    .steps li{display:flex;gap:12px;align-items:flex-start;font-size:15px}
+    .steps b{flex:none;width:28px;height:28px;border-radius:9px;display:grid;place-items:center;background:var(--teal-soft);color:var(--teal);font:700 13px var(--mono)}
+    .ticket{display:grid;grid-template-columns:1fr 150px;background:var(--navy);color:#fff;border-radius:20px;position:relative;max-width:470px;transform:rotate(-1.5deg);box-shadow:0 22px 40px #0f2a4433}
+    .ticket::before,.ticket::after{content:"";position:absolute;left:calc(100% - 163px);width:26px;height:26px;border-radius:50%;background:var(--paper)}
+    .ticket::before{top:-13px}.ticket::after{bottom:-13px}
+    .t-main{padding:20px;border-right:2px dashed #ffffff55;display:flex;flex-direction:column;gap:6px;min-width:0}
+    .t-main small{font:700 10.5px var(--mono);letter-spacing:.14em;opacity:.7}
+    .t-main strong{font:800 22px var(--display);line-height:1.1}
+    .t-main code{font:700 15px var(--mono);color:var(--saffron);letter-spacing:.06em}
+    .ok{align-self:flex-start;font:700 11px var(--mono);letter-spacing:.1em;background:var(--leaf);color:#04170c;padding:3px 9px;border-radius:99px}
+    .t-qr{padding:16px;display:grid;place-items:center;text-align:center;font:600 11px var(--mono);color:var(--hero-soft)}
+    .t-qr span{display:grid;place-items:center;width:112px;height:112px;background:#fff;border-radius:10px;color:var(--navy);font:800 13px var(--mono)}
+    .ticket-cap{font-size:12.5px;color:var(--ink-soft);margin-top:14px}
+
+    .faq{display:grid;gap:10px;margin-top:22px}
+    .faq details{background:var(--ground);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+    .faq summary{font-weight:700;cursor:pointer}
+    .faq p{color:var(--ink-soft);margin-top:6px;font-size:14.5px}
+
+    .foot{background:var(--hero-bg);color:var(--hero-soft);font-size:14px}
+    .foot .wrap{display:flex;gap:16px;flex-wrap:wrap;justify-content:space-between;padding-block:26px 96px}
+    .foot strong{color:var(--hero-ink)}
+    .dock{position:fixed;left:0;right:0;bottom:0;z-index:30;display:none;gap:10px;align-items:center;padding:10px max(14px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(14px,env(safe-area-inset-left,0px));background:#ffffffe6;backdrop-filter:blur(10px);border-top:1px solid var(--line)}
+    .dock .btn{flex:1}
+    .dock span{font-size:13px;color:var(--ink-soft);line-height:1.3}
+
+    @media (max-width:860px){
+      .hero-grid,.two,.ticket-wrap{grid-template-columns:1fr}
+      .learn{grid-template-columns:1fr 1fr}
+      .demo{transform:none}
+      .dock{display:flex}
     }
-    body{background:var(--surface)}
-    .nav{border-color:#d9e1eb}
-    .hero{background:linear-gradient(145deg,#edf2f8 0%,#e8edf4 100%)}
-    .kicker,.brandmark,.learn-icon,.infaq-badge{box-shadow:inset 2px 2px 5px rgba(123,145,166,.12),inset -2px -2px 5px rgba(255,255,255,.55)}
-    .btn{transition:transform .18s ease,box-shadow .18s ease,background-color .18s ease}
-    .btn.primary{box-shadow:6px 6px 13px rgba(28,75,135,.24),-4px -4px 10px rgba(255,255,255,.7)}
-    .btn.light{background:var(--surface);border-color:#e0e6ee;box-shadow:5px 5px 11px var(--surface-shadow),-5px -5px 11px var(--surface-light)}
-    .btn.primary:active{box-shadow:inset 4px 4px 8px rgba(12,48,99,.35),inset -3px -3px 7px rgba(255,255,255,.18);transform:translateY(1px)}
-    .btn.light:active{box-shadow:inset 4px 4px 8px var(--surface-shadow),inset -4px -4px 8px var(--surface-light);transform:translateY(1px)}
-    .btn:focus-visible,a:focus-visible{outline:3px solid #176f9c;outline-offset:4px}
-    .hero-meta,.learn-card,.form-shell{
-      background:var(--surface);
-      border:1px solid rgba(255,255,255,.72);
-      box-shadow:10px 10px 22px var(--surface-shadow),-10px -10px 22px var(--surface-light);
+    @media (max-width:540px){
+      .learn{grid-template-columns:1fr}
+      .speaker{grid-template-columns:1fr}
+      .speaker img{max-width:280px}
+      .kopi{grid-template-columns:1fr}
+      .cup{display:none}
+      .qris{grid-template-columns:1fr}
+      .qris img{width:180px;height:180px}
+      .ticket{grid-template-columns:1fr 118px;transform:none}
+      .ticket::before,.ticket::after{left:calc(100% - 131px)}
+      .t-qr span{width:90px;height:90px}
     }
-    .learn-card{border-radius:18px;transition:transform .2s ease,box-shadow .2s ease}
-    .learn-card:hover{transform:translateY(-2px);box-shadow:12px 12px 24px var(--surface-shadow),-10px -10px 22px var(--surface-light)}
-    .agenda{background:#e4eaf2}
-    .agenda-row{border-color:#d0d9e4}
-    .speaker-image{background:linear-gradient(145deg,#e9eff6,#e2eaf2);box-shadow:inset 7px 7px 15px rgba(157,171,190,.24),inset -7px -7px 15px rgba(255,255,255,.76)}
-    .register{background:#e9eef5}
-    input,select,textarea{
-      background:#e9eef5;
-      border:1px solid #dce4ed;
-      box-shadow:inset 4px 4px 8px rgba(157,171,190,.3),inset -4px -4px 8px rgba(255,255,255,.78);
-    }
-    input:focus,select:focus,textarea:focus{outline:3px solid rgba(21,155,154,.25);border-color:var(--teal);box-shadow:inset 2px 2px 5px rgba(157,171,190,.2),0 0 0 2px rgba(21,155,154,.1)}
-    .consent input{accent-color:var(--teal);box-shadow:none}
-    /* Make the tactile surfaces clear at first glance while keeping the page calm. */
-    .hero-grid>div:first-child{
-      padding:clamp(24px,3.4vw,40px);
-      border:1px solid rgba(255,255,255,.82);
-      border-radius:28px;
-      background:linear-gradient(145deg,#edf2f8,#e4eaf2);
-      box-shadow:14px 14px 28px rgba(151,165,184,.38),-12px -12px 25px rgba(255,255,255,.92);
-    }
-    .hero-meta{background:linear-gradient(145deg,#eef3f9,#e4eaf2);box-shadow:11px 11px 22px rgba(12,35,61,.2),-6px -6px 14px rgba(255,255,255,.74)}
-    .learn-card{box-shadow:11px 11px 21px rgba(151,165,184,.38),-9px -9px 20px rgba(255,255,255,.9)}
-    .learn-icon{box-shadow:5px 5px 10px rgba(129,157,169,.24),-4px -4px 9px rgba(255,255,255,.88)}
-    .agenda-list{gap:12px}
-    .agenda-row{padding:18px 20px;border:1px solid rgba(255,255,255,.82);border-radius:16px;background:linear-gradient(145deg,#eaf0f7,#e2e9f1);box-shadow:8px 8px 16px rgba(151,165,184,.25),-7px -7px 15px rgba(255,255,255,.8)}
-    .form-shell{box-shadow:14px 14px 28px rgba(151,165,184,.36),-11px -11px 23px rgba(255,255,255,.9)}
-    .btn.primary{box-shadow:7px 7px 14px rgba(28,75,135,.3),-5px -5px 12px rgba(255,255,255,.8)}
-    .btn.light{border-color:rgba(255,255,255,.9);box-shadow:7px 7px 14px rgba(151,165,184,.3),-6px -6px 13px rgba(255,255,255,.88)}
-    .art-frame{transform-style:preserve-3d;transition:transform .22s ease;will-change:transform}
-    .speaker-hero-frame{background:linear-gradient(145deg,#123a5a,#0b6277);border:1px solid rgba(255,255,255,.48);box-shadow:0 28px 62px rgba(8,42,70,.28),inset 0 1px rgba(255,255,255,.35)}
-    .speaker-hero-frame:before,.speaker-hero-frame:after{z-index:2;width:340px;height:340px;border-color:rgba(188,255,247,.56);pointer-events:none}
-    .speaker-hero-frame:after{width:250px;height:250px;border-color:rgba(255,255,255,.42)}
-    .hero-speaker-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 50%;transform:scale(2.12);transform-origin:54% 38%;filter:saturate(.98) contrast(1.07);}
-    .speaker-photo-shade{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(5,29,52,.05) 24%,rgba(5,29,52,.08) 58%,rgba(5,29,52,.56) 100%),linear-gradient(90deg,rgba(4,32,54,.16),transparent 65%);pointer-events:none}
-    .photo-glow{position:absolute;z-index:1;width:200px;height:200px;right:3%;top:4%;border-radius:50%;background:#59f4e2;filter:blur(76px);opacity:.34;pointer-events:none}
-    .speaker-hero-frame .orbit{z-index:2;width:300px;height:110px;border-color:rgba(193,255,247,.7);pointer-events:none}
-    .speaker-hero-frame .orbit.second{width:260px;height:92px;border-color:rgba(255,255,255,.55)}
-    .speaker-hero-frame .spark{z-index:3}
-    .photo-ai-badge{position:absolute;z-index:4;top:22px;right:23px;width:64px;height:64px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.86);border-radius:19px;background:linear-gradient(145deg,#f5fffe,#a8eee3);color:#123a5a;font-size:1.32rem;font-weight:950;box-shadow:8px 10px 22px rgba(3,26,50,.28),inset 2px 2px 5px rgba(255,255,255,.9);animation:chip-float 4.8s ease-in-out infinite;transform:rotate(7deg)}
-    .ai-orb{animation:orb-float 5s ease-in-out infinite;transform-style:preserve-3d}
-    .orbit{animation:orbit-spin 24s linear infinite}
-    .orbit.second{animation:orbit-spin-reverse 30s linear infinite}
-    .chip.one{animation:chip-float 5s ease-in-out infinite}
-    .chip.two{animation:chip-float 6s ease-in-out -1.5s infinite}
-    .chip.three{animation:chip-float 5.5s ease-in-out -2.5s infinite}
-    .spark{animation:spark-pulse 2.4s ease-in-out infinite}
-    .spark.s2{animation-delay:1.1s}
-    .learn-card{transform-style:preserve-3d}
-    .learn-card:hover,.learn-card:focus-within{transform:perspective(850px) translateY(-6px) rotateX(2deg) rotateY(-1deg)}
-    .learn-card:active{transform:scale(.985)}
-    .speaker-image{isolation:isolate}
-    .speaker-image:before{inset:0;width:auto;height:auto;right:0;bottom:0;border-radius:0;background:linear-gradient(180deg,rgba(7,30,52,.02) 38%,rgba(7,30,52,.62));z-index:1}
-    .speaker-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:41% 39%;transform:scale(1.3);filter:saturate(.92) contrast(1.03)}
-    .photo-caption{position:absolute;z-index:2;left:20px;bottom:18px;padding:9px 13px;border:1px solid rgba(255,255,255,.5);border-radius:12px;background:rgba(10,38,61,.55);backdrop-filter:blur(10px);color:#fff;font-size:.88rem;font-weight:800}
-    .agenda-row{transition:transform .2s ease,box-shadow .2s ease}
-    .agenda-row:hover{transform:translateX(5px);box-shadow:11px 11px 20px rgba(151,165,184,.32),-7px -7px 15px rgba(255,255,255,.82)}
-    body.has-motion .reveal{opacity:0;transform:translateY(24px);transition:opacity .65s ease,transform .65s cubic-bezier(.2,.7,.2,1)}
-    body.has-motion .reveal.is-visible{opacity:1;transform:translateY(0)}
-    @keyframes orb-float{0%,100%{transform:translate(-50%,-50%) translateY(0) rotate(0)}50%{transform:translate(-50%,-50%) translateY(-12px) rotate(3deg)}}
-    @keyframes orbit-spin{from{transform:translate(-50%,-50%) rotate(-27deg)}to{transform:translate(-50%,-50%) rotate(333deg)}}
-    @keyframes orbit-spin-reverse{from{transform:translate(-50%,-50%) rotate(34deg)}to{transform:translate(-50%,-50%) rotate(-326deg)}}
-    @keyframes chip-float{0%,100%{translate:0 0}50%{translate:0 -7px}}
-    @keyframes spark-pulse{0%,100%{opacity:.55;scale:.82}50%{opacity:1;scale:1.2}}
-    @media(max-width:840px){.hero-grid>div:first-child{padding:30px}}
-    @media(max-width:600px){.hero-grid>div:first-child{padding:23px 20px;border-radius:22px}.agenda-row{padding:16px;border-radius:14px}.speaker-photo{transform:scale(1.25);object-position:42% 40%}.hero-speaker-photo{transform:scale(2.18);transform-origin:54% 38%;object-position:50% 40%}.photo-ai-badge{width:54px;height:54px;top:15px;right:15px;border-radius:16px}}
-    .meta-link{text-decoration:underline;text-decoration-color:#9aaec2;text-underline-offset:3px}
-    .faq{background:#eef2f7}.faq-list{display:grid;gap:12px;max-width:850px}.faq-item{padding:18px 22px;border:1px solid rgba(255,255,255,.85);border-radius:16px;background:linear-gradient(145deg,#eaf0f7,#e2e9f1);box-shadow:8px 8px 16px rgba(151,165,184,.22),-7px -7px 15px rgba(255,255,255,.8)}.faq-item summary{cursor:pointer;color:var(--navy);font-weight:850}.faq-item p{margin:10px 0 0;color:var(--muted)}.faq-item a{text-decoration:underline;color:var(--blue)}.registration-cta{display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:24px;border-radius:18px;background:linear-gradient(145deg,#eaf0f7,#e2e9f1);box-shadow:10px 10px 20px rgba(151,165,184,.25),-8px -8px 17px rgba(255,255,255,.84)}.registration-cta p{width:100%;margin:0;color:var(--muted)}
-    .brand{gap:10px}
-    .brand-logo{width:48px;height:44px;object-fit:contain;flex:none;border-radius:12px;background:#fff;box-shadow:0 5px 15px rgba(17,49,78,.12)}
-    .brand-copy{display:flex;flex-direction:column;line-height:1.15}
-    .brand-copy strong{font-size:.94rem;font-weight:900;letter-spacing:.015em}
-    .brand-copy small{font-size:.7rem;font-weight:700;letter-spacing:.025em;color:#128c8b;margin-top:4px}
-    .footer .brand-copy small{color:#9be5db}
-    h1{animation:headline-enter .85s cubic-bezier(.2,.75,.25,1) both}
-    h1 span{background:linear-gradient(105deg,#2865d8 0%,#4991f4 38%,#2865d8 68%,#42b7bf 100%);background-size:220% 100%;background-clip:text;-webkit-background-clip:text;color:transparent;animation:headline-shimmer 7s ease-in-out infinite}
-    .title,.speaker-copy h2{animation:title-breathe 5.5s ease-in-out infinite}
-    @keyframes headline-enter{from{opacity:1;transform:translateY(12px) scale(.985);filter:blur(3px)}to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
-    @keyframes headline-shimmer{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
-    @keyframes title-breathe{0%,100%{text-shadow:0 0 0 rgba(40,101,216,0)}50%{text-shadow:0 8px 24px rgba(40,101,216,.12)}}
-    @media(max-width:600px){.brand-logo{width:42px;height:39px}.brand-copy strong{font-size:.82rem}.brand-copy small{font-size:.65rem}}
-    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
   </style>
 </head>
 <body>
-  <div class="announce">Sesi belajar praktis untuk seller, reseller, dan UMKM</div>
-  <header class="wrap nav">
-    <a class="brand" href="#atas"><img class="brand-logo" src="assets/logo-masjid-mudzaki.png?v=logo-528f886" alt="Logo Masjid Mudzaki"><span class="brand-copy"><strong>AI UNTUK BISNIS</strong><small>by Masjid Mudzaki</small></span></a>
-    <nav class="navlinks" aria-label="Navigasi utama"><a href="#materi">Materi</a><a href="#agenda">Agenda</a><a href="#pemateri">Pemateri</a><a href="#faq">FAQ</a></nav>
-    <a class="btn primary" href="daftar.html">Daftar</a>
+  <div class="announce">
+    <span class="only-before">Gratis · Kursi terbatas · Disarankan bawa laptop dan charger</span>
+    <span class="only-dday">Hari ini 09.00 WIB · Siapkan QR tiket di HP sebelum masuk aula</span>
+    <span class="only-after">Batch 1 selesai 21 Nov 2026 · Terima kasih jamaah dan peserta!</span>
+  </div>
+
+  <header class="top">
+    <div class="wrap">
+      <a class="brand" href="#atas">
+        <span class="logo-pill"><img src="assets/logo-penyelenggara.jpg" alt="masjidmuzaki.com dan Masjid Sejuta Pemuda" width="350" height="92"></span>
+        <span>AI FOR BUSINESS<small>Training Exclusive</small></span>
+      </a>
+      <nav class="links" aria-label="Navigasi utama"><a href="#materi">Materi</a><a href="#agenda">Agenda</a><a href="#tiket">Tiket</a><a href="#faq">FAQ</a></nav>
+      <a class="btn hot sm only-before" href="daftar.html">Daftar gratis</a>
+      <a class="btn hot sm only-dday" href="#tiket">Info masuk</a>
+      <a class="btn hot sm only-after js-wa-next" href="https://wa.me/6285283966520" target="_blank" rel="noopener">Kabari batch 2</a>
+    </div>
   </header>
+
   <main id="atas">
-    <section class="hero"><div class="wrap hero-grid">
-      <div>
-        <span class="kicker"><i></i> TRAINING EXCLUSIVE</span>
-        <h1>AI untuk<br><span>Bisnis.</span></h1>
-        <p class="lead">Belajar memanfaatkan AI untuk mengembangkan usaha—dari mencari ide promosi sampai membuat konten yang siap dicoba.</p>
-        <div class="hero-actions"><a class="btn primary" href="daftar.html">Daftar sebagai peserta</a><a class="btn light" href="#materi">Lihat yang dipelajari</a></div>
-        <p class="mini-proof">Dirancang untuk pemilik usaha, seller, reseller, dan peserta pemula.</p>
-      </div>
-      <div class="hero-art" aria-label="Foto Mang Tab dengan efek visual AI">
-        <div class="art-frame speaker-hero-frame">
-          <img class="hero-speaker-photo" src="assets/training-poster.jpeg" alt="Mang Tab, pemateri Training Exclusive AI for Business">
-          <div class="speaker-photo-shade" aria-hidden="true"></div>
-          <div class="photo-glow" aria-hidden="true"></div>
-          <div class="orbit"></div><div class="orbit second"></div>
-          <span class="spark s1"></span><span class="spark s2"></span>
-          <div class="photo-ai-badge" aria-hidden="true">AI</div>
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div>
+          <span class="kick"><b></b><span class="only-before">Training exclusive · gratis</span><span class="only-dday">Berlangsung hari ini</span><span class="only-after">Batch 1 sudah selesai</span></span>
+          <h1>Jualan lebih <em>gurih</em> dengan AI.</h1>
+          <p class="lead">Tingkatkan bisnis dengan teknologi masa depan. Belajar pakai AI buat cari ide promosi, nulis caption, dan bales chat pelanggan, langsung praktik pakai produk usahamu sendiri.</p>
+          <div class="cta-row">
+            <a class="btn hot only-before" href="daftar.html">Ambil tiket gratis</a>
+            <a class="btn hot only-dday" href="#tiket">Lihat info masuk</a>
+            <a class="btn hot only-after js-wa-next" href="https://wa.me/6285283966520" target="_blank" rel="noopener">Kabari saya batch berikutnya</a>
+            <a class="btn ghost" href="#materi">Lihat materinya</a>
+          </div>
+          <div class="facts">
+            <div class="fact"><small>TANGGAL</small>Sabtu, 21 Nov 2026</div>
+            <div class="fact"><small>WAKTU</small>09.00 WIB–selesai</div>
+            <a class="fact" href="https://www.google.com/maps/search/?api=1&query=Masjid+Sejuta+Pemuda" target="_blank" rel="noopener"><small>LOKASI ↗</small>Aula Masjid Sejuta Pemuda</a>
+          </div>
+          <div class="count only-before" id="countdown" hidden>Mulai dalam <b id="cd-d">0</b> hari <b id="cd-h">00</b> jam <b id="cd-m">00</b> menit</div>
+          <p class="count only-after">Mau ikut batch berikutnya? Tekan tombol di atas, admin akan mengabari lewat WhatsApp.</p>
         </div>
-        <div class="hero-meta"><div class="meta-item"><small>TANGGAL</small><strong>Sabtu, 21 Nov 2026</strong></div><div class="meta-item"><small>WAKTU</small><strong>09.00 WIB–selesai</strong></div><div class="meta-item"><small>LOKASI</small><strong><a class="meta-link" href="https://www.google.com/maps/search/?api=1&query=Masjid+Sejuta+Pemuda" target="_blank" rel="noopener">Aula Masjid Sejuta Pemuda</a></strong></div></div>
+
+        <div class="demo" aria-label="Simulasi AI menulis materi jualan">
+          <div class="demo-head"><i></i><i></i><i></i>praktik-di-kelas<span>simulasi</span></div>
+          <div class="pick" role="group" aria-label="Pilih contoh produk">
+            <button type="button" data-p="0" aria-pressed="true">Keripik pisang</button>
+            <button type="button" data-p="1" aria-pressed="false">Kopi susu</button>
+            <button type="button" data-p="2" aria-pressed="false">Bibit cabai</button>
+          </div>
+          <div class="msg you" id="demo-q">Buatkan caption Instagram untuk keripik pisang pedas manis, target anak kos.</div>
+          <div class="msg ai"><span class="who">AI</span><span id="demo-a">Laper tengah malam tapi dompet tipis? Keripik pisang pedas manis, renyahnya bunyi sampai kamar sebelah.</span><span class="caret"></span></div>
+          <p class="demo-foot">Contoh simulasi jenis latihan di kelas, bukan hasil AI sungguhan.</p>
+        </div>
       </div>
-    </div></section>
+    </section>
 
-    <section id="materi"><div class="wrap"><div class="section-head"><span class="eyebrow">ISI PELATIHAN</span><h2 class="title">AI yang bisa langsung dicoba untuk usaha</h2><p class="desc">Kenali cara memakai AI dalam aktivitas bisnis sehari-hari, lalu praktikkan pada produk atau ide usaha sendiri.</p></div>
-      <div class="content-grid">
-        <article class="learn-card"><div class="learn-icon">01</div><div><h3>Mengenal AI untuk bisnis</h3><p>Pahami contoh pemakaian AI dan pilih yang sesuai dengan kebutuhan usaha.</p></div></article>
-        <article class="learn-card"><div class="learn-icon">02</div><div><h3>Mencari ide konten promosi</h3><p>Gunakan AI untuk memulai ide konten berdasarkan produk dan calon pelanggan.</p></div></article>
-        <article class="learn-card"><div class="learn-icon">03</div><div><h3>Menyusun materi jualan</h3><p>Praktik membuat caption, deskripsi produk, dan jawaban pelanggan.</p></div></article>
-        <article class="learn-card"><div class="learn-icon">04</div><div><h3>Praktik dengan contoh produk</h3><p>Peserta mencoba membuat satu materi promosi yang bisa dikembangkan setelah acara.</p></div></article>
+    <section class="sec" id="materi">
+      <div class="wrap">
+        <span class="eye">Isi pelatihan</span>
+        <h2>Empat hal yang dibawa pulang.</h2>
+        <p class="sub">Materi ramah pemula. Semua dicoba langsung di laptop atau HP, pakai produk atau ide usaha masing-masing.</p>
+        <div class="learn">
+          <article><span class="tag">KENALI</span><h3>Mengenal AI untuk bisnis</h3><p>Contoh pemakaian AI dan cara memilih yang cocok untuk usahamu.</p></article>
+          <article><span class="tag">CARI IDE</span><h3>Ide konten promosi</h3><p>Mulai ide konten dari produk dan calon pelanggan.</p></article>
+          <article><span class="tag">TULIS</span><h3>Materi jualan</h3><p>Caption, deskripsi produk, dan jawaban chat pelanggan.</p></article>
+          <article><span class="tag">PRAKTIK</span><h3>Coba di produkmu</h3><p>Pulang dengan satu materi promosi yang siap dikembangkan.</p></article>
+        </div>
       </div>
-    </div></section>
+    </section>
 
-    <section class="agenda" id="agenda"><div class="wrap agenda-grid"><div><span class="eyebrow">RANGKAIAN ACARA</span><h2 class="title">Belajar, praktik, lalu bawa pulang ide.</h2><div class="agenda-note">Siapkan ponsel dan satu contoh produk atau ide usaha. <strong>Materi dibuat ramah untuk pemula.</strong></div></div>
-      <div class="agenda-list"><div class="agenda-row"><time>Sesi 1</time><div><h3>Pembukaan dan pengantar</h3><p>Kenalan dengan tujuan pelatihan dan kebutuhan peserta.</p></div></div><div class="agenda-row"><time>Sesi 2</time><div><h3>Materi AI untuk bisnis</h3><p>Contoh penggunaan AI untuk ide, promosi, dan komunikasi pelanggan.</p></div></div><div class="agenda-row"><time>Sesi 3</time><div><h3>Praktik membuat materi promosi</h3><p>Coba susun konten berdasarkan produk atau ide usaha masing-masing.</p></div></div><div class="agenda-row"><time>Penutup</time><div><h3>Tanya jawab dan penutup</h3><p>Diskusi, rangkuman, dan langkah lanjutan setelah acara.</p></div></div></div>
-    </div></section>
+    <section class="sec" id="agenda" style="padding-top:0">
+      <div class="wrap two">
+        <div>
+          <span class="eye">Rangkaian acara</span>
+          <h2>Belajar, praktik, bawa pulang.</h2>
+          <ol class="tl">
+            <li><span class="n">1</span><div><h3>Pembukaan dan pengantar</h3><p>Kenalan dengan tujuan pelatihan dan kebutuhan peserta.</p></div></li>
+            <li><span class="n">2</span><div><h3>Materi AI untuk bisnis</h3><p>AI untuk ide, promosi, dan komunikasi pelanggan.</p></div></li>
+            <li><span class="n">3</span><div><h3>Praktik materi promosi</h3><p>Susun konten dari produk atau ide usahamu.</p></div></li>
+            <li><span class="n">✓</span><div><h3>Tanya jawab dan penutup</h3><p>Diskusi, rangkuman, dan langkah lanjutan.</p></div></li>
+          </ol>
+          <p class="bring"><b>Yang perlu dibawa:</b> laptop dan charger (disarankan), HP, dan satu contoh produk atau ide usaha.</p>
+        </div>
+        <div id="pemateri">
+          <span class="eye">Pemateri</span>
+          <h2>Belajar langsung dari praktisi.</h2>
+          <div class="speaker">
+            <img src="assets/mang-tab.jpg" alt="Mang Tab, pemateri, bersama ilustrasi robot AI" width="500" height="620" loading="lazy">
+            <div>
+              <h3>Mang Tab</h3>
+              <span class="role">Konsultan Bisnis</span>
+              <p>Membawakan AI untuk bisnis dengan pendekatan praktis untuk pelaku usaha dan peserta yang baru mulai.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-    <section id="pemateri"><div class="wrap speaker"><div class="speaker-image"><img class="speaker-photo" src="assets/training-poster.jpeg" alt="Mang Tab pada poster Training Exclusive AI for Business"><span class="photo-caption">Mang Tab · Pemateri</span></div><div class="speaker-copy"><span class="eyebrow">PEMATERI</span><h2>Mang Tab</h2><p class="role">Konsultan Bisnis</p><p>Dalam sesi ini, Mang Tab akan membawakan materi AI untuk bisnis dengan pendekatan yang praktis bagi pelaku usaha dan peserta yang baru mulai.</p><a class="btn light" href="daftar.html">Ikut sesi bersama Mang Tab</a></div></div></section>
+    <section class="wrap" aria-labelledby="kopi-title">
+      <div class="kopi">
+        <div class="cup" aria-hidden="true"><span class="steam"></span><span class="steam"></span><span class="steam"></span><span class="body"></span></div>
+        <div>
+          <h3 id="kopi-title">Infaq kopi jamaah</h3>
+          <p>Pendaftaran gratis. Infaq kopi jamaah sukarela, bukan biaya, dan tidak memengaruhi tiket.</p>
+          <div class="qris">
+            <img src="assets/qris-kopi-jamaah.png" alt="QRIS infaq kopi jamaah Rp20.000" width="400" height="400" loading="lazy">
+            <p><span class="amt">Rp20.000</span><b>Scan pakai m-banking atau e-wallet.</b> Nominal sudah tetap. Pastikan nama penerima <b>YAYASAN AMANAH SEJUTA PEMUDA</b> sebelum membayar.</p>
+          </div>
+        </div>
+        <div class="free">Rp0<small>biaya daftar</small></div>
+      </div>
+    </section>
 
+    <section class="sec" id="tiket">
+      <div class="wrap ticket-wrap">
+        <div>
+          <span class="eye only-before">Tiketmu langsung jadi</span>
+          <span class="eye only-dday">Masuk aula</span>
+          <span class="eye only-after">Batch berikutnya</span>
+          <h2 class="only-before">Daftar 1 menit, tiket QR langsung terbit.</h2>
+          <h2 class="only-dday">Tunjukkan QR tiket ke panitia di pintu.</h2>
+          <h2 class="only-after">Pendaftaran batch 1 sudah ditutup.</h2>
+          <ol class="steps only-before">
+            <li><b>1</b><span>Isi nama, nomor WhatsApp, dan info usaha.</span></li>
+            <li><b>2</b><span>Tiket QR langsung tampil. Simpan atau screenshot.</span></li>
+            <li><b>3</b><span>Tekan tombol WhatsApp untuk konfirmasi kehadiran ke admin.</span></li>
+          </ol>
+          <p class="sub only-dday" style="margin-top:10px">Belum punya tiket? Datang ke meja panitia dan sebutkan nama serta nomor WhatsApp yang didaftarkan.</p>
+          <p class="sub only-after" style="margin-top:10px">Tinggalkan pesan ke admin supaya dikabari kalau batch 2 dibuka. Tanggal batch 2 belum ditentukan.</p>
+          <div class="cta-row">
+            <a class="btn hot only-before" href="daftar.html">Buka formulir</a>
+            <a class="btn hot only-after js-wa-next" href="https://wa.me/6285283966520" target="_blank" rel="noopener">Kabari saya</a>
+            <a class="btn line" href="assets/poster-batch1.jpg" target="_blank" rel="noopener">Lihat poster</a>
+          </div>
+        </div>
+        <div>
+          <div class="ticket" aria-label="Contoh tampilan tiket">
+            <div class="t-main">
+              <span class="ok">TIKET VALID</span>
+              <small>PESERTA</small><strong>Nama Peserta</strong>
+              <small>KODE</small><code>AI-XXXXXXXXXX</code>
+              <small>SABTU, 21 NOV 2026 · 09.00 WIB</small>
+            </div>
+            <div class="t-qr"><span>QR</span></div>
+          </div>
+          <p class="ticket-cap">Contoh tampilan. QR hanya berisi kode tiket, tanpa nama atau nomor WhatsApp.</p>
+        </div>
+      </div>
+    </section>
 
-    <section class="faq" id="faq"><div class="wrap"><div class="section-head"><span class="eyebrow">FAQ</span><h2 class="title">Yang perlu kamu tahu</h2><p class="desc">Informasi singkat sebelum mengisi formulir.</p></div><div class="faq-list"><details class="faq-item"><summary>Apakah ada biaya pendaftaran?</summary><p>Untuk saat ini, acara digratiskan. Tidak ada biaya pendaftaran.</p></details><details class="faq-item"><summary>Infaq kopi jamaah wajib?</summary><p>Tidak. Infaq hanya untuk kopi jamaah dan sepenuhnya sukarela. Tidak memengaruhi pendaftaran atau tiket.</p></details><details class="faq-item"><summary>Bagaimana cara menerima tiket?</summary><p>Isi formulir, tinjau data, lalu kirim ke admin melalui WhatsApp. Admin akan mengonfirmasi pendaftaran dan mengirim tiket digital melalui WhatsApp.</p></details><details class="faq-item"><summary>Di mana acaranya?</summary><p>Masjid Sejuta Pemuda. <a href="https://www.google.com/maps/search/?api=1&query=Masjid+Sejuta+Pemuda" target="_blank" rel="noopener">Cari lokasi di Google Maps</a> atau hubungi panitia untuk petunjuk.</p></details></div></div></section>
-
-    <section class="infaq-wrap"><div class="wrap"><div class="infaq"><div><h2>Infaq kopi jamaah masjid</h2><p>Acara ini <strong>gratis</strong>. Infaq kopi jamaah bersifat sukarela, bukan biaya pendaftaran, dan tidak menjadi syarat untuk ikut atau menerima tiket.</p></div><div class="infaq-badge">Untuk kopi jamaah</div></div></div></section>
-
-    <section class="register" id="daftar"><div class="wrap register-layout"><div class="register-copy"><span class="eyebrow">PENDAFTARAN</span><h2 class="title">Amankan tempatmu.</h2><p class="desc">Isi formulir singkat di halaman pendaftaran. Setelah meninjau data, kirim ke admin untuk konfirmasi dan tiket digital.</p><p class="note" style="margin-top:18px">Gratis. Infaq kopi jamaah sukarela.</p></div><div class="registration-cta"><p>Siapkan nama, nomor WhatsApp, dan informasi usaha atau produkmu.</p><a class="btn primary" href="daftar.html">Buka formulir pendaftaran</a><a class="btn light" href="https://wa.me/6285283966520?text=Assalamu%E2%80%99alaikum%2C%20saya%20ingin%20bertanya%20tentang%20Training%20Exclusive%20AI%20untuk%20Bisnis." target="_blank" rel="noopener">Tanya panitia</a></div></div></section>
+    <section class="sec" id="faq" style="padding-top:0">
+      <div class="wrap">
+        <span class="eye">FAQ</span>
+        <h2>Yang sering ditanya</h2>
+        <div class="faq">
+          <details open><summary>Bagaimana cara dapat tiket?</summary><p>Isi formulir pendaftaran. Tiket QR langsung tampil setelah formulir dikirim, tidak perlu menunggu admin. Tombol WhatsApp di halaman tiket hanya untuk konfirmasi kehadiran.</p></details>
+          <details><summary>Ada biaya pendaftaran?</summary><p>Tidak. Pendaftaran gratis.</p></details>
+          <details><summary>Infaq kopi jamaah wajib?</summary><p>Tidak. Infaq hanya untuk kopi jamaah, sukarela, dan tidak memengaruhi pendaftaran atau tiket.</p></details>
+          <details><summary>Perlu bawa apa?</summary><p>Disarankan membawa laptop dan charger. Bawa juga HP dan satu contoh produk atau ide usaha untuk praktik.</p></details>
+          <details><summary>Di mana acaranya?</summary><p>Aula Masjid Sejuta Pemuda. <a href="https://www.google.com/maps/search/?api=1&query=Masjid+Sejuta+Pemuda" target="_blank" rel="noopener">Buka di Google Maps</a> atau tanya admin.</p></details>
+        </div>
+      </div>
+    </section>
   </main>
-  <footer class="footer"><div class="wrap footer-inner"><a class="brand" href="#atas"><img class="brand-logo" src="assets/logo-masjid-mudzaki.png?v=logo-528f886" alt="Logo Masjid Mudzaki"><span class="brand-copy"><strong>AI UNTUK BISNIS</strong><small>by Masjid Mudzaki</small></span></a><div><strong>Training Exclusive bersama Mang Tab</strong><p>Aula Masjid Sejuta Pemuda</p><p>Panitia: <a href="https://wa.me/6285283966520" target="_blank" rel="noopener">0852-8396-6520</a></p></div><p class="qr-hint">Pendaftaran gratis · Infaq kopi jamaah sukarela</p></div></footer>
-  <div class="mobile-cta"><a class="btn primary" href="daftar.html">Daftar sebagai peserta</a></div>
+
+  <footer class="foot">
+    <div class="wrap">
+      <div><strong>Training Exclusive AI for Business</strong><br>Aula Masjid Sejuta Pemuda · masjidmuzaki.com</div>
+      <div>Admin WhatsApp: <a href="https://wa.me/6285283966520" target="_blank" rel="noopener"><strong>0852 8396 6520</strong></a><br>Pendaftaran gratis · Infaq kopi jamaah sukarela</div>
+    </div>
+  </footer>
+
+  <div class="dock">
+    <span class="only-before">Gratis · tiket QR langsung jadi</span>
+    <span class="only-dday">Siapkan QR di HP</span>
+    <span class="only-after">Batch 1 selesai</span>
+    <a class="btn hot sm only-before" href="daftar.html">Daftar</a>
+    <a class="btn hot sm only-dday" href="#tiket">Info masuk</a>
+    <a class="btn hot sm only-after js-wa-next" href="https://wa.me/6285283966520" target="_blank" rel="noopener">Kabari saya</a>
+  </div>
+
   <script>
-    // Reveal sections as they enter view and add a gentle pointer tilt to the 3D hero.
-    const revealObserver = "IntersectionObserver" in window
-      ? new IntersectionObserver(entries => entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-            revealObserver.unobserve(entry.target);
-          }
-        }), { threshold: 0.12 })
-      : null;
-    if (revealObserver && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      document.body.classList.add("has-motion");
-      document.querySelectorAll("section:not(.hero)").forEach(section => {
-        section.classList.add("reveal");
-        revealObserver.observe(section);
-      });
-    }
-    const heroArt = document.querySelector(".hero-art");
-    const artFrame = document.querySelector(".art-frame");
-    if (heroArt && artFrame && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
-      heroArt.addEventListener("pointermove", event => {
-        const bounds = heroArt.getBoundingClientRect();
-        const x = (event.clientX - bounds.left) / bounds.width - 0.5;
-        const y = (event.clientY - bounds.top) / bounds.height - 0.5;
-        artFrame.style.transform = `perspective(1100px) rotateX(${(-y * 5).toFixed(2)}deg) rotateY(${(x * 7).toFixed(2)}deg)`;
-      });
-      heroArt.addEventListener("pointerleave", () => { artFrame.style.transform = ""; });
-    }
+    // Tombol "kabari batch berikutnya" membuka WhatsApp admin dengan pesan terisi.
+    var nextMsg = "Assalamu'alaikum Admin Masjid Muzaki,\n\nSaya ingin dikabari kalau Training Exclusive AI for Business batch berikutnya dibuka. Terima kasih.";
+    document.querySelectorAll(".js-wa-next").forEach(function (a) {
+      a.href = "https://wa.me/6285283966520?text=" + encodeURIComponent(nextMsg);
+    });
+
+    // Hitung mundur (hanya tampil sebelum hari H).
+    (function () {
+      var box = document.getElementById("countdown");
+      var start = Date.parse(window.EVENT.start);
+      function tick() {
+        var ms = start - Date.now();
+        if (ms <= 0) { box.hidden = true; return; }
+        box.hidden = false;
+        document.getElementById("cd-d").textContent = Math.floor(ms / 864e5);
+        document.getElementById("cd-h").textContent = String(Math.floor(ms % 864e5 / 36e5)).padStart(2, "0");
+        document.getElementById("cd-m").textContent = String(Math.floor(ms % 36e5 / 6e4)).padStart(2, "0");
+      }
+      tick(); setInterval(tick, 30000);
+    })();
+
+    // Simulasi AI menulis materi jualan (contoh tetap, bukan AI sungguhan).
+    (function () {
+      var samples = [
+        { q: "Buatkan caption Instagram untuk keripik pisang pedas manis, target anak kos.",
+          a: "Laper tengah malam tapi dompet tipis?\nKeripik pisang pedas manis, renyahnya bunyi sampai kamar sebelah.\nSatu bungkus buat nemenin tugas, dua bungkus buat dibagi (kalau rela).\nKetik \"MAU\" di komentar, kami kirim info ordernya." },
+        { q: "Tulis 3 ide konten TikTok untuk kopi susu gula aren rumahan.",
+          a: "1. \"Racik 30 detik\": time-lapse bikin segelas, dari aren cair sampai es batu.\n2. \"Tebak harga\": tanya orang lewat, lalu kasih tahu harga aslinya.\n3. \"Kopi buat siapa?\": satu gelas untuk tiap tipe pelanggan, dari mahasiswa sampai bapak ronda." },
+        { q: "Pelanggan tanya: \"bibitnya kalau mati di jalan gimana?\" Bantu jawab sopan.",
+          a: "Halo Kak, terima kasih sudah tanya.\nBibit kami kemas pakai media lembap dan kardus berlubang supaya tetap segar.\nKalau sampai dalam kondisi layu, kirim foto dan video unboxing ya Kak, nanti kami bantu cek dan carikan solusinya." }
+      ];
+      var qEl = document.getElementById("demo-q"), aEl = document.getElementById("demo-a");
+      var buttons = document.querySelectorAll(".pick button");
+      var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      var timer = null, next = null;
+      function play(i) {
+        clearInterval(timer); clearTimeout(next);
+        buttons.forEach(function (b) { b.setAttribute("aria-pressed", String(+b.dataset.p === i)); });
+        qEl.textContent = samples[i].q;
+        var full = samples[i].a, n = 0;
+        if (reduce) { aEl.textContent = full; return; }
+        aEl.textContent = "";
+        timer = setInterval(function () {
+          n += 2; aEl.textContent = full.slice(0, n);
+          if (n >= full.length) { clearInterval(timer); next = setTimeout(function () { play((i + 1) % samples.length); }, 4500); }
+        }, 28);
+      }
+      buttons.forEach(function (b) { b.addEventListener("click", function () { play(+b.dataset.p); }); });
+      setTimeout(function () { play(0); }, 500);
+    })();
   </script>
 </body>
 </html>

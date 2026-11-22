@@ -1,6 +1,6 @@
 # Training Exclusive AI untuk Bisnis
 
-Website pendaftaran acara bersama Mang Tab, Konsultan Bisnis. Halaman pendaftaran mengirim data ke Google Apps Script dan Google Sheets. Setelah mendaftar, peserta melihat tiket QR dan bisa mengunduh QR atau menyimpan tiket sebagai PDF.
+Website pendaftaran acara bersama Mang Tab, Konsultan Bisnis. Penyelenggara: masjidmuzaki.com dan Masjid Sejuta Pemuda. Halaman pendaftaran mengirim data ke Google Apps Script dan Google Sheets. Setelah mendaftar, peserta melihat tiket QR dan bisa mengunduh QR atau menyimpan tiket sebagai PDF.
 
 ## Alur peserta
 
@@ -16,3 +16,15 @@ Kode Google Apps Script dan panduan instalasi ada di folder `ticket-system/`. `d
 ## Infaq
 
 Pendaftaran gratis. Infaq hanya untuk kopi jamaah, bersifat sukarela, dan tidak memengaruhi penerbitan tiket atau check-in.
+
+## Mode halaman dan batch berikutnya
+
+`index.html` otomatis berganti tampilan berdasarkan tanggal di `window.EVENT`: sebelum acara (daftar + hitung mundur), hari H (info masuk), dan setelah acara (tombol "kabari batch berikutnya" ke WhatsApp admin). Pratinjau mode tertentu: `index.html?mode=before`, `?mode=dday`, atau `?mode=after`.
+
+Untuk membuka batch baru, ubah tanggal di tiga tempat:
+
+1. `window.EVENT` di `index.html`
+2. `window.REG_CLOSE_AT` di `daftar.html`
+3. `TICKET_CONFIG.closeAt` di `ticket-system/Code.gs` (lalu deploy ulang Apps Script)
+
+Teks tanggal yang tampil (mis. "Sabtu, 21 Nov 2026") juga perlu diganti manual.
