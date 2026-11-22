@@ -74,35 +74,73 @@ function ensureProofColumns_(sheet) {
   }
 }
 
-function doGet() {
-  return HtmlService.createHtmlOutput(checkinPage_())
-    .setTitle("Check-in Peserta — Training Exclusive AI untuk Bisnis");
+// Halaman check-in sekarang ada di GitHub Pages (checkin.html), satu halaman tanpa tab kedua.
+// Halaman lama tetap bisa dibuka lewat ?mode=lama.
+function doGet(e) {
+  if (e && e.parameter && e.parameter.mode === "lama") {
+    return HtmlService.createHtmlOutput(checkinPage_())
+      .setTitle("Check-in Peserta — Training Exclusive AI untuk Bisnis");
+  }
+  const url = "https://ai-training-exlusive.github.io/belajar-AI-exclusive/checkin.html";
+  return HtmlService.createHtmlOutput(
+    "<meta name='viewport' content='width=device-width,initial-scale=1'>" +
+    "<div style='font:16px/1.5 system-ui,Arial;max-width:480px;margin:10vh auto;padding:24px;text-align:center'>" +
+    "<h2 style='color:#0f2a44'>Check-in pindah ke halaman baru</h2>" +
+    "<p>Pemindai QR sekarang satu halaman: PIN, kamera, dan hasil scan jadi satu.</p>" +
+    "<p><a target='_top' href='" + url + "' style='display:inline-block;padding:12px 18px;background:#f4a62a;color:#2a1a05;border-radius:12px;font-weight:700;text-decoration:none'>Buka halaman check-in</a></p></div>"
+  ).setTitle("Check-in Peserta — Training Exclusive AI untuk Bisnis");
 }
 
+// Satu pintu untuk website di GitHub Pages.
+// - action=checkin  : catat kehadiran (butuh PIN), jawab JSON.
+// - format=json     : pendaftaran, jawab JSON (tiket ditampilkan di website).
+// - tanpa format    : pendaftaran gaya lama, jawab halaman HTML.
 function doPost(e) {
   const data = (e && e.parameter) || {};
+  if (data.action === "checkin") {
+    try {
+      return json_(checkInTicket(data.ticketId, data.pin));
+    } catch (err) {
+      return json_({ ok: false, message: "Server sibuk. Coba pindai lagi." });
+    }
+  }
+  let result;
+  try {
+    result = register_(data);
+  } catch (err) {
+    result = { ok: false, error: "Server sedang sibuk. Coba kirim ulang sebentar lagi." };
+  }
+  if (data.format === "json") return json_(result);
+  return result.ok ? ticketPage_(result) : ticketPage_({ error: result.error });
+}
+
+function json_(obj) {
+  return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
+}
+
+function register_(data) {
   if (new Date() >= new Date(TICKET_CONFIG.closeAt)) {
-    return ticketPage_({ error: "Pendaftaran online sudah ditutup. Hubungi admin WhatsApp 0852 8396 6520 untuk info batch berikutnya." });
+    return { ok: false, error: "Pendaftaran online sudah ditutup. Hubungi admin WhatsApp 0852 8396 6520 untuk info batch berikutnya." };
   }
   // Kolom jebakan bot: manusia tidak melihat kolom ini, jadi seharusnya kosong.
   if (String(data.website || "").trim()) {
-    return ticketPage_({ error: "Pendaftaran tidak dapat diproses. Silakan coba lagi dari formulir resmi." });
+    return { ok: false, error: "Pendaftaran tidak dapat diproses. Silakan coba lagi dari formulir resmi." };
   }
   const required = ["name", "phone", "product", "city", "platform", "participantType", "consent"];
   const missing = required.filter(key => !String(data[key] || "").trim());
-  if (missing.length) return ticketPage_({ error: "Data wajib belum lengkap. Kembali ke formulir dan lengkapi semua kolom bertanda *." });
+  if (missing.length) return { ok: false, error: "Data wajib belum lengkap. Kembali ke formulir dan lengkapi semua kolom bertanda *." };
 
   // Bukti transfer dikirim formulir sebagai data URL gambar.
   const proofMatch = /^data:image\/(jpeg|png|webp);base64,([A-Za-z0-9+\/=]+)$/.exec(String(data.proof || ""));
-  if (!proofMatch) return ticketPage_({ error: "Bukti transfer belum diupload. Kembali ke formulir dan upload foto bukti transfer." });
+  if (!proofMatch) return { ok: false, error: "Bukti transfer belum diupload. Kembali ke formulir dan upload foto bukti transfer." };
   const proofBytes = Utilities.base64Decode(proofMatch[2]);
-  if (proofBytes.length > 4 * 1024 * 1024) return ticketPage_({ error: "Foto bukti transfer terlalu besar. Coba screenshot ulang lalu upload lagi." });
+  if (proofBytes.length > 4 * 1024 * 1024) return { ok: false, error: "Foto bukti transfer terlalu besar. Coba screenshot ulang lalu upload lagi." };
 
   const email = "";
 
   const props = PropertiesService.getScriptProperties();
   const spreadsheetId = props.getProperty("SPREADSHEET_ID");
-  if (!spreadsheetId) return ticketPage_({ error: "Sistem pendaftaran belum disiapkan panitia." });
+  if (!spreadsheetId) return { ok: false, error: "Sistem pendaftaran belum disiapkan panitia." };
 
   const lock = LockService.getScriptLock();
   lock.waitLock(15000);
@@ -116,7 +154,7 @@ function doPost(e) {
       // supaya orang lain tidak bisa mengambil QR hanya dengan mengetik nomor seseorang.
       const phones = sheet.getRange(2, 5, lastRow - 1, 1).getDisplayValues();
       if (phones.some(row => String(row[0]).replace(/\D/g, "") === phone)) {
-        return ticketPage_({ error: "Nomor WhatsApp ini sudah terdaftar. Cek tiket yang sudah kamu simpan, atau hubungi admin WhatsApp 0852 8396 6520." });
+        return { ok: false, error: "Nomor WhatsApp ini sudah terdaftar. Cek tiket yang sudah kamu simpan, atau hubungi admin WhatsApp 0852 8396 6520." };
       }
     }
     ticketId = "AI-" + Utilities.getUuid().replace(/-/g, "").slice(0, 10).toUpperCase();
@@ -126,7 +164,7 @@ function doPost(e) {
       const blob = Utilities.newBlob(proofBytes, "image/" + proofMatch[1], ticketId + "-bukti." + ext);
       proofUrl = proofFolder_().createFile(blob).getUrl();
     } catch (err) {
-      return ticketPage_({ error: "Bukti transfer gagal disimpan. Coba kirim ulang formulir sebentar lagi." });
+      return { ok: false, error: "Bukti transfer gagal disimpan. Coba kirim ulang formulir sebentar lagi." };
     }
     ensureProofColumns_(sheet);
     sheet.appendRow([
@@ -149,10 +187,10 @@ function doPost(e) {
   } catch (err) {
     updateDeliveryStatus_(ticketId, "QR GAGAL DIBUAT", "TIDAK DIGUNAKAN");
   }
-  return ticketPage_({
-    name: String(data.name), ticketId: ticketId, qrDataUrl: qrDataUrl,
+  return {
+    ok: true, name: String(data.name), ticketId: ticketId, qrDataUrl: qrDataUrl,
     whatsappUrl: whatsappConfirmationUrl_(data, ticketId)
-  });
+  };
 }
 
 function checkInTicket(ticketId, pin) {

@@ -2,120 +2,202 @@
 <html lang="id">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#102d4d">
-  <title>Pemindai QR Tiket</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0f2a44">
+  <meta name="robots" content="noindex">
+  <title>Check-in Panitia — AI for Business</title>
   <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+  <link rel="stylesheet" href="assets/site.css">
   <style>
-    *{box-sizing:border-box}
-    body{margin:0;padding:18px;background:#e9eef5;color:#142b43;font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
-    .card{width:min(620px,100%);margin:3vh auto;padding:clamp(20px,5vw,30px);border:1px solid #ffffffc9;border-radius:22px;background:#edf2f8;box-shadow:12px 12px 28px #b9c4d1,-10px -10px 24px #fff}
-    .eyebrow{color:#159b9a;font-size:12px;font-weight:850;letter-spacing:.12em}
-    h1{margin:8px 0;color:#102d4d;font-size:clamp(25px,6vw,34px)}
-    p{color:#5e7185}
-    #reader{overflow:hidden;width:100%;margin:16px 0;border-radius:14px;background:#dce4ed}
+    body{background:var(--ground)}
+    .page{max-width:640px;padding-block:18px 40px;display:grid;gap:14px}
+    .card{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:18px}
+    h1{font-size:clamp(26px,6vw,34px);font-weight:800;margin:4px 0 6px}
+    .muted{color:var(--ink-soft);font-size:.92rem}
+    label{display:block;font-weight:700;font-size:.92rem;margin-bottom:6px}
+    input{width:100%;font:inherit;padding:12px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--ground)}
+    input:focus{outline:3px solid #0f9c9733;border-color:var(--teal);background:var(--paper)}
+    .row{display:flex;gap:10px}
+    .row input{flex:1;min-width:0}
+    .row .btn{flex:none}
+    .btn.wide{width:100%}
+    #reader{overflow:hidden;border-radius:14px;background:#0f2a44;min-height:0}
+    #reader:empty{display:none}
     #reader video{border-radius:14px}
-    button{width:100%;min-height:48px;padding:12px;border:0;border-radius:11px;background:#2865d8;color:#fff;font:800 15px system-ui,Arial;cursor:pointer}
-    button.secondary{margin-top:10px;background:#e9eef5;color:#102d4d;border:1px solid #d3dce7}
-    .status{padding:14px;border-radius:12px;background:#e1e9f1;color:#536a80}
-    .status.ok{background:#e0f3eb;color:#176b59}
-    .status.bad{background:#fff0e9;color:#9e402c}
-    .name{margin-top:5px;color:#102d4d;font-size:20px;font-weight:850}
-    .code{color:#2865d8;font-weight:850}
-    .hidden{display:none!important}
+    .result{border-radius:18px;padding:18px;background:var(--paper);border:2px solid var(--line);text-align:center;display:grid;gap:4px}
+    .result .big{font:800 26px var(--display)}
+    .result .name{font:800 22px var(--display);color:var(--ink)}
+    .result code{font:700 15px var(--mono);color:var(--ink-soft)}
+    .result.ok{background:var(--leaf-soft);border-color:var(--leaf)}
+    .result.ok .big{color:var(--leaf)}
+    .result.warn{background:var(--saffron-soft);border-color:var(--saffron)}
+    .result.warn .big{color:var(--coffee)}
+    .result.bad{background:var(--chili-soft);border-color:var(--chili)}
+    .result.bad .big{color:var(--chili)}
+    .result.wait .big{color:var(--ink-soft)}
+    .log{list-style:none;margin:0;padding:0;display:grid;gap:6px;font-size:.9rem}
+    .log li{display:flex;justify-content:space-between;gap:10px;padding:8px 10px;border-radius:10px;background:var(--ground)}
+    .log li span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .log li b{flex:none;font:700 12px var(--mono)}
+    .log .ok b{color:var(--leaf)} .log .warn b{color:var(--coffee)} .log .bad b{color:var(--chili)}
+    .count{font:700 13px var(--mono);color:var(--teal)}
   </style>
 </head>
 <body>
-  <main class="card">
-    <span class="eyebrow">TRAINING EXCLUSIVE</span>
-    <h1>Pindai QR tiket</h1>
-    <p>Arahkan QR peserta ke kamera. Kehadiran akan dicatat otomatis setelah dipindai.</p>
-    <button id="start" type="button" onclick="startScanner()">Aktifkan kamera</button>
+  <header class="top">
+    <div class="wrap">
+      <a class="brand" href="index.html">
+        <span class="logo-pill"><img src="assets/logo-penyelenggara.jpg" alt="masjidmuzaki.com dan Masjid Sejuta Pemuda" width="350" height="92"></span>
+        <span>CHECK-IN<small>Khusus panitia</small></span>
+      </a>
+    </div>
+  </header>
+
+  <main class="wrap page">
+    <section class="card">
+      <span class="eye">Panitia</span>
+      <h1>Pindai QR tiket</h1>
+      <p class="muted">Isi PIN panitia sekali, lalu nyalakan kamera. Kehadiran langsung tercatat di sheet.</p>
+      <div style="margin-top:14px">
+        <label for="pin">PIN panitia</label>
+        <input id="pin" type="password" inputmode="numeric" autocomplete="off" placeholder="PIN 6 digit">
+      </div>
+      <div style="margin-top:12px;display:grid;gap:10px">
+        <button class="btn hot wide" id="start" type="button">Nyalakan kamera</button>
+        <button class="btn line wide hidden" id="stop" type="button">Matikan kamera</button>
+      </div>
+    </section>
+
     <div id="reader"></div>
-    <div id="status" class="status">Tekan tombol untuk meminta izin kamera.</div>
-    <button id="next" class="secondary hidden" type="button" onclick="scanNext()">Pindai peserta berikutnya</button>
+
+    <section class="result wait" id="result" aria-live="polite">
+      <span class="big" id="r-big">Siap memindai</span>
+      <span class="name" id="r-name"></span>
+      <code id="r-code"></code>
+      <span class="muted" id="r-msg">Arahkan QR tiket peserta ke kamera.</span>
+    </section>
+
+    <section class="card">
+      <label for="manual">Kode tiket manual (kalau QR susah terbaca)</label>
+      <div class="row">
+        <input id="manual" autocomplete="off" autocapitalize="characters" placeholder="AI-XXXXXXXXXX">
+        <button class="btn line" id="manual-go" type="button">Catat</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <strong>Riwayat di HP ini</strong><span class="count" id="count">0 hadir</span>
+      </div>
+      <ul class="log" id="log"><li><span class="muted">Belum ada pemindaian.</span></li></ul>
+    </section>
   </main>
+
   <script>
-    let scanner=null;
-    let busy=false;
-let waitTimer=null;
-    const statusBox=document.getElementById("status");
-    const nextButton=document.getElementById("next");
+    // Alamat web app Apps Script (sama dengan formulir daftar.html).
+    const EXEC_URL = "https://script.google.com/macros/s/AKfycbzHNKd8RWTlwYRxcfMPvG_mH5AdENZt-BP2Nv11bGUNmLVhE-IyPZjT82-DUWrAGSsWkA/exec";
 
-    function setStatus(message,kind){
-      statusBox.className="status"+(kind?" "+kind:"");
-      statusBox.textContent=message;
-    }
-    function appScriptOrigin(origin){
-      try{
-        const host=new URL(origin).hostname;
-        return host==="script.google.com" || host==="script.googleusercontent.com" || host.endsWith(".script.googleusercontent.com");
-      }catch(_){return false;}
-    }
-    window.addEventListener("message",event=>{
-      if(event.source!==window.opener || !appScriptOrigin(event.origin)) return;
-      const data=event.data||{};
-      if(data.type!=="checkin-result") return;
-      clearTimeout(waitTimer);
-      const result=data.result||{};
-      statusBox.className="status "+(result.ok?"ok":"bad");
-      statusBox.replaceChildren();
-      const message=document.createElement("div");
-      message.textContent=result.message||"Hasil check-in diterima.";
-      statusBox.appendChild(message);
-      if(result.name){
-        const name=document.createElement("div");name.className="name";name.textContent=result.name;statusBox.appendChild(name);
-      }
-      if(result.ticketId){
-        const code=document.createElement("div");code.className="code";code.textContent=result.ticketId;statusBox.appendChild(code);
-      }
-      nextButton.classList.remove("hidden");
-    });
+    const pinInput = document.getElementById("pin");
+    const startBtn = document.getElementById("start");
+    const stopBtn = document.getElementById("stop");
+    const resultBox = document.getElementById("result");
+    const logList = document.getElementById("log");
+    let scanner = null, busy = false, lastCode = "", lastAt = 0, hadir = 0;
 
-    async function startScanner(){
-      if(!window.opener){
-        setStatus("Buka pemindai dari halaman check-in panitia agar hasilnya tersimpan.", "bad");
-        return;
-      }
-      if(typeof Html5Qrcode==="undefined"){
-        setStatus("Pemindai gagal dimuat. Periksa koneksi internet lalu muat ulang halaman.", "bad");
-        return;
-      }
-      try{
-        scanner=new Html5Qrcode("reader");
-        const cameras=await Html5Qrcode.getCameras();
-        if(!cameras.length) throw new Error("Kamera tidak ditemukan di perangkat ini.");
-        const camera=cameras.find(item=>/back|rear|environment/i.test(item.label))||cameras[0];
-        await scanner.start(camera.id,{fps:10,qrbox:{width:240,height:240}},ticketId=>{
-          if(busy) return;
-          busy=true;
-          scanner.pause(true);
-          nextButton.classList.add("hidden");
-          setStatus("QR terbaca. Mencatat kehadiran…");
-          if(!window.opener||window.opener.closed){
-            setStatus("Halaman check-in panitia sudah tertutup. Buka lagi halaman panitia, isi PIN, lalu tekan Buka pemindai QR.","bad");
-            nextButton.classList.remove("hidden");
-            return;
-          }
-          window.opener.postMessage({type:"ticket-scan",ticketId:ticketId},"*");
-          clearTimeout(waitTimer);
-          waitTimer=setTimeout(()=>{
-            setStatus("Belum ada jawaban dari halaman panitia. Cek tab Check-in panitia (masih terbuka dan PIN terisi), lalu tekan Pindai peserta berikutnya untuk mencoba lagi.","bad");
-            nextButton.classList.remove("hidden");
-          },15000);
+    try { pinInput.value = sessionStorage.getItem("checkin-pin") || ""; } catch (_) {}
+    pinInput.addEventListener("change", () => { try { sessionStorage.setItem("checkin-pin", pinInput.value.trim()); } catch (_) {} });
+
+    function show(kind, big, name, code, msg) {
+      resultBox.className = "result " + kind;
+      document.getElementById("r-big").textContent = big;
+      document.getElementById("r-name").textContent = name || "";
+      document.getElementById("r-code").textContent = code || "";
+      document.getElementById("r-msg").textContent = msg || "";
+    }
+    function addLog(kind, label, status) {
+      if (logList.firstElementChild && !logList.firstElementChild.dataset.entry) logList.replaceChildren();
+      const li = document.createElement("li"); li.className = kind; li.dataset.entry = "1";
+      const a = document.createElement("span"); a.textContent = label;
+      const b = document.createElement("b"); b.textContent = status;
+      li.append(a, b); logList.prepend(li);
+      while (logList.children.length > 30) logList.lastElementChild.remove();
+    }
+    function buzz(pattern) { try { navigator.vibrate && navigator.vibrate(pattern); } catch (_) {} }
+
+    async function checkIn(raw) {
+      const code = String(raw || "").trim().toUpperCase();
+      const pin = pinInput.value.trim();
+      if (!pin) { show("bad", "Isi PIN dulu", "", "", "Masukkan PIN panitia di atas."); pinInput.focus(); return; }
+      if (busy) return;
+      // Abaikan QR yang sama yang terbaca berulang dalam 4 detik.
+      if (code === lastCode && Date.now() - lastAt < 4000) return;
+      lastCode = code; lastAt = Date.now(); busy = true;
+      show("wait", "Memeriksa…", "", code, "Tunggu sebentar.");
+      try {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 20000);
+        const res = await fetch(EXEC_URL, {
+          method: "POST",
+          body: new URLSearchParams({ action: "checkin", ticketId: code, pin: pin }),
+          signal: controller.signal
         });
-        document.getElementById("start").classList.add("hidden");
-        setStatus("Kamera aktif. Arahkan QR tiket ke kotak pemindai.");
-      }catch(error){
-        setStatus(error.message||"Kamera tidak dapat diakses. Izinkan akses kamera lalu muat ulang.", "bad");
+        clearTimeout(timer);
+        const text = await res.text();
+        let data;
+        try { data = JSON.parse(text); } catch (_) { throw new Error("old-backend"); }
+        if (data.ok) {
+          hadir++; document.getElementById("count").textContent = hadir + " hadir";
+          show("ok", "✓ Hadir", data.name, data.ticketId, "Silakan masuk.");
+          addLog("ok", data.name || code, "HADIR"); buzz(120);
+        } else if (data.alreadyCheckedIn) {
+          show("warn", "Sudah check-in", data.name, data.ticketId, "Tiket ini sudah dipakai masuk sebelumnya.");
+          addLog("warn", data.name || code, "DOBEL"); buzz([80, 60, 80]);
+        } else {
+          show("bad", "Ditolak", "", code, data.message || "Tiket tidak valid.");
+          addLog("bad", code || "QR", "TOLAK"); buzz([200, 80, 200]);
+        }
+      } catch (err) {
+        const msg = err && err.message === "old-backend"
+          ? "Server belum versi terbaru. Minta admin deploy ulang Apps Script."
+          : (err && err.name === "AbortError" ? "Server terlalu lama menjawab. Coba lagi." : "Koneksi gagal. Cek internet lalu coba lagi.");
+        show("bad", "Gagal", "", code, msg);
+        lastCode = "";
+      } finally {
+        busy = false;
       }
     }
-    function scanNext(){
-      busy=false;
-      nextButton.classList.add("hidden");
-      setStatus("Arahkan QR peserta berikutnya ke kamera.");
-      if(scanner) scanner.resume();
+
+    function onScan(text) {
+      if (busy) return;
+      checkIn(text);
     }
+
+    startBtn.addEventListener("click", async () => {
+      if (!pinInput.value.trim()) { show("bad", "Isi PIN dulu", "", "", "Masukkan PIN panitia sebelum menyalakan kamera."); pinInput.focus(); return; }
+      try { sessionStorage.setItem("checkin-pin", pinInput.value.trim()); } catch (_) {}
+      if (typeof Html5Qrcode === "undefined") { show("bad", "Pemindai gagal dimuat", "", "", "Cek internet lalu muat ulang halaman."); return; }
+      try {
+        scanner = scanner || new Html5Qrcode("reader");
+        await scanner.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 240, height: 240 } }, onScan);
+        startBtn.classList.add("hidden"); stopBtn.classList.remove("hidden");
+        show("wait", "Kamera aktif", "", "", "Arahkan QR tiket ke kotak pemindai.");
+      } catch (err) {
+        show("bad", "Kamera tidak bisa dibuka", "", "", "Izinkan akses kamera di browser, lalu coba lagi.");
+      }
+    });
+    stopBtn.addEventListener("click", async () => {
+      try { if (scanner) await scanner.stop(); } catch (_) {}
+      stopBtn.classList.add("hidden"); startBtn.classList.remove("hidden");
+      show("wait", "Kamera mati", "", "", "Tekan Nyalakan kamera untuk memindai lagi.");
+    });
+    document.getElementById("manual-go").addEventListener("click", () => {
+      const input = document.getElementById("manual");
+      if (!/^AI-[A-F0-9]{10}$/i.test(input.value.trim())) { show("bad", "Kode tidak valid", "", input.value, "Format kode: AI- diikuti 10 huruf/angka."); return; }
+      lastCode = ""; checkIn(input.value); input.value = "";
+    });
   </script>
 </body>
 </html>
