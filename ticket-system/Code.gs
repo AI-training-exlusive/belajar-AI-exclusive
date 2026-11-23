@@ -24,7 +24,7 @@ function setupTicketSystem() {
 
   const headers = [
     "Waktu daftar", "Kode tiket", "Nama", "Email", "WhatsApp", "Nama usaha",
-    "Produk / bidang usaha", "Domisili", "Platform", "Status peserta", "Infaq kopi jamaah",
+    "Produk / bidang usaha", "Domisili", "AI yang dipakai", "Status peserta", "Infaq kopi jamaah",
     "Pertanyaan", "Status tiket", "Status kehadiran", "Waktu check-in", "Status email", "Status WhatsApp"
   ];
   const headerRange = sheet.getRange(1, 1, 1, headers.length);
