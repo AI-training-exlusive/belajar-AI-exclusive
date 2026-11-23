@@ -122,6 +122,9 @@
     .orbit-chip:nth-of-type(3){bottom:4%;left:-4px;animation-delay:-2.4s}
     @keyframes bob{50%{transform:translateY(-8px)}}
     .speaker h3{font-size:30px}
+    .roles{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 10px}
+    .roles .role{margin:0}
+    .role.ceo{background:var(--teal-soft);color:#0b5e5b}
     .role{display:inline-block;margin:4px 0 8px;background:var(--navy);color:#fff;font-size:13px;font-weight:700;padding:3px 10px;border-radius:99px}
     .speaker p{color:var(--ink-soft);font-size:14.5px}
 
@@ -311,7 +314,11 @@
             </div>
             <div>
               <h3>Mang Tab</h3>
-              <span class="role">Konsultan Bisnis</span>
+              <div class="roles">
+                <span class="role">Konsultan Bisnis</span>
+                <span class="role ceo">CEO Petani Kota</span>
+                <span class="role ceo">CEO Benih Baik Group</span>
+              </div>
               <p>Membawakan AI untuk bisnis dengan pendekatan praktis untuk pelaku usaha dan peserta yang baru mulai.</p>
             </div>
           </div>
