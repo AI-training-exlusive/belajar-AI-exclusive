@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#0f2a44">
-  <meta name="description" content="Training Exclusive AI for Business bersama Mang Tab di Aula Masjid Sejuta Pemuda. Biaya pendaftaran Rp20.000 untuk kopi jamaah.">
+  <meta name="description" content="Training Exclusive AI for Business bersama Mang Tab di Aula Masjid Sejuta Pemuda. Pendaftaran gratis.">
   <title>AI for Business — Training Exclusive</title>
   <script>
     // Jadwal acara. Ganti tiga baris ini untuk batch berikutnya.
@@ -141,6 +141,18 @@
     .qris p{font-size:14px;color:var(--ink-soft);margin:0}
     .qris b{color:var(--ink)}
     .qris .amt{font:800 24px var(--display);color:var(--coffee);display:block}
+    .free-run{display:inline-flex;flex-wrap:wrap;justify-content:center;gap:4px 10px;text-decoration:none;color:inherit}
+    .free-run b{display:inline-block;animation:freeBounce 1.4s ease-in-out infinite}
+    .announce{background:linear-gradient(100deg,var(--saffron) 40%,#ffd77a 50%,var(--saffron) 60%);background-size:250% 100%;animation:shine 3.2s linear infinite}
+    @keyframes shine{from{background-position:120% 0}to{background-position:-120% 0}}
+    @keyframes freeBounce{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-2px) scale(1.06)}}
+    .free-stamp{transform:rotate(-8deg);border:3px dashed var(--leaf);border-radius:16px;padding:10px 14px;animation:stamp 2.4s ease-in-out infinite}
+    @keyframes stamp{0%,100%{transform:rotate(-8deg) scale(1)}50%{transform:rotate(-4deg) scale(1.08)}}
+    .free-blink{color:var(--leaf);animation:freeBounce 1.4s ease-in-out infinite;display:inline-block}
+    .hero-free{position:absolute;right:max(16px,4vw);top:18px;z-index:3;background:var(--leaf);color:#fff;font:800 15px var(--display);letter-spacing:.04em;padding:10px 16px;border-radius:99px;box-shadow:0 10px 24px #0007;text-decoration:none;animation:freeBounce 1.4s ease-in-out infinite}
+    .hero-free::before{content:"";position:absolute;inset:-6px;border-radius:inherit;border:2px solid var(--leaf);animation:ring 1.6s ease-out infinite}
+    @keyframes ring{from{opacity:.9;transform:scale(.9)}to{opacity:0;transform:scale(1.25)}}
+    @media (max-width:860px){.hero-free{top:auto;bottom:16px;right:16px;font-size:13px}}
     .free{font:800 36px var(--display);color:var(--leaf);text-align:center;line-height:1}
     .free small{display:block;font:600 12px var(--body);color:var(--ink-soft)}
 
@@ -200,7 +212,7 @@
 </head>
 <body>
   <div class="announce">
-    <span class="only-before">Biaya Rp20.000 · Kursi terbatas · Disarankan bawa laptop dan charger</span>
+    <a class="only-before free-run" href="daftar.html"><b>🎉 Mumpung GRATIS, segera daftar!</b> <span>Kursi terbatas · Disarankan bawa laptop dan charger →</span></a>
     <span class="only-dday">Hari ini 09.00 WIB · Siapkan QR tiket di HP sebelum masuk aula</span>
     <span class="only-after">Acara selesai 19 Des 2026 · Terima kasih jamaah dan peserta!</span>
   </div>
@@ -220,9 +232,10 @@
 
   <main id="atas">
     <section class="hero">
+      <a class="hero-free only-before" href="daftar.html">Mumpung GRATIS · Daftar sekarang</a>
       <div class="wrap hero-grid">
         <div>
-          <span class="kick"><b></b><span class="only-before">Training exclusive · Rp20.000</span><span class="only-dday">Berlangsung hari ini</span><span class="only-after">Acara sudah selesai</span></span>
+          <span class="kick"><b></b><span class="only-before">Training exclusive · GRATIS</span><span class="only-dday">Berlangsung hari ini</span><span class="only-after">Acara sudah selesai</span></span>
           <h1>Jualan lebih <em>gurih</em> dengan AI.</h1>
           <p class="lead">Tingkatkan bisnis dengan teknologi masa depan. Belajar pakai AI buat cari ide promosi, nulis caption, dan bales chat pelanggan, langsung praktik pakai produk usahamu sendiri.</p>
           <div class="cta-row">
@@ -310,14 +323,14 @@
       <div class="kopi">
         <div class="cup" aria-hidden="true"><span class="steam"></span><span class="steam"></span><span class="steam"></span><span class="body"></span></div>
         <div>
-          <h3 id="kopi-title">Biaya pendaftaran: Rp20.000</h3>
-          <p>Biaya pendaftaran untuk kopi jamaah. Bayar lewat QRIS di bawah, lalu upload bukti transfer di formulir pendaftaran.</p>
+          <h3 id="kopi-title">Infaq kopi jamaah (opsional)</h3>
+          <p>Pendaftaran gratis. Kalau ingin ikut infaq kopi jamaah, scan QRIS di bawah. Sukarela, tidak memengaruhi tiket.</p>
           <div class="qris">
-            <img src="assets/qris-kopi-jamaah.png" alt="QRIS pembayaran pendaftaran Rp20.000" width="400" height="400" loading="lazy">
+            <img src="assets/qris-kopi-jamaah.png" alt="QRIS infaq kopi jamaah Rp20.000" width="400" height="400" loading="lazy">
             <p><span class="amt">Rp20.000</span><b>Scan pakai m-banking atau e-wallet.</b> Nominal sudah tetap. Pastikan nama penerima <b>YAYASAN AMANAH SEJUTA PEMUDA</b> sebelum membayar.</p>
           </div>
         </div>
-        <div class="free">Rp20rb<small>biaya daftar</small></div>
+        <div class="free free-stamp">GRATIS<small>biaya daftar Rp0</small></div>
       </div>
     </section>
 
@@ -327,14 +340,14 @@
           <span class="eye only-before">Tiketmu langsung jadi</span>
           <span class="eye only-dday">Masuk aula</span>
           <span class="eye only-after">Acara berikutnya</span>
-          <h2 class="only-before">Bayar, daftar, tiket QR langsung terbit.</h2>
+          <h2 class="only-before">Daftar gratis, tiket QR langsung terbit.</h2>
           <h2 class="only-dday">Tunjukkan QR tiket ke panitia di pintu.</h2>
           <h2 class="only-after">Pendaftaran sudah ditutup.</h2>
           <ol class="steps only-before">
-            <li><b>1</b><span>Bayar Rp20.000 lewat QRIS, screenshot bukti transfernya.</span></li>
-            <li><b>2</b><span>Isi formulir dan upload bukti transfer.</span></li>
+            <li><b>1</b><span>Isi nama, nomor WhatsApp, dan info usaha.</span></li>
+            <li><b>2</b><span>Mau infaq kopi jamaah? Scan QRIS dan upload buktinya (opsional).</span></li>
             <li><b>3</b><span>Tiket QR langsung tampil. Simpan atau screenshot.</span></li>
-            <li><b>4</b><span>Tekan tombol WhatsApp untuk konfirmasi ke admin. Admin mengecek bukti transfermu.</span></li>
+            <li><b>4</b><span>Tekan tombol WhatsApp untuk konfirmasi kehadiran ke admin.</span></li>
           </ol>
           <p class="sub only-dday" style="margin-top:10px">Belum punya tiket? Datang ke meja panitia dan sebutkan nama serta nomor WhatsApp yang didaftarkan.</p>
           <p class="sub only-after" style="margin-top:10px">Tinggalkan pesan ke admin supaya dikabari kalau acara berikutnya dibuka.</p>
@@ -382,8 +395,8 @@
         <h2>Yang sering ditanya</h2>
         <div class="faq">
           <details open><summary>Bagaimana cara dapat tiket?</summary><p>Isi formulir pendaftaran. Tiket QR langsung tampil setelah formulir dikirim, tidak perlu menunggu admin. Tombol WhatsApp di halaman tiket hanya untuk konfirmasi kehadiran.</p></details>
-          <details><summary>Ada biaya pendaftaran?</summary><p>Ada, Rp20.000 untuk kopi jamaah. Bayar lewat QRIS di halaman ini atau di formulir pendaftaran.</p></details>
-          <details><summary>Bagaimana cara bayar?</summary><p>Scan QRIS pakai m-banking atau e-wallet (nominal sudah Rp20.000), screenshot bukti transfernya, lalu upload di formulir pendaftaran. Admin mengecek bukti itu sebelum hari H.</p></details>
+          <details><summary>Ada biaya pendaftaran?</summary><p>Tidak. Pendaftaran gratis.</p></details>
+          <details><summary>Infaq kopi jamaah wajib?</summary><p>Tidak. Infaq kopi jamaah sukarela (QRIS Rp20.000) dan tidak memengaruhi pendaftaran atau tiket. Kalau ikut infaq, upload buktinya di formulir.</p></details>
           <details><summary>Perlu bawa apa?</summary><p>Disarankan membawa laptop dan charger. Bawa juga HP dan satu contoh produk atau ide usaha untuk praktik.</p></details>
           <details><summary>Di mana acaranya?</summary><p>Aula Masjid Sejuta Pemuda. <a href="https://maps.app.goo.gl/Eqbw839XBTK7faA59" target="_blank" rel="noopener">Buka di Google Maps</a> atau tanya admin.</p></details>
         </div>
@@ -394,12 +407,12 @@
   <footer class="foot">
     <div class="wrap">
       <div><strong>Training Exclusive AI for Business</strong><br>Aula Masjid Sejuta Pemuda · masjidmuzaki.com</div>
-      <div>Admin WhatsApp: <a href="https://wa.me/6285283966520" target="_blank" rel="noopener"><strong>0852 8396 6520</strong></a><br>Biaya pendaftaran Rp20.000 · untuk kopi jamaah</div>
+      <div>Admin WhatsApp: <a href="https://wa.me/6285283966520" target="_blank" rel="noopener"><strong>0852 8396 6520</strong></a><br>Pendaftaran gratis · Infaq kopi jamaah sukarela</div>
     </div>
   </footer>
 
   <div class="dock">
-    <span class="only-before">Rp20.000 · tiket QR langsung jadi</span>
+    <span class="only-before"><b class="free-blink">GRATIS</b> · tiket QR langsung jadi</span>
     <span class="only-dday">Siapkan QR di HP</span>
     <span class="only-after">Acara selesai</span>
     <a class="btn hot sm only-before" href="daftar.html">Daftar</a>
