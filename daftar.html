@@ -92,7 +92,7 @@
     <section class="card" aria-labelledby="page-title">
       <span class="eyebrow">TRAINING EXCLUSIVE</span>
       <h1 id="page-title">Formulir pendaftaran</h1>
-      <p class="intro"><b class="free-tag">GRATIS</b> Isi data peserta, dan tiket QR langsung muncul. Infaq kopi jamaah boleh, tapi tidak wajib.</p>
+      <p class="intro"><b class="free-tag">GRATIS</b> Isi data peserta, dan tiket QR langsung muncul. Kopi jamaah Rp20.000 boleh, tapi tidak wajib.</p>
       <div class="progress" id="progress" data-step="1"><span id="progress-label">Langkah 1 dari 2 · Data peserta</span><span class="progress-track"><span class="progress-fill"></span></span></div>
       <p class="bring-note"><b>Disarankan membawa laptop dan charger</b> saat acara, plus HP dan satu contoh produk atau ide usaha.</p>
 
@@ -105,17 +105,18 @@
             <div class="field"><label for="business">Nama usaha</label><input id="business" name="business" placeholder="Boleh dikosongkan"></div>
             <div class="field"><label for="product">Produk / bidang usaha *</label><input id="product" name="product" required placeholder="Contoh: makanan, fashion, jasa"></div>
             <div class="field"><label for="city">Domisili *</label><input id="city" name="city" required autocomplete="address-level2" placeholder="Kota / kabupaten"></div>
-            <div class="field"><label for="platform">AI yang biasa dipakai *</label><select id="platform" name="platform" required><option value="">Pilih AI</option><option>ChatGPT</option><option>Gemini</option><option>Kimi AI</option><option>Claude</option><option>AI lainnya</option></select></div>
+            <div class="field"><label for="platform">AI yang biasa dipakai *</label><select id="platform" name="platform" required><option value="">Pilih AI</option><option>ChatGPT</option><option>Claude</option><option>Gemini</option><option value="Lainnya">Lainnya (tulis sendiri)</option></select>
+              <input id="platform-other" class="hidden" placeholder="Tulis nama AI-nya" autocomplete="off" maxlength="60"></div>
             <div class="field"><label for="status">Status peserta *</label><select id="status" name="participantType" required><option value="">Pilih status</option><option>Seller</option><option>Reseller</option><option>Pemilik UMKM</option><option>Pemula</option><option>Lainnya</option></select></div>
-            <input type="hidden" id="infaq" name="infaq" value="Tidak infaq">
+            <input type="hidden" id="infaq" name="infaq" value="Tidak bayar">
             <div class="field full"><label for="question">Pertanyaan untuk panitia (opsional)</label><textarea id="question" name="question" rows="3" placeholder="Tulis pertanyaan kalau ada"></textarea></div>
             <div class="field full pay">
-              <div class="pay-qr"><img src="assets/qris-kopi-jamaah.png" alt="QRIS infaq kopi jamaah Rp20.000" width="400" height="400"></div>
+              <div class="pay-qr"><img src="assets/qris-kopi-jamaah.png" alt="QR pembayaran kopi jamaah Rp20.000" width="400" height="400"></div>
               <div class="pay-copy">
-                <strong class="pay-amt">Infaq kopi jamaah (opsional)</strong>
-                <p>Pendaftaran gratis. Kalau mau ikut infaq kopi jamaah, scan QRIS ini (nominal Rp20.000). Penerimanya <b>YAYASAN AMANAH SEJUTA PEMUDA</b>.</p>
-                <p>Sudah infaq? Upload screenshot bukti transfernya di sini. Tidak infaq? Lewati saja.</p>
-                <label for="proof-file" class="proof-label">Bukti transfer infaq (opsional)</label>
+                <strong class="pay-amt">Kopi jamaah Rp20.000 (tidak wajib)</strong>
+                <p>Pendaftaran gratis. Mau ikut kopi jamaah? Scan QR ini (nominal Rp20.000). Penerimanya <b>YAYASAN AMANAH SEJUTA PEMUDA</b>.</p>
+                <p>Sudah bayar? Upload screenshot bukti transfernya di sini. Tidak ikut? Lewati saja.</p>
+                <label for="proof-file" class="proof-label">Bukti transfer (tidak wajib)</label>
                 <input id="proof-file" type="file" accept="image/*">
                 <input type="hidden" id="proof" name="proof">
                 <p class="proof-status" id="proof-status" role="status">Format foto (JPG/PNG). Maksimal 10 MB.</p>
@@ -130,7 +131,7 @@
 
       <section id="review-step" class="hidden" aria-labelledby="review-title">
         <h2 id="review-title" style="color:var(--navy);margin:0">Periksa datamu</h2>
-        <p class="intro" style="margin-top:6px">Periksa datamu. Tiket langsung terbit tanpa menunggu persetujuan admin; setelahnya kirim konfirmasi ke admin melalui WhatsApp. Pendaftaran gratis; bukti infaq (kalau ada) dicek admin.</p>
+        <p class="intro" style="margin-top:6px">Periksa datamu. Tiket langsung terbit tanpa menunggu persetujuan admin; setelahnya kirim konfirmasi ke admin melalui WhatsApp. Pendaftaran gratis.</p>
         <dl class="summary" id="summary"></dl>
         <div class="handoff">Tiket QR tampil setelah pendaftaran berhasil. Unduh tiket, lalu lanjutkan ke WhatsApp dengan data yang sudah tersusun. Tekan Kirim untuk mengonfirmasi kehadiran; tidak perlu mengisi data lagi.</div>
         <div class="actions"><button class="btn hot" id="submit-registration" type="button">Daftar dan terbitkan tiket</button><button class="btn line" id="edit-data" type="button">Ubah data</button></div>
@@ -172,8 +173,19 @@
     const fields = [
       ["Nama", "name"], ["WhatsApp peserta", "phone"], ["Nama usaha", "business"],
       ["Produk / bidang usaha", "product"], ["Domisili", "city"], ["AI yang dipakai", "platform"],
-      ["Status peserta", "status"], ["Infaq kopi jamaah", "infaq"], ["Pertanyaan", "question"]
+      ["Status peserta", "status"], ["Kopi jamaah", "infaq"], ["Pertanyaan", "question"]
     ];
+
+    // Pilihan AI "Lainnya": munculkan kolom isian dan wajib diisi.
+    const platformSel = document.getElementById("platform");
+    const platformOther = document.getElementById("platform-other");
+    platformSel.addEventListener("change", () => {
+      const other = platformSel.value === "Lainnya";
+      platformOther.classList.toggle("hidden", !other);
+      platformOther.required = other;
+      if (other) platformOther.focus();
+    });
+    const platformValue = () => platformSel.value === "Lainnya" ? "Lainnya: " + platformOther.value.trim() : platformSel.value;
 
     // Bukti transfer: diperkecil di browser jadi JPG (maks 1200 px) lalu dikirim sebagai teks.
     const proofFile = document.getElementById("proof-file");
@@ -184,7 +196,7 @@
     function setProofStatus(text, kind) { proofStatus.textContent = text; proofStatus.className = "proof-status" + (kind ? " " + kind : ""); }
     proofFile.addEventListener("change", () => {
       proofInput.value = ""; proofPreview.classList.add("hidden");
-      document.getElementById("infaq").value = "Tidak infaq";
+      document.getElementById("infaq").value = "Tidak bayar";
       const file = proofFile.files && proofFile.files[0];
       if (!file) { setProofStatus("Pilih foto bukti transfer.", "bad"); return; }
       if (!/^image\//.test(file.type)) { proofFile.value = ""; setProofStatus("File harus berupa foto (JPG/PNG).", "bad"); return; }
@@ -219,7 +231,7 @@
       fields.forEach(([label, id]) => {
         const row = document.createElement("div"); row.className = "summary-row";
         const term = document.createElement("dt"); term.textContent = label;
-        const value = document.createElement("dd"); value.textContent = read(id) || "Tidak diisi";
+        const value = document.createElement("dd"); value.textContent = (id === "platform" ? platformValue() : read(id)) || "Tidak diisi";
         row.append(term, value); summary.append(row);
       });
       const proofRow = document.createElement("div"); proofRow.className = "summary-row";
@@ -257,6 +269,7 @@
       btn.disabled = true; note.classList.remove("hidden"); errBox.classList.add("hidden");
       const body = new URLSearchParams(new FormData(form));
       body.set("format", "json");
+      body.set("platform", platformValue());
       let text;
       try {
         const res = await fetch(form.action, { method: "POST", body: body });

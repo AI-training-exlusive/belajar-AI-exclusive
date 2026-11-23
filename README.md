@@ -15,7 +15,7 @@ Kode Google Apps Script dan panduan instalasi ada di folder `ticket-system/`. `d
 
 ## Biaya pendaftaran
 
-Biaya pendaftaran Rp20.000 untuk kopi jamaah, dibayar lewat QRIS (`assets/qris-kopi-jamaah.png`). Formulir mewajibkan centang "sudah membayar" dan mengirim field `infaq` berisi "Rp20.000 (dibayar via QRIS)". Sistem tidak memeriksa pembayaran secara otomatis: peserta mengirim bukti bayar di chat WhatsApp konfirmasi, lalu admin mencocokkannya. Tiket tetap terbit saat formulir dikirim.
+Biaya pendaftaran Rp20.000 untuk kopi jamaah, dibayar lewat QRIS (`assets/qris-kopi-jamaah.png`). Pembayaran tidak wajib; field `infaq` (nama teknis) berisi "Tidak bayar" atau "Rp20.000 via QRIS (bukti diupload)". Kata "infaq" tidak ditampilkan di halaman. Sistem tidak memeriksa pembayaran secara otomatis: peserta mengirim bukti bayar di chat WhatsApp konfirmasi, lalu admin mencocokkannya. Tiket tetap terbit saat formulir dikirim.
 
 ## Mode halaman dan batch berikutnya
 

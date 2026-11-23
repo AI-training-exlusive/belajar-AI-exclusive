@@ -24,7 +24,7 @@ function setupTicketSystem() {
 
   const headers = [
     "Waktu daftar", "Kode tiket", "Nama", "Email", "WhatsApp", "Nama usaha",
-    "Produk / bidang usaha", "Domisili", "AI yang dipakai", "Status peserta", "Infaq kopi jamaah",
+    "Produk / bidang usaha", "Domisili", "AI yang dipakai", "Status peserta", "Pembayaran",
     "Pertanyaan", "Status tiket", "Status kehadiran", "Waktu check-in", "Status email", "Status WhatsApp"
   ];
   const headerRange = sheet.getRange(1, 1, 1, headers.length);
@@ -134,7 +134,7 @@ function register_(data) {
   const missing = required.filter(key => !String(data[key] || "").trim());
   if (missing.length) return { ok: false, error: "Data wajib belum lengkap. Kembali ke formulir dan lengkapi semua kolom bertanda *." };
 
-  // Bukti transfer infaq (opsional) dikirim formulir sebagai data URL gambar.
+  // Bukti transfer kopi jamaah (opsional) dikirim formulir sebagai data URL gambar.
   const proofRaw = String(data.proof || "");
   const proofMatch = proofRaw ? /^data:image\/(jpeg|png|webp);base64,([A-Za-z0-9+\/=]+)$/.exec(proofRaw) : null;
   if (proofRaw && !proofMatch) return { ok: false, error: "File bukti transfer tidak bisa dibaca. Upload ulang sebagai foto, atau kosongkan." };
@@ -265,7 +265,7 @@ function whatsappConfirmationUrl_(data, ticketId) {
     ["Domisili", data.city],
     ["AI yang dipakai", data.platform],
     ["Status peserta", data.participantType],
-    ["Infaq kopi jamaah", data.infaq],
+    ["Kopi jamaah", data.infaq],
     ["Pertanyaan", data.question]
   ].filter(item => String(item[1] || "").trim());
 
