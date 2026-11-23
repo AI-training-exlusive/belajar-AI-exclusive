@@ -8,7 +8,9 @@ const TICKET_CONFIG = {
   adminWa: "6285283966520",
   proofFolderName: "Bukti Bayar Training AI for Business",
   // Isi kolom S (Status bayar) yang dianggap lunas. Harus sama dengan pilihan dropdown di sheet.
-  paidStatus: "sudah bayar"
+  paidStatus: "sudah bayar",
+  // true = check-in hanya untuk yang sudah bayar. Sekarang pendaftaran gratis, jadi false.
+  requirePaid: false
 };
 
 function setupTicketSystem() {
@@ -132,11 +134,12 @@ function register_(data) {
   const missing = required.filter(key => !String(data[key] || "").trim());
   if (missing.length) return { ok: false, error: "Data wajib belum lengkap. Kembali ke formulir dan lengkapi semua kolom bertanda *." };
 
-  // Bukti transfer dikirim formulir sebagai data URL gambar.
-  const proofMatch = /^data:image\/(jpeg|png|webp);base64,([A-Za-z0-9+\/=]+)$/.exec(String(data.proof || ""));
-  if (!proofMatch) return { ok: false, error: "Bukti transfer belum diupload. Kembali ke formulir dan upload foto bukti transfer." };
-  const proofBytes = Utilities.base64Decode(proofMatch[2]);
-  if (proofBytes.length > 4 * 1024 * 1024) return { ok: false, error: "Foto bukti transfer terlalu besar. Coba screenshot ulang lalu upload lagi." };
+  // Bukti transfer infaq (opsional) dikirim formulir sebagai data URL gambar.
+  const proofRaw = String(data.proof || "");
+  const proofMatch = proofRaw ? /^data:image\/(jpeg|png|webp);base64,([A-Za-z0-9+\/=]+)$/.exec(proofRaw) : null;
+  if (proofRaw && !proofMatch) return { ok: false, error: "File bukti transfer tidak bisa dibaca. Upload ulang sebagai foto, atau kosongkan." };
+  const proofBytes = proofMatch ? Utilities.base64Decode(proofMatch[2]) : null;
+  if (proofBytes && proofBytes.length > 4 * 1024 * 1024) return { ok: false, error: "Foto bukti transfer terlalu besar. Coba screenshot ulang lalu upload lagi." };
 
   const email = "";
 
@@ -160,8 +163,8 @@ function register_(data) {
       }
     }
     ticketId = "AI-" + Utilities.getUuid().replace(/-/g, "").slice(0, 10).toUpperCase();
-    let proofUrl;
-    try {
+    let proofUrl = "";
+    if (proofMatch) try {
       const ext = proofMatch[1] === "jpeg" ? "jpg" : proofMatch[1];
       const blob = Utilities.newBlob(proofBytes, "image/" + proofMatch[1], ticketId + "-bukti." + ext);
       proofUrl = proofFolder_().createFile(blob).getUrl();
@@ -174,7 +177,7 @@ function register_(data) {
       safeCell_(data.business), safeCell_(data.product), safeCell_(data.city),
       safeCell_(data.platform), safeCell_(data.participantType), safeCell_(data.infaq),
       safeCell_(data.question), "VALID", "BELUM HADIR", "", "MENUNGGU", "MENUNGGU",
-      proofUrl, "MENUNGGU CEK"
+      proofUrl, proofUrl ? "MENUNGGU CEK" : "GRATIS"
     ]);
   } finally {
     lock.releaseLock();
@@ -223,7 +226,7 @@ function checkInTicket(ticketId, pin) {
     const name = String(sheet.getRange(row, 3).getDisplayValue() || "");
     // Hanya peserta dengan Status bayar (kolom S) "sudah bayar" yang boleh masuk.
     const payStatus = String(sheet.getRange(row, 19).getDisplayValue() || "").trim();
-    if (payStatus.toLowerCase() !== TICKET_CONFIG.paidStatus.toLowerCase()) {
+    if (TICKET_CONFIG.requirePaid && payStatus.toLowerCase() !== TICKET_CONFIG.paidStatus.toLowerCase()) {
       return {
         ok: false, notPaid: true, name: name, ticketId: code, payStatus: payStatus || "KOSONG",
         message: "Pembayaran belum dicek / belum lunas (status: " + (payStatus || "kosong") + "). Arahkan ke meja panitia."
@@ -260,10 +263,9 @@ function whatsappConfirmationUrl_(data, ticketId) {
     ["Nama usaha", data.business],
     ["Bidang usaha", data.product],
     ["Domisili", data.city],
-    ["Platform jualan", data.platform],
+    ["AI yang dipakai", data.platform],
     ["Status peserta", data.participantType],
-    ["Pembayaran", data.infaq],
-    ["Bukti transfer", "sudah diupload di formulir"],
+    ["Infaq kopi jamaah", data.infaq],
     ["Pertanyaan", data.question]
   ].filter(item => String(item[1] || "").trim());
 
