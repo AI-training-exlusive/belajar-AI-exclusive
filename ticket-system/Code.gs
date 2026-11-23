@@ -265,7 +265,7 @@ function whatsappConfirmationUrl_(data, ticketId) {
     ["Domisili", data.city],
     ["AI yang dipakai", data.platform],
     ["Status peserta", data.participantType],
-    ["Kopi jamaah", data.infaq],
+    ["Traktir kopi jama'ah", data.infaq],
     ["Pertanyaan", data.question]
   ].filter(item => String(item[1] || "").trim());
 
